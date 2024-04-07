@@ -36,11 +36,12 @@ class Restaurant(models.Model):
   
 class Rider(models.Model):
   user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, primary_key=True)
+  username = models.CharField(max_length=100, blank=True, default='Rider')
   status = models.CharField(max_length=100)
   position  = models.CharField(max_length=100)
   balance = models.FloatField()
   def __str__(self):
-    return str(self.position + ' '+ self.status)
+    return str(self.username+ ' '+ self.status)
 
 
 class Order(models.Model):

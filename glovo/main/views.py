@@ -48,8 +48,38 @@ def login(request):
 @api_view(['POST'])
 def signup(request):
   if request.method == 'POST':
+    print("signup request", request.data)
+        
+    role = request.data.get('ruolo', None)
+    if role not in ['cliente', 'ristorante', 'rider']:
+        return Response({'error': 'Invalid role'}, status=400)
     user = BaseUser()
-    return Response({})
+    """ if role == 'cliente':
+        user.is_customer = True
+    elif role == 'ristorante':
+        user.is_restaurant = True
+    elif role == 'rider':
+        user.is_rider = True """
+    # Create an instance of the specific model based on the role
+    if role == 'cliente':
+        user.is_customer = True
+        user.save()
+        customer = Customer(user=user, username=request.data['username'], password=request.data['password'], email=request.data['email'],balance=request.data.get('balance', 0))
+        customer.save()
+    elif role == 'ristorante':
+        user.is_restaurant = True
+        user.save()
+        restaurant = Restaurant(user=user, name=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
+        restaurant.save()
+    elif role == 'rider':
+        user.is_rider = True
+        user.save()
+        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], status='available' ,balance=request.data.get('balance', 0))
+        rider.save()
+    
+    print("base user", user)
+    
+    return Response({'message': 'User created successfully'}, status=200)
   
 @api_view(['GET'])
 def users(request):

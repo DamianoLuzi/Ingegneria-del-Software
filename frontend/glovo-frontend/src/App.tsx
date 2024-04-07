@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Ristorante } from './interfaces/helper';
 import HomePage from './HomePage'
 import LoginForm from './LoginForm';
@@ -44,7 +43,7 @@ function App() {
           <Route path="/login" element={<LoginForm setUser={setUser}/>}/>
           <Route path="/restaurants" element={<RestaurantsPage restaurants={restaurants} setRestaurants={setRestaurants} setSelectedRestaurant={setSelectedRestaurant}/>}/>
             <Route path="/:restaurantName/menu/" element={<MenuPage products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant}/>} />
-            <Route path="/signup" element={<SignUpPage/>}/>
+            <Route path="/signup" element={<SignUpPage user={user} setUser={setUser}/>}/>
         </Routes>
       </div>
     </Router>
