@@ -7,6 +7,8 @@ import RestaurantsPage from './RestaurantsPage';
 import MenuPage from './MenuPage';
 import SignUpPage from './SignUpPage';
 import { Utente } from './interfaces/helper';
+import OrdersPage from './OrdersPage';
+import BalancePage from './BalancePage';
 
 function App() {
   
@@ -18,7 +20,7 @@ function App() {
     <>
       <Router>
       <div>
-        <nav  className="bg-dark">
+        <nav className="bg-dark">
           <ul>
             <li>
               <Link to="">Home</Link>
@@ -28,13 +30,14 @@ function App() {
                   <Link to="/restaurants">Restaurants</Link>
                 </li>
               }
-              {user && user.ruolo === 'ristorante' && 
+              {user  && 
                 <li>
-                  <Link to="/orders">Orders</Link>
+                  <Link to={`/orders`}>Orders</Link>
                 </li>
               }
             <li>
-            {`Logged in as ${user ? user.ruolo : ''} `} |{user ? <Link to="/login" > Logout</Link> : <Link to="/login">Login</Link> }
+            {user && `Logged in as ${user ? user.ruolo : ''} | `} {user ? <Link to="/login">Logout</Link> : <Link to="/login">Login</Link> }
+            {user && <li><Link to={`/balance`}>Balance</Link></li>}
             </li>
           </ul>
         </nav>
@@ -42,8 +45,10 @@ function App() {
           <Route path="" element={<HomePage />} />
           <Route path="/login" element={<LoginForm setUser={setUser}/>}/>
           <Route path="/restaurants" element={<RestaurantsPage restaurants={restaurants} setRestaurants={setRestaurants} setSelectedRestaurant={setSelectedRestaurant}/>}/>
-            <Route path="/:restaurantName/menu/" element={<MenuPage products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant}/>} />
-            <Route path="/signup" element={<SignUpPage user={user} setUser={setUser}/>}/>
+          <Route path="/:restaurantName/menu/" element={<MenuPage products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant}/>} /> 
+          <Route path="/orders" element={<OrdersPage user={user}/>}/> 
+          <Route path="/balance" element={<BalancePage user = {user}/>}/>
+          <Route path="/signup" element={<SignUpPage user={user} setUser={setUser}/>}/>
         </Routes>
       </div>
     </Router>

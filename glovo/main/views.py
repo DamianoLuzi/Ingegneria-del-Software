@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Customer, BaseUser, Item, Restaurant, Rider
+from .models import Customer, BaseUser, Item, Restaurant, Rider, Order
 import json
 from django.core.serializers import serialize
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 @api_view(['GET'])
 def home(request):
@@ -21,12 +22,12 @@ def login(request):
     print("login request ", request.data)
     try:
         if request.data['ruolo'] == 'cliente':
-            user = Customer.objects.get(username=request.data['username'])
+          user = Customer.objects.get(username=request.data['username'])
         elif request.data['ruolo'] == 'ristorante':
-            user = Restaurant.objects.get(name=request.data['username'])
+          user = Restaurant.objects.get(name=request.data['username'])
         else:
           user = Rider.objects.get(username=request.data['username'])
-        
+        print("user", user)
         if user.user.is_customer:
             user_role = 'cliente'
         elif user.user.is_restaurant:
@@ -37,12 +38,13 @@ def login(request):
         user_data_dict = json.loads(user_data)
         print("udd ", user_data_dict)
         user_data_dict[0]['fields']['ruolo'] = user_role
-        print("uodate", user_data_dict)
+        print("update", user_data_dict)
         return Response([user_data_dict[0]['fields']])
 
     except Customer.DoesNotExist or Restaurant.DoesNotExist or Rider.DoesNotExist:
         return HttpResponse({'User not found'}, status=404)
     except Exception as e:
+       return HttpResponse({'User not found'}, status=500)
        return Response([{"error":'Internal Server Error'}])
   
 @api_view(['POST'])
@@ -54,13 +56,6 @@ def signup(request):
     if role not in ['cliente', 'ristorante', 'rider']:
         return Response({'error': 'Invalid role'}, status=400)
     user = BaseUser()
-    """ if role == 'cliente':
-        user.is_customer = True
-    elif role == 'ristorante':
-        user.is_restaurant = True
-    elif role == 'rider':
-        user.is_rider = True """
-    # Create an instance of the specific model based on the role
     if role == 'cliente':
         user.is_customer = True
         user.save()
@@ -84,7 +79,7 @@ def signup(request):
 @api_view(['GET'])
 def users(request):
   try:
-    users = BaseUser.objects.all()
+    users = Order.objects.all()
     print("users")
     return HttpResponse(
       serialize('json',users), status= 200)
@@ -104,7 +99,7 @@ def restaurants(request):
 @api_view(['GET'])
 def items(request):
   try:
-    items =Item.objects.all()
+    items = Order.objects.all()
     data = serialize('json', items)
     print("items", data)
     return HttpResponse(data, status= 200)
@@ -123,3 +118,72 @@ def menu(request,**kwargs):
     return HttpResponse(serialized_products, status = 200)
   except Restaurant.DoesNotExist:
     return HttpResponse(status=404)
+  
+""" @api_view(['GET', 'POST'])
+def orders(request):
+  if request.method == 'GET':
+    role = request.data.get('ruolo', None)
+    if role not in ['cliente', 'ristorante', 'rider']:
+      return Response({'error': 'Invalid role'}, status=400)
+    if role == 'cliente':
+      customer = Customer.objects.get(username = request.data['username'])
+      orders = Order.objects.filter(customer_id = customer.pk)
+      return HttpResponse(orders, status  = 200)
+    elif role == 'cliente':
+      print("")
+  elif request.method == 'POST':
+    return Response({}) """
+  
+@api_view(['GET'])
+def orders(request,**kwargs):
+  print("orders request", request.data)
+  print("kwargs", kwargs)
+  user_name = kwargs.get('user_name')
+  print("user order", user_name)
+  try:
+    try:
+      user = Restaurant.objects.get(name=user_name)
+      orders = Order.objects.filter(restaurant_id = user.pk)
+    except ObjectDoesNotExist:
+      try:
+        user = Customer.objects.get(username=user_name)
+        orders = Order.objects.filter(customer_id = user.pk)
+      except ObjectDoesNotExist:
+        try:
+          user = Rider.objects.get(username=user_name)
+          orders = Order.objects.filter(rider_id = user.pk)
+        except ObjectDoesNotExist:
+          return HttpResponse({'error': 'User not found'}, status=404)
+    print("orders ", orders)
+    serialized_orders = serialize('json', orders)
+    print("serialized")
+    return HttpResponse(serialized_orders, status = 200)
+  except Exception as e:
+    return HttpResponse({'error':str(e)}, status = 500)
+  
+@api_view(['GET'])
+def balance(request, **kwargs):
+  if request.method == 'GET':
+    user_name = kwargs.get('user_name')
+    print('username', user_name)
+    try:
+      try:
+        customer = Customer.objects.get(username = user_name)
+        return HttpResponse(customer.balance, status  = 200)
+      except:
+        try:
+          res = Restaurant.objects.get(name = user_name)
+          return HttpResponse(res.balance, status  = 200)
+        except:
+          try:
+            rider = Rider.objects.get(username = user_name)
+            return HttpResponse(rider.balance, status  = 200)
+          except Exception as e:
+            return HttpResponse({'error':str(e)}, status = 404)
+
+    except Exception as e:
+      return HttpResponse({'error':str(e)}, status = 500)
+  if request.method == 'PUT':
+      return Response({})
+   
+   

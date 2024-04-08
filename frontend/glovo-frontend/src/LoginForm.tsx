@@ -16,6 +16,7 @@ function LoginForm(props: any) {
       // Handle the response here
       console.log('Response:', response.data[0]);
       props.setUser(response.data[0])
+      console.log('setUser', response.data[0]);
     } catch (error : any) {
       // Handle errors here
       console.error('Error:', error);

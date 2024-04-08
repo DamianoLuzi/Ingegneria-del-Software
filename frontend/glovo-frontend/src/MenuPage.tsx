@@ -19,14 +19,18 @@ function MenuPage(props:any) {
     <>
     <h1>Menu</h1>
       <div>
+        <ul>
         {props.products && 
         props.products.map((product: any, index: number) => (
-          <div key={index}>
+          <li>
+            <div key={index}>
             <h2>{product.fields.name}</h2>
             <p>Description: {product.fields.description}</p>
             <p>Price: {product.fields.price} €</p>
           </div>
+          </li>
         ))}
+        </ul>
       </div>
     </>
   )
