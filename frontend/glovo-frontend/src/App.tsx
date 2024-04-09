@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { Ristorante } from './interfaces/helper';
-import HomePage from './HomePage';
-import LoginForm from './LoginForm';
-import RestaurantsPage from './RestaurantsPage';
-import MenuPage from './MenuPage';
-import SignUpPage from './SignUpPage';
+import HomePage from './pages/HomePage';
+import LoginForm from './pages/LoginForm';
+import RestaurantsPage from './pages/RestaurantsPage';
+import MenuPage from './pages/MenuPage';
+import SignUpPage from './pages/SignUpPage';
 import { Utente } from './interfaces/helper';
-import OrdersPage from './OrdersPage';
-import BalancePage from './BalancePage';
-import CartPage from './CartPage';
-import './App.css'; // Import the CSS file for styling
+import OrdersPage from './pages/OrdersPage';
+import BalancePage from './pages/BalancePage';
+import CartPage from './pages/CartPage';
+import './styles/App.css'; // Import the CSS file for styling
 
 function App() {
   

@@ -1,29 +1,24 @@
 import { useState } from "react";
-import RuoliMenu from "./RuoliMenu";
+import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
 
-function SignUpForm(props: any) {
+function LoginForm(props: any) {
   const [errors, setErrors] = useState(null)
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    email:'',
     ruolo:''
   });
-  const [position, setPosition] = useState('')
 
   const handleFormSubmit = async () => {
     try {
-      let updatedFormData = { ...formData, 'posizione': ''};
-      if (formData && (formData.ruolo === 'ristorante' || formData.ruolo === 'rider')) {
-         updatedFormData = { ...updatedFormData, 'posizione': position };
-      }
-    setFormData(updatedFormData);
-    console.log('update form data', updatedFormData)
-      const response = await axios.post('http://localhost:8000/signup', updatedFormData);
+      const response = await axios.post('http://localhost:8000/login', formData);
+      // Handle the response here
       console.log('Response:', response.data[0]);
       props.setUser(response.data[0])
+      console.log('setUser', response.data[0]);
     } catch (error : any) {
+      // Handle errors here
       console.error('Error:', error);
       setErrors(error.response.data); 
       setTimeout(() => {
@@ -36,14 +31,12 @@ function SignUpForm(props: any) {
     console.log("handle change event", e)
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if (name === 'posizione') setPosition(value)
-    console.log("position", position)
     console.log("form data ", formData)
   };
 
   return (
     <div>
-      <h2>Sign Up</h2>
+      <h2>Login</h2>
       <h3>Scegli il tuo ruolo</h3>
       <RuoliMenu selectedRole={formData.ruolo} handleChange={handleChange}/>
       <br/>
@@ -67,27 +60,6 @@ function SignUpForm(props: any) {
           />
         </div>
         <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        {formData && (formData.ruolo === 'rider' || formData.ruolo === 'ristorante') && 
-          <div>
-          <label htmlFor="posizione">Posizione:</label>
-          <input
-            type="posizione"
-            id="posizione"
-            name='posizione'
-            value={position}
-            onChange={handleChange}
-          />
-        </div>}
-        <div>
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -97,11 +69,11 @@ function SignUpForm(props: any) {
             onChange={handleChange}
           />
         </div>
-        <p>Have an account? Log in <a href="/login">Here</a>!</p>
+        <p>Don't have an account? Create one <a href="/signup">Here</a>!</p>
         <button type="button" onClick={handleFormSubmit}>Log In</button>
       </form>
     </div>
   )
 }
 
-export  default SignUpForm;
+export  default LoginForm;

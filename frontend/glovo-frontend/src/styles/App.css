@@ -1,0 +1,144 @@
+/* App.css */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #008c4f; /* Light gray background */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar {
+  background-color: #ffcc00; /* Yellow */
+  color: #000000; /* Black */
+  padding: 1rem;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.navbar li a {
+  color: #000000; /* Black */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar li a:hover {
+  text-decoration: underline;
+}
+
+/* Added green details */
+.navbar li a.active {
+  color: #228b22; /* Evergreen */
+}
+
+/* Card styling */
+.card {
+  background-color: #ffffff; /* White */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Lift the card on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+/* Additional UI enhancements */
+.container {
+  background-color: #ffffcc; /* Pale yellow */
+  padding: 2rem;
+}
+
+.navbar li a {
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.navbar li a:hover {
+  color: #228b22; /* Evergreen */
+}
+
+.card {
+  border: 1px solid #dddddd; /* Light gray border */
+}
+
+.card h2 {
+  color: #228b22; /* Evergreen */
+}
+
+.card p {
+  color: #000000; /* Black */
+}
+
+
+/* // App.css 
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f0f0; //Light gray background 
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar {
+  background-color: #ffcc00; //Yellow 
+  color: #000000; // Black 
+  padding: 1rem;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.navbar li a {
+  color: #000000; // Black 
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar li a:hover {
+  text-decoration: underline;
+}
+
+// Added green details 
+.navbar li a.active {
+  color: #228b22; // Evergreen 
+}
+
+// Card styling
+.card {
+  background-color: #ffffff; // White 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Soft shadow 
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px); // Lift the card on hover 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // Stronger shadow on hover 
+}
+ */
+

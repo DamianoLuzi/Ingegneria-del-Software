@@ -5,7 +5,8 @@ function CartPage (props: any) {
   const handlePlaceOrder = async () => {
     const orderData = {
       'user' : props.user,
-      'items' : props.cartItems
+      'items' : props.cartItems,
+      'price': props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)
     }
     const response = axios.post(`http://localhost:8000/${props.user.username}/orders`, orderData)
   }
@@ -21,7 +22,8 @@ function CartPage (props: any) {
       </li>
     ))}
     </ul>
-    <button onClick={handlePlaceOrder}>Buy</button>
+    <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)} €</h2>
+    {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Buy</button>}
     </>
   )
 }

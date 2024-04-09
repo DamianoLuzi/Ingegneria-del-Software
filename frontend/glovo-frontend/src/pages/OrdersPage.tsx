@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import '../styles/App.css'
 function OrdersPage(props: any) {
   const [orders, setOrders] = useState([])
   useEffect(() => {
@@ -18,11 +18,11 @@ function OrdersPage(props: any) {
     <>
     <h1>Your orders:</h1>
       <div>
-      <ul>
+      <ul className="card-list">
         {orders && 
         orders.map((order: any, index: number) => (
           <li>
-            <div key={index}>
+            <div key={index} className = 'card'>
             <h2>{order.fields.items}</h2>
             <p>Price: {order.fields.price} €</p>
             <p>Status: {order.fields.status}</p>

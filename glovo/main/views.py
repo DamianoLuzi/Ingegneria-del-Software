@@ -149,6 +149,7 @@ def orders(request,**kwargs):
   if request.method == 'POST':
     print("orders POST req ", request.data)
     items = request.data['items']
+    order_price = request.data['price']
     print("items", items[0], type(items[0]))
     restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
     user = Customer.objects.get(username = request.data['user']['username'])
@@ -164,16 +165,27 @@ def orders(request,**kwargs):
       customer_id = user,
       rider_id = rider, 
       items = serialized_items,
-      status='in progres...',
+      status='in progress...',
       destination = '')
-      new_order.save()
+      if user.balance >= order_price:
+        new_order.save()
+        #updating balances and status
+        user.balance = user.balance - order_price
+        user.save()
+        restaurant.balance = restaurant.balance + order_price * 80/100
+        restaurant.save()
+        rider.balance = rider.balance + order_price * 20 /100
+        rider.status = 'assigned'
+        rider.save()
+      else:
+        return HttpResponse({'error': 'Insufficient Credit Balance'}, status = 400)
       return HttpResponse(new_order, status = 200)
     except Exception as e:
       return HttpResponse({'error':str(e)},status=500)
     
     
   
-@api_view(['GET'])
+@api_view(['GET','PUT'])
 def balance(request, **kwargs):
   if request.method == 'GET':
     user_name = kwargs.get('user_name')
@@ -196,6 +208,29 @@ def balance(request, **kwargs):
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
   if request.method == 'PUT':
-      return Response({})
+    print("balance PUT", request.data)
+    username = request.data['username'] 
+    try:
+      try:
+        customer = Customer.objects.get(username = username)
+        customer.balance = request.data['balance']
+        customer.save()
+        return HttpResponse(customer, status  = 200)
+      except:
+        try:
+          res = Restaurant.objects.get(name = username)
+          res.balance = request.data['balance']
+          res.save()
+          return HttpResponse(res, status  = 200)
+        except:
+          try:
+            rider = Rider.objects.get(username = username)
+            rider.balance = request.data['balance']
+            rider.save()
+            return HttpResponse(rider, status  = 200)
+          except Exception as e:
+            return HttpResponse({'error':str(e)}, status = 404)
+    except Exception as e:
+      return HttpResponse({'error':str(e)}, status = 500)
    
    
