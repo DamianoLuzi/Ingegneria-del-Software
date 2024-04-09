@@ -32,7 +32,7 @@ function BalancePage(props: any) {
   }, [])
 
   return(
-    <div>
+    <div className="container">
     <h1>Your balance: </h1>
     {balance && 
       <div>

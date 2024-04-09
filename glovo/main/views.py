@@ -151,6 +151,7 @@ def orders(request,**kwargs):
     items = request.data['items']
     order_price = request.data['price']
     print("items", items[0], type(items[0]))
+    print("order price", order_price, type(order_price))
     restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
     user = Customer.objects.get(username = request.data['user']['username'])
     rider = Rider.objects.filter(status = 'available').first()
@@ -165,10 +166,12 @@ def orders(request,**kwargs):
       customer_id = user,
       rider_id = rider, 
       items = serialized_items,
+      price = float(order_price),
       status='in progress...',
       destination = '')
       if user.balance >= order_price:
         new_order.save()
+        print("new order", new_order)
         #updating balances and status
         user.balance = user.balance - order_price
         user.save()
@@ -181,6 +184,7 @@ def orders(request,**kwargs):
         return HttpResponse({'error': 'Insufficient Credit Balance'}, status = 400)
       return HttpResponse(new_order, status = 200)
     except Exception as e:
+      print("ERROR ", str(e))
       return HttpResponse({'error':str(e)},status=500)
     
     

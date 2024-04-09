@@ -15,7 +15,7 @@ import './styles/App.css'; // Import the CSS file for styling
 function App() {
   
   const [restaurants, setRestaurants] = useState<Ristorante[]>();
-  const [user, setUser] = useState<Utente>();
+  const [user, setUser] = useState<Utente | null>();
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [products, setProducts] = useState(null);
   const [cartItems, setCartItems] = useState([]);
@@ -41,7 +41,7 @@ function App() {
             {user && <li><Link to="/balance"> Balance</Link></li>}
             {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Cart</Link></li>}
             {user && `Logged in as ${user ? user.ruolo : ''} | `} 
-            {user ? <li><Link to="/login">Logout</Link></li> : <Link to="/login">Login</Link>}    
+            {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <Link to="/login">Login</Link>}    
           </ul>
         </nav>
         <Routes>
