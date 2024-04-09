@@ -119,47 +119,59 @@ def menu(request,**kwargs):
   except Restaurant.DoesNotExist:
     return HttpResponse(status=404)
   
-""" @api_view(['GET', 'POST'])
-def orders(request):
-  if request.method == 'GET':
-    role = request.data.get('ruolo', None)
-    if role not in ['cliente', 'ristorante', 'rider']:
-      return Response({'error': 'Invalid role'}, status=400)
-    if role == 'cliente':
-      customer = Customer.objects.get(username = request.data['username'])
-      orders = Order.objects.filter(customer_id = customer.pk)
-      return HttpResponse(orders, status  = 200)
-    elif role == 'cliente':
-      print("")
-  elif request.method == 'POST':
-    return Response({}) """
-  
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def orders(request,**kwargs):
   print("orders request", request.data)
   print("kwargs", kwargs)
   user_name = kwargs.get('user_name')
   print("user order", user_name)
-  try:
+  if request.method == 'GET':
     try:
-      user = Restaurant.objects.get(name=user_name)
-      orders = Order.objects.filter(restaurant_id = user.pk)
-    except ObjectDoesNotExist:
       try:
-        user = Customer.objects.get(username=user_name)
-        orders = Order.objects.filter(customer_id = user.pk)
+        user = Restaurant.objects.get(name=user_name)
+        orders = Order.objects.filter(restaurant_id = user.pk)
       except ObjectDoesNotExist:
         try:
-          user = Rider.objects.get(username=user_name)
-          orders = Order.objects.filter(rider_id = user.pk)
+          user = Customer.objects.get(username=user_name)
+          orders = Order.objects.filter(customer_id = user.pk)
         except ObjectDoesNotExist:
-          return HttpResponse({'error': 'User not found'}, status=404)
-    print("orders ", orders)
-    serialized_orders = serialize('json', orders)
-    print("serialized")
-    return HttpResponse(serialized_orders, status = 200)
-  except Exception as e:
-    return HttpResponse({'error':str(e)}, status = 500)
+          try:
+            user = Rider.objects.get(username=user_name)
+            orders = Order.objects.filter(rider_id = user.pk)
+          except ObjectDoesNotExist:
+            return HttpResponse({'error': 'User not found'}, status=404)
+      print("orders ", orders)
+      serialized_orders = serialize('json', orders)
+      print("serialized")
+      return HttpResponse(serialized_orders, status = 200)
+    except Exception as e:
+      return HttpResponse({'error':str(e)}, status = 500)
+  if request.method == 'POST':
+    print("orders POST req ", request.data)
+    items = request.data['items']
+    print("items", items[0], type(items[0]))
+    restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
+    user = Customer.objects.get(username = request.data['user']['username'])
+    rider = Rider.objects.filter(status = 'available').first()
+    print("user", user)
+    print("restaurant", restaurant)
+    try:
+      items_names = [item['fields']['name'] for item in items]
+      serialized_items = json.dumps(items_names)
+      print("ser it", serialized_items, type(serialized_items))
+      new_order = Order(
+      restaurant_id = restaurant,
+      customer_id = user,
+      rider_id = rider, 
+      items = serialized_items,
+      status='in progres...',
+      destination = '')
+      new_order.save()
+      return HttpResponse(new_order, status = 200)
+    except Exception as e:
+      return HttpResponse({'error':str(e)},status=500)
+    
+    
   
 @api_view(['GET'])
 def balance(request, **kwargs):
