@@ -119,7 +119,7 @@ def menu(request,**kwargs):
   except Restaurant.DoesNotExist:
     return HttpResponse(status=404)
   
-@api_view(['GET','POST'])
+@api_view(['GET','POST','PUT'])
 def orders(request,**kwargs):
   print("orders request", request.data)
   print("kwargs", kwargs)
@@ -186,6 +186,13 @@ def orders(request,**kwargs):
     except Exception as e:
       print("ERROR ", str(e))
       return HttpResponse({'error':str(e)},status=500)
+  if request.method == 'PUT':
+    print("orders PUT", request.data)
+    order = Order.objects.get(pk = request.data['pk'])
+    order.status = 'in transit'
+    order.save()
+    serialized_order = serialize('json', [order])
+    return HttpResponse(serialized_order, status=200)
     
     
   

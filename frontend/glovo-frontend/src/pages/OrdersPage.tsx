@@ -14,6 +14,12 @@ function OrdersPage(props: any) {
     }
     fetchOrders()
   }, [])
+
+  const handleStatusChange = async (order:any) => {
+    const username = props.user.ruolo === 'ristorante' ? props.user.name : props.user.username
+    const response = await axios.put(`http://localhost:8000/${username}/orders`, order )
+    console.log("PUT response", response.data)
+  }
   return(
     <>
     <h1>Your orders:</h1>
@@ -26,7 +32,8 @@ function OrdersPage(props: any) {
             <h2>{order.fields.items}</h2>
             <p>Price: {order.fields.price} €</p>
             <p>Status: {order.fields.status}</p>
-          </div>
+            {props.user.ruolo === 'ristorante' && <button onClick={() => handleStatusChange(order)}>Order Ready!</button>}
+          </div>   
           </li>
         ))}
         </ul>
