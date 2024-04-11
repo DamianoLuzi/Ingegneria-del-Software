@@ -125,8 +125,7 @@ def orders(request,**kwargs):
   print("kwargs", kwargs)
   user_name = kwargs.get('user_name')
   print("user order", user_name)
-  if request.method == 'GET':
-    try:
+  try:
       try:
         user = Restaurant.objects.get(name=user_name)
         orders = Order.objects.filter(restaurant_id = user.pk)
@@ -139,13 +138,15 @@ def orders(request,**kwargs):
             user = Rider.objects.get(username=user_name)
             orders = Order.objects.filter(rider_id = user.pk)
           except ObjectDoesNotExist:
-            return HttpResponse({'error': 'User not found'}, status=404)
-      print("orders ", orders)
-      serialized_orders = serialize('json', orders)
-      print("serialized")
-      return HttpResponse(serialized_orders, status = 200)
-    except Exception as e:
-      return HttpResponse({'error':str(e)}, status = 500)
+            return HttpResponse({'error': 'User not found'}, status=404)      
+  except Exception as e:
+    return HttpResponse({'error':str(e)}, status = 500)
+  
+  if request.method == 'GET':
+    serialized_orders = serialize('json', orders)
+    print("serialized")
+    return HttpResponse(serialized_orders, status = 200)
+  
   if request.method == 'POST':
     print("orders POST req ", request.data)
     items = request.data['items']
@@ -155,6 +156,7 @@ def orders(request,**kwargs):
     restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
     user = Customer.objects.get(username = request.data['user']['username'])
     rider = Rider.objects.filter(status = 'available').first()
+    if rider is None: return HttpResponse({'No riders available at the moment'}, status = 500)
     print("user", user)
     print("restaurant", restaurant)
     try:
@@ -181,15 +183,22 @@ def orders(request,**kwargs):
         rider.status = 'assigned'
         rider.save()
       else:
-        return HttpResponse({'error': 'Insufficient Credit Balance'}, status = 400)
+        return HttpResponse({'Insufficient Credit Balance,Top up your card first!'}, status = 500)
       return HttpResponse(new_order, status = 200)
     except Exception as e:
       print("ERROR ", str(e))
       return HttpResponse({'error':str(e)},status=500)
   if request.method == 'PUT':
     print("orders PUT", request.data)
+    user_data = serialize('json', [user])
+    print("user PUT", user_data)
     order = Order.objects.get(pk = request.data['pk'])
-    order.status = 'in transit'
+    if isinstance(user, Restaurant):  ##need to check that it is the irght restaurant as well
+      order.status = 'in transit'
+    elif isinstance(user, Rider):  ##need to check that it is the irght rider as well
+      order.status = 'delivered'
+    else: ##need to check that it is the irght user as well
+      order.status = 'completed'
     order.save()
     serialized_order = serialize('json', [order])
     return HttpResponse(serialized_order, status=200)

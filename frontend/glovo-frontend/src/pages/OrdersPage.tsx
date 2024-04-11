@@ -33,6 +33,8 @@ function OrdersPage(props: any) {
             <p>Price: {order.fields.price} €</p>
             <p>Status: {order.fields.status}</p>
             {props.user.ruolo === 'ristorante' && <button onClick={() => handleStatusChange(order)}>Order Ready!</button>}
+            {props.user.ruolo === 'rider' && <button onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
+            {props.user.ruolo === 'cliente' && <button onClick={() => handleStatusChange(order)}>Order Received!</button>}
           </div>   
           </li>
         ))}
