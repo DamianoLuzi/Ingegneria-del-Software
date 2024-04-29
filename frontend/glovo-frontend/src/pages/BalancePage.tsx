@@ -11,7 +11,8 @@ function BalancePage(props: any) {
     try {
       const u = props.user
       u.balance = updatedBalance
-      const response = await axios.put(`http://localhost:8000/${username}/balance`,u);
+      console.log("PUT username", username.replace(" ",'%20'))
+      const response = await axios.put(`http://localhost:8000/${encodeURIComponent(username)}/balance`,u);
       console.log("top up response", response)
       props.user.balance = updatedBalance
     } catch (error) {

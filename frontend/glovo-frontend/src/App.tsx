@@ -33,6 +33,11 @@ function App() {
                 <Link to="/restaurants">Restaurants</Link>
               </li>
             }
+            {user && user.ruolo === 'ristorante' && 
+              <li>
+                <Link to="/menu">Menu</Link>
+              </li>
+            }
             {user  && 
               <li>
                 <Link to="/orders">Orders</Link>
@@ -53,6 +58,7 @@ function App() {
           <Route path="/balance" element={<BalancePage user={user} />} />
           <Route path="/signup" element={<SignUpPage user={user} setUser={setUser} />} />
           <Route path="/cart" element={<CartPage user={user} cartItems={cartItems} />} />
+          <Route path="/menu" element={<MenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
         </Routes>
       </div>
     </Router>

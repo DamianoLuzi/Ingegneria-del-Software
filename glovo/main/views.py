@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Customer, BaseUser, Item, Restaurant, Rider, Order
+from main.models import Item
+from users.models import Restaurant, Rider
+from deliveries.models import Order
 import json
 from django.core.serializers import serialize
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
+from datetime import datetime
 @api_view(['GET'])
 def home(request):
   if request.method == 'GET':
@@ -166,7 +169,8 @@ def orders(request,**kwargs):
       new_order = Order(
       restaurant_id = restaurant,
       customer_id = user,
-      rider_id = rider, 
+      rider_id = rider,
+      payment = payment,
       items = serialized_items,
       price = float(order_price),
       status='in progress...',
@@ -205,7 +209,7 @@ def orders(request,**kwargs):
     
     
   
-@api_view(['GET','PUT'])
+""" @api_view(['GET','PUT'])
 def balance(request, **kwargs):
   if request.method == 'GET':
     user_name = kwargs.get('user_name')
@@ -253,4 +257,4 @@ def balance(request, **kwargs):
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
    
-   
+    """

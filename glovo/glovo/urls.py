@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')), #urls defined in the main folder can be accessed here and viceversa
-    path('', include('django.contrib.auth.urls')) #premade django ath urls such as login signup pw reset/change
+    path('', include('django.contrib.auth.urls')), #premade django ath urls such as login signup pw reset/change
+    path('', include('users.urls')),
+    path('', include('deliveries.urls'))
 ]
