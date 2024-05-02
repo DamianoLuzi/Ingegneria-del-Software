@@ -10,6 +10,8 @@ import { Utente } from './interfaces/helper';
 import OrdersPage from './pages/OrdersPage';
 import BalancePage from './pages/BalancePage';
 import CartPage from './pages/CartPage';
+import EditMenuPage from './pages/EditMenuPage';
+import AccountPage from './pages/AccountPage';
 import './styles/App.css'; // Import the CSS file for styling
 
 function App() {
@@ -45,7 +47,7 @@ function App() {
             }
             {user && <li><Link to="/balance"> Balance</Link></li>}
             {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Cart</Link></li>}
-            {user && `Logged in as ${user ? user.ruolo : ''} | `} 
+            {user && <li><Link to="/account">{`Logged in as ${user ? user.username : ''} | `}</Link></li>} 
             {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <Link to="/login">Login</Link>}    
           </ul>
         </nav>
@@ -53,12 +55,13 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginForm setUser={setUser} />} />
           <Route path="/restaurants" element={<RestaurantsPage restaurants={restaurants} setRestaurants={setRestaurants} setSelectedRestaurant={setSelectedRestaurant} />} />
-          <Route path="/:restaurantName/menu/" element={<MenuPage products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} /> 
+          <Route path="/:restaurantName/menu/" element={<MenuPage user={user} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} /> 
           <Route path="/orders" element={<OrdersPage user={user} />} /> 
           <Route path="/balance" element={<BalancePage user={user} />} />
           <Route path="/signup" element={<SignUpPage user={user} setUser={setUser} />} />
-          <Route path="/cart" element={<CartPage user={user} cartItems={cartItems} />} />
-          <Route path="/menu" element={<MenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
+          <Route path="/cart" element={<CartPage user={user} cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="/menu" element={<EditMenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
+          <Route path="/account" element = {<AccountPage user={user}/>}/>
         </Routes>
       </div>
     </Router>

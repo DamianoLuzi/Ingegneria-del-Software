@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from main.models import Item
-from users.models import Restaurant, Rider
+from users.models import Restaurant, Rider, Customer, BaseUser
 from deliveries.models import Order
 import json
 from django.core.serializers import serialize
@@ -12,7 +12,7 @@ from datetime import datetime
 @api_view(['GET'])
 def home(request):
   if request.method == 'GET':
-    return Response({"message": 'Home Page!'})
+    return Response({"message": 'Welcome back!'})
   
 @api_view(['GET'])
 def restaurants(request):
@@ -113,14 +113,44 @@ def items(request):
 def menu(request,**kwargs):
   restaurant_name = kwargs.get('restaurant_name')
   print("restaurant menu", restaurant_name)
-  try:
-    res = Restaurant.objects.get(name = restaurant_name)
-    products = Item.objects.filter(restaurant = res.pk)
-    serialized_products = serialize('json', products)
-    print("serialized")
-    return HttpResponse(serialized_products, status = 200)
-  except Restaurant.DoesNotExist:
-    return HttpResponse(status=404)
+  if request.method == "GET":
+    try:
+      res = Restaurant.objects.get(name = restaurant_name)
+      products = Item.objects.filter(restaurant = res.pk)
+      serialized_products = serialize('json', products)
+      print("serialized")
+      return HttpResponse(serialized_products, status = 200)
+    except Restaurant.DoesNotExist:
+      return HttpResponse(status=404)
+  if request.method == "POST":
+    print("menu POST\n", request.data)
+    try:
+      res = Restaurant.objects.get(name = restaurant_name)
+      newProduct = Item(
+        restaurant_id = res.pk,
+        name = request.data['name'],
+        description = request.data['description'],
+        price= request.data['price']
+      )
+      newProduct.save()
+    except Exception as e:
+      return HttpResponse(e, status = 500)
+    return HttpResponse(newProduct, status=200)
+  if request.method == "PUT":
+    print("menu PUT\n", request.data)
+    try:
+      res = Restaurant.objects.get(name = restaurant_name)
+      updatedProduct = Item(
+        restaurant_id = res.pk,
+        name = request.data['name'],
+        description = request.data['description'],
+        price= request.data['price']
+      )
+      updatedProduct.save()
+    except Exception as e:
+      return HttpResponse(e, status = 500)
+    return HttpResponse(updatedProduct, status=200)
+
   
 @api_view(['GET','POST','PUT'])
 def orders(request,**kwargs):
@@ -170,7 +200,6 @@ def orders(request,**kwargs):
       restaurant_id = restaurant,
       customer_id = user,
       rider_id = rider,
-      payment = payment,
       items = serialized_items,
       price = float(order_price),
       status='in progress...',

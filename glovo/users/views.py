@@ -51,12 +51,11 @@ def login(request):
 @api_view(['POST'])
 def signup(request):
   if request.method == 'POST':
-    print("signup request", request.data)
-        
+    print("signup request", request.data)   
     role = request.data.get('ruolo', None)
     if role not in ['cliente', 'ristorante', 'rider']:
         return Response({'error': 'Invalid role'}, status=400)
-    user = BaseUser()
+    user = BaseUser(username=request.data['username'])
     if role == 'cliente':
         user.is_customer = True
         user.save()
@@ -65,12 +64,12 @@ def signup(request):
     elif role == 'ristorante':
         user.is_restaurant = True
         user.save()
-        restaurant = Restaurant(user=user, name=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
+        restaurant = Restaurant(user=user, name=request.data['username'],username=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
         restaurant.save()
     elif role == 'rider':
         user.is_rider = True
         user.save()
-        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], status='available' ,balance=request.data.get('balance', 0))
+        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], password = request.data['password'], status='available' ,balance=request.data.get('balance', 0))
         rider.save()
     
     print("base user", user)
@@ -128,5 +127,24 @@ def balance(request, user_name):
             return HttpResponse({'error':str(e)}, status = 404)
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
+
+@api_view(['GET','PUT'])
+def account(request, user_name):
+  print("account user_name", user_name)
+  user = BaseUser.objects.get(username = user_name)
+  if request.method == "GET":
+    print("account GET", user_name)
+    return HttpResponse(user, status = 200)
+  elif request.method == "PUT":
+    print("account PUT", request.data)
+    if user.is_customer:
+      return HttpResponse(user, status = 202)
+    elif user.is_restaurant:
+      return HttpResponse(user, status = 203)
+    elif user.is_rider:
+      return HttpResponse(user, status = 204)
+    
+    return HttpResponse(user, status = 201)
+     
    
    

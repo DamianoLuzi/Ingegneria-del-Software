@@ -1,17 +1,18 @@
-/* App.css */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #008c4f; /* Light gray background */
+  background-color: #fffeb0; /* Light gray background */
 }
 
 .container {
+  background-color: #ffcc00;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 .navbar {
-  background-color: #ffcc00; /* Yellow */
-  color: #000000; /* Black */
+  background-color: #ff4500; /* Yellow */
+  color: #ffffff; /* White */
   padding: 1rem;
 }
 
@@ -27,7 +28,7 @@ body {
 }
 
 .navbar li a {
-  color: #000000; /* Black */
+  color: #ffffff; /* White */
   text-decoration: none;
   font-weight: bold;
 }
@@ -36,12 +37,6 @@ body {
   text-decoration: underline;
 }
 
-/* Added green details */
-.navbar li a.active {
-  color: #228b22; /* Evergreen */
-}
-
-/* Card styling */
 .card {
   background-color: #ffffff; /* White */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
@@ -56,37 +51,9 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
 }
 
-/* Additional UI enhancements */
-.container {
-  background-color: #ffffcc; /* Pale yellow */
-  padding: 2rem;
-}
-
-.navbar li a {
-  transition: color 0.3s ease; /* Smooth color transition */
-}
-
-.navbar li a:hover {
-  color: #228b22; /* Evergreen */
-}
-
-.card {
-  border: 1px solid #dddddd; /* Light gray border */
-}
-
-.card h2 {
-  color: #228b22; /* Evergreen */
-}
-
-.card p {
-  color: #000000; /* Black */
-}
-
-
-/* Button styling */
 .button {
-  background-color: #228b22; /* Green */
-  color: #ffffff; /* White */
+  background-color: #ff8c00; /* Darker Orange */
+  color: #ff792b; /* White */
   border: none;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -96,41 +63,10 @@ body {
 }
 
 .button:hover {
-  background-color: #006400; /* Dark green on hover */
+  background-color: #ffffff; /* Darker Orange Red on hover */
   transform: translateY(-2px); /* Lift the button on hover */
 }
 
-/* Hover effect for links */
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
-}
-
-/* Hover effect for cards */
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-}
-
-button:hover {
-  background-color: #228b22; /* Green on hover */
-  color: #ffffff; /* White text on hover */
-}
-
-
-/* Hover effect for links */
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
-}
-
-/* Hover effect for cards */
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-}
-
-/* Form styling */
 .form-input {
   padding: 0.5rem;
   border-radius: 0.25rem;
@@ -139,13 +75,15 @@ button:hover {
 
 .form-input:focus {
   outline: none;
-  border-color: #228b22; /* Green on focus */
-  box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.2); /* Green glow on focus */
+  border-color: #ffcc00; /* Yellow on focus */
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2); /* Yellow glow on focus */
 }
 
-/* Box shadow effect */
-.container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+.form-input:hover {
+  text-decoration: underline;
 }
 
-
+button.active {
+  background-color: #ff4500; /* Yellow */
+  color: white;
+}
