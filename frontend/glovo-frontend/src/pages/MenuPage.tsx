@@ -9,8 +9,10 @@ function MenuPage(props:any) {
   
   useEffect(() => {
     const getProducts = async () => {
+      console.log("getProducts user  ", props.user)
       try {
-        const response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
+        let response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
+        if(props.user.ruolo === 'ristorante') response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
         console.log("menu response", response);
         if (response) props.setProducts(response.data);
       } catch (error) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 
 function CartPage (props: any) {
   const [message, setMessage] = useState('')
@@ -26,6 +26,10 @@ function CartPage (props: any) {
    }
   }
 
+  useEffect(() => {
+    props.setCartItems(props.cartItems);
+  }, [props.cartItems]);
+  
   //selected items have been set as useState, might need to be stored in the DB
   return(
     <>
@@ -40,7 +44,8 @@ function CartPage (props: any) {
     ))}
     </ul>
     <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)} €</h2>
-    {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Buy</button>}
+    {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Pay</button>}
+    {<button onClick={() => props.setCartItems([])}>Cancel</button>}
     </>
   )
 }

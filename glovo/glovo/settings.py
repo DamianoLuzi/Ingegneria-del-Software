@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'glovo',
-    'main.apps.MainConfig',
+    'users',
+    'main',
+    'deliveries',
+    #'users.apps.UsersConfig',
+    #'deliveries.apps.DeliveriesConfig',
+    #'main.apps.MainConfig',
     'rest_framework',
     'corsheaders'
 ]
