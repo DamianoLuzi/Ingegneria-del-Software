@@ -7,7 +7,7 @@ import json
 from django.core.serializers import serialize
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
-
+from django.forms.models import model_to_dict
 from datetime import datetime
 
 # Create your views here.
@@ -39,7 +39,7 @@ def login(request):
         user_data_dict = json.loads(user_data)
         print("udd ", user_data_dict)
         user_data_dict[0]['fields']['ruolo'] = user_role
-        print("update", user_data_dict)
+        print("login response", user_data_dict)
         return Response([user_data_dict[0]['fields']])
 
     except Customer.DoesNotExist or Restaurant.DoesNotExist or Rider.DoesNotExist:
@@ -47,6 +47,20 @@ def login(request):
     except Exception as e:
        return HttpResponse({'User not found'}, status=500)
        return Response([{"error":'Internal Server Error'}])
+
+
+""" @api_view(['POST'])
+def login(request):
+  body = request.data
+  print("login body", body)
+  try:
+    base_user = BaseUser()
+    user = base_user.get_user_by_role(body['ruolo'], body['username'])
+    print("login \n", user)
+    return HttpResponse(user, status = 200)
+  except Exception as e:
+    print("login exception", e) """
+
   
 @api_view(['POST'])
 def signup(request):
@@ -61,6 +75,8 @@ def signup(request):
         user.save()
         customer = Customer(user=user, username=request.data['username'], password=request.data['password'], email=request.data['email'],balance=request.data.get('balance', 0))
         customer.save()
+        print("customer JSON\n", customer.to_json())
+        return JsonResponse(customer.to_json(), status = 200)
     elif role == 'ristorante':
         user.is_restaurant = True
         user.save()
@@ -73,7 +89,6 @@ def signup(request):
         rider.save()
     
     print("base user", user)
-    
     return Response({'message': 'User created successfully'}, status=200)
   
 @api_view(['GET','PUT'])

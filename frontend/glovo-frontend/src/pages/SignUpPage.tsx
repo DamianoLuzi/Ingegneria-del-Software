@@ -128,8 +128,8 @@ function SignUpForm(props: any) {
         "http://localhost:8000/signup",
         formData
       );
-      console.log("Response:", response.data[0]);
-      props.setUser(response.data[0]);
+      console.log("Response:", response.data);
+      props.setUser(response.data);
     } catch (error:any) {
       console.error("Error:", error);
       setErrors(error.response.data);
