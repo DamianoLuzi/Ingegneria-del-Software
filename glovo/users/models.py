@@ -17,20 +17,10 @@ class BaseUser(models.Model):
   def get_user_by_role(self, role, username):
     if role == 'cliente':
       return Customer.objects.get(username = username)
-      #user = Customer.objects.get(user = baseUser)
     elif role == 'ristorante':
       return Restaurant.objects.get(username = username)
-      #user = Restaurant.objects.get(user = baseUser)
     else:
       return Rider.objects.get(username = username)
-    
-  def get_role(self):
-    if self.is_customer:
-        return 'cliente'
-    elif self.is_restaurant:
-        return 'ristorante'
-    else:
-        return 'rider'
 
   def update_balance(self, balance):
     self.balance = balance
@@ -45,7 +35,7 @@ class BaseUser(models.Model):
         print("authenticate user case", u)
         return u
       elif role == 'ristorante':
-        return Restaurant.objects.get(name=username)
+        return Restaurant.objects.get(username=username)
       elif role == 'rider':
         return Rider.objects.get(username=username)
     except (Customer.DoesNotExist, Restaurant.DoesNotExist, Rider.DoesNotExist):
@@ -54,8 +44,7 @@ class BaseUser(models.Model):
   @classmethod 
   def create_user(cls, role, **kwargs):
     if role == 'cliente':
-        user = Customer(
-          #user=base_user, 
+        user = Customer( 
           username=kwargs['username'],
           password=kwargs['password'],
           ruolo = role,
@@ -63,7 +52,6 @@ class BaseUser(models.Model):
           balance=kwargs.get('balance', 0))
     elif role == 'ristorante':
         user = Restaurant(
-          #user=base_user,
           name=kwargs['username'],
           username=kwargs['username'],
           ruolo = role,
@@ -106,8 +94,10 @@ class Restaurant(BaseUser):
   position = models.CharField(max_length=100)
   orarioApertura=models.DateField(blank=True, null=True)
   orarioChiusura=models.DateField(blank=True, null=True)
+
   def __str__(self):
     return str(self.name+' '+str(self.balance)) 
+  
   def to_json(self):
     return {
       'name': self.name,
@@ -121,8 +111,10 @@ class Restaurant(BaseUser):
 class Rider(BaseUser):
   status = models.CharField(max_length=100)
   position  = models.CharField(max_length=100)
+
   def __str__(self):
     return str(str(self.ruolo)+ ' '+ self.status)
+  
   def to_json(self):
     return {
       'username': self.username,

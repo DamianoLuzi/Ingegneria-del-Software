@@ -42,7 +42,6 @@ def signup(request):
 def balance(request, user_name):
   print("GET balance", request.data)
   if request.method == 'GET':
-    #user_name = kwargs.get('user_name')
     print('username', user_name)
     try:
       try:

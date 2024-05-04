@@ -127,13 +127,15 @@ def menu(request,**kwargs):
   if request.method == "POST":
     print("menu POST\n", request.data)
     try:
-      res = Restaurant.objects.get(name = restaurant_name)
+      res = Restaurant.objects.get(username = restaurant_name)
+      print("res adding prooduct\n", res)
       newProduct = Item(
         restaurant_id = res.pk,
         name = request.data['name'],
         description = request.data['description'],
         price= request.data['price']
       )
+      print("new Prod\n\n", newProduct)
       newProduct.save()
     except Exception as e:
       return HttpResponse(e, status = 500)

@@ -1,8 +1,8 @@
 from django.db import models
 from main.models import Item
-from users.models import Restaurant, Rider
+from users.models import Restaurant, Rider, BaseUser
 from users.models import Customer
-
+from django.core.exceptions import ObjectDoesNotExist
 # Create your models here.
 
 class Order(models.Model):
@@ -15,8 +15,72 @@ class Order(models.Model):
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+
   def __str__(self):
     return str(str(self.items)+'-'+str(self.restaurant_id)+'-'+str(self.destination))
+  
+  @classmethod
+  def get_orders_by_user(cls, role, username):
+    try:
+      try:
+        user = Restaurant.objects.get(name=username)
+        orders = cls.objects.filter(restaurant_id = user.pk)
+      except ObjectDoesNotExist:
+        try:
+          user = Customer.objects.get(username=username)
+          orders = cls.objects.filter(customer_id = user.pk)
+        except ObjectDoesNotExist:
+          try:
+            user = Rider.objects.get(username=username)
+            orders = cls.objects.filter(rider_id = user.pk)
+          except ObjectDoesNotExist:
+            return None     
+    except Exception as e:
+      return None
+    print("models orders\n", orders)
+    return orders
+    """ try: 
+      user = BaseUser.get_user_by_role(role, username)
+      #print("filter query\n\n",**f"{role}_id")
+      print("Order user\n", user.to_json())
+      try:
+        roles_dict = {
+          'cliente':'customer',
+          'ristorante':'restaurant',
+          'rider':'rider'
+        }
+        r = roles_dict['role']
+        try:
+          orders = cls.objects.filter(restaurant_id = user.pk)
+        except ObjectDoesNotExist:
+          try:
+            orders = cls.objects.filter(customer_id = user.pk)
+          except ObjectDoesNotExist:
+            try:
+              orders = cls.objects.filter(rider_id = user.pk)
+            except ObjectDoesNotExist:
+              return None
+        #orders = Order.objects.filter(**{f"{r}_id": user.pk})
+        print("fetched orders\n", orders)
+        if orders is not None:
+          return orders
+      except Order.DoesNotExist:
+        return []
+    except Exception:
+      return None """
+    
+  def to_json(self):
+    return ({   
+      'created_at': self.created_at,
+      'customer_id': self.customer_id,
+      'destination': self.destination,
+      'items': self.items,
+      'price':self.price,
+      'restaurant_id': self.restaurant_id,
+      'rider_id':self.rider_id,
+      'status':self.status,
+      'updated_at': self.updated_at
+    })
   
 class OrderDetails:
   order = models.ForeignKey(Order, on_delete=models.CASCADE)
