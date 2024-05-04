@@ -16,7 +16,7 @@ import './styles/App.css'; // Import the CSS file for styling
 
 function App() {
   
-  const [restaurants, setRestaurants] = useState<Ristorante[]>();
+  const [restaurants, setRestaurants] = useState();
   const [user, setUser] = useState<Utente | null>();
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [products, setProducts] = useState(null);

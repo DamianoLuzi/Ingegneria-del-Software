@@ -51,11 +51,11 @@ function EditMenuPage(props: any) {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const newProduct = await axios.post(`http://localhost:8000/${props.user.name}/menu`, formData);
+      const newProduct = await axios.post(`http://localhost:8000/${props.user.username}/menu`, formData);
       console.log("new item  ", newProduct)
       setFormData({ name: '', description: '', price: 0 });
       setShowForm(false);
-      const response = await axios.get(`http://localhost:8000/${props.user.name}/menu`);
+      const response = await axios.get(`http://localhost:8000/${props.user.username}/menu`);
       setMenuItems(response.data);
     } catch (error) {
       console.error("Error adding new menu item:", error);

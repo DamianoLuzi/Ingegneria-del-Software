@@ -18,7 +18,9 @@ def home(request):
 def restaurants(request):
   if request.method == 'GET':
     restaurants = Restaurant.objects.all()
-    return Response({"restaurants": restaurants})
+    restaurants_json = [restaurant.to_json() for restaurant in restaurants]
+    print("res JSON", restaurants_json)
+    return JsonResponse(restaurants_json, status=200, safe=False)
   
 @api_view(['POST'])
 def login(request):
@@ -89,7 +91,7 @@ def users(request):
   except:
     return Response({"message":'unable to fetch'})
   
-@api_view(['GET'])
+""" @api_view(['GET'])
 def restaurants(request):
   try:
     restaurants = Restaurant.objects.all()
@@ -97,7 +99,7 @@ def restaurants(request):
     print("restaurants", data)
     return HttpResponse(data, status= 200)
   except:
-    return Response({"message":'unable to fetch'})
+    return Response({"message":'unable to fetch'}) """
   
 @api_view(['GET'])
 def items(request):

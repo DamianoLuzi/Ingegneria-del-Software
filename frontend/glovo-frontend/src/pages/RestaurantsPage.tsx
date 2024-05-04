@@ -5,14 +5,17 @@ function RestaurantsPage(props: any) {
   useEffect(() => {
     const getRistoranti = async () => {
       const response = await axios.get('http://localhost:8000/restaurants')
-      console.log("restaurant response", response.data, typeof response.data)
+      console.log("restaurant response", response.data)
       if(response) props.setRestaurants(response.data)
       console.log("props rest", props.restaurants)
     }
     getRistoranti()
   },[])
-   // <a href={`/${restaurant.name.replace(/\s+/g, '').toLowerCase()}/menu`} className="btn btn-primary" onClick={() => displayMenu(restaurant)}>View Menu</a>
-   //<h1 htmlFor="items">Choose your favorite restaurant!</h1>
+
+  /* useEffect(() => {
+    props.setRestaurants(props.selectedRestaurant);
+  }, [props.selectedRestaurant]); */
+
   return (
     <div>
     <br />
@@ -22,9 +25,9 @@ function RestaurantsPage(props: any) {
         <div key={index} className="col-md-4">
           <div className="card mb-3">
             <div className="card-body">
-              <h1 className="card-title">{restaurant.fields.name}</h1>
-              <p className="card-text">Location: {restaurant.fields.position}</p> 
-              <Link to={`/${restaurant.fields.name.toLowerCase().replace(/\s+/g, '')}/menu`}>
+              <h1 className="card-title">{restaurant.username}</h1>
+              <p className="card-text">Location: {restaurant.posizione}</p> 
+              <Link to={`/${restaurant.username.toLowerCase().replace(/\s+/g, '')}/menu`}>
               <button
                 className="btn btn-primary"
                 onClick={() => {

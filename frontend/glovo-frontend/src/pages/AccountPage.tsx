@@ -133,7 +133,6 @@ function AccountPage(props: any) {
     try {
       console.log("form PUT  ", formData)
       await axios.put(`http://localhost:8000/${props.user.username}/account`, formData);
-      // Optionally, you can update the user state or display a success message
       console.log("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);

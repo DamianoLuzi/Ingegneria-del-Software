@@ -18,78 +18,25 @@ def home(request):
 def login(request):
     print("login request ", request.data)
     try:
-        #baseUser = BaseUser.objects.get(username = request.data['username'])
-        if request.data['ruolo'] == 'cliente':
-          user = Customer.objects.get(username=request.data['username'])
-          #user = Customer.objects.get(user = baseUser)
-        elif request.data['ruolo'] == 'ristorante':
-          user = Restaurant.objects.get(name=request.data['username'])
-          #user = Restaurant.objects.get(user = baseUser)
+        user = BaseUser.authenticate_user(request.data['username'], request.data['ruolo'])
+        print("login base user", user)
+        if user:
+            print("authenticated user\n", user.to_json())
+            return JsonResponse(user.to_json(), status = 200)
         else:
-          user = Rider.objects.get(username=request.data['username'])
-          #user = Rider.objects.get(user = baseUser)
-        print("user", user)
-        if user.user.is_customer:
-            user_role = 'cliente'
-        elif user.user.is_restaurant:
-            user_role = 'ristorante'
-        else:
-            user_role = 'rider'
-        user_data = serialize('json', [user])
-        user_data_dict = json.loads(user_data)
-        print("udd ", user_data_dict)
-        user_data_dict[0]['fields']['ruolo'] = user_role
-        print("login response", user_data_dict)
-        return Response([user_data_dict[0]['fields']])
-
-    except Customer.DoesNotExist or Restaurant.DoesNotExist or Rider.DoesNotExist:
-        return HttpResponse({'User not found'}, status=404)
+            return HttpResponse({'User not found'}, status=404)
     except Exception as e:
-       return HttpResponse({'User not found'}, status=500)
-       return Response([{"error":'Internal Server Error'}])
-
-
-""" @api_view(['POST'])
-def login(request):
-  body = request.data
-  print("login body", body)
-  try:
-    base_user = BaseUser()
-    user = base_user.get_user_by_role(body['ruolo'], body['username'])
-    print("login \n", user)
-    return HttpResponse(user, status = 200)
-  except Exception as e:
-    print("login exception", e) """
-
+        return HttpResponse({'Error authenticating user'}, status=500)
   
 @api_view(['POST'])
 def signup(request):
-  if request.method == 'POST':
-    print("signup request", request.data)   
-    role = request.data.get('ruolo', None)
-    if role not in ['cliente', 'ristorante', 'rider']:
-        return Response({'error': 'Invalid role'}, status=400)
-    user = BaseUser(username=request.data['username'])
-    if role == 'cliente':
-        user.is_customer = True
-        user.save()
-        customer = Customer(user=user, username=request.data['username'], password=request.data['password'], email=request.data['email'],balance=request.data.get('balance', 0))
-        customer.save()
-        print("customer JSON\n", customer.to_json())
-        return JsonResponse(customer.to_json(), status = 200)
-    elif role == 'ristorante':
-        user.is_restaurant = True
-        user.save()
-        restaurant = Restaurant(user=user, name=request.data['username'],username=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
-        restaurant.save()
-    elif role == 'rider':
-        user.is_rider = True
-        user.save()
-        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], password = request.data['password'], status='available' ,balance=request.data.get('balance', 0))
-        rider.save()
-    
-    print("base user", user)
-    return Response({'message': 'User created successfully'}, status=200)
+    if request.method == 'POST':
+        role = request.data.get('ruolo', None)
+        if role not in ['cliente', 'ristorante', 'rider']:
+            return Response({'error': 'Invalid role'}, status=400)
+        user = BaseUser.create_user(role, **request.data)
+        print(f"{role.capitalize()} JSON\n", user.to_json())
+        return JsonResponse(user.to_json(), status=200)
   
 @api_view(['GET','PUT'])
 def balance(request, user_name):
@@ -162,4 +109,86 @@ def account(request, user_name):
     return HttpResponse(user, status = 201)
      
    
-   
+  
+
+  """ 
+@api_view(['POST'])
+def login(request):
+    print("login request ", request.data)
+    try:
+        #baseUser = BaseUser.objects.get(username = request.data['username'])
+        if request.data['ruolo'] == 'cliente':
+          user = Customer.objects.get(username=request.data['username'])
+          #user = Customer.objects.get(user = baseUser)
+        elif request.data['ruolo'] == 'ristorante':
+          user = Restaurant.objects.get(name=request.data['username'])
+          #user = Restaurant.objects.get(user = baseUser)
+        else:
+          user = Rider.objects.get(username=request.data['username'])
+          #user = Rider.objects.get(user = baseUser)
+        print("user", user)
+        if user.user.is_customer:
+            user_role = 'cliente'
+        elif user.user.is_restaurant:
+            user_role = 'ristorante'
+        else:
+            user_role = 'rider'
+        user_data = serialize('json', [user])
+        user_data_dict = json.loads(user_data)
+        print("udd ", user_data_dict)
+        user_data_dict[0]['fields']['ruolo'] = user_role
+        print("login response", user_data_dict)
+        return Response([user_data_dict[0]['fields']])
+
+    except Customer.DoesNotExist or Restaurant.DoesNotExist or Rider.DoesNotExist:
+        return HttpResponse({'User not found'}, status=404)
+    except Exception as e:
+       return HttpResponse({'User not found'}, status=500)
+       return Response([{"error":'Internal Server Error'}]) """
+
+
+""" @api_view(['POST'])
+def login(request):
+  body = request.data
+  print("login body", body)
+  try:
+    base_user = BaseUser()
+    user = base_user.get_user_by_role(body['ruolo'], body['username'])
+    print("login \n", user)
+    return HttpResponse(user, status = 200)
+  except Exception as e:
+    print("login exception", e) """
+
+  
+'''@api_view(['POST'])
+def signup(request):
+  if request.method == 'POST':
+    print("signup request", request.data)   
+    role = request.data.get('ruolo', None)
+    if role not in ['cliente', 'ristorante', 'rider']:
+        return Response({'error': 'Invalid role'}, status=400)
+    user = BaseUser(username=request.data['username'])
+    if role == 'cliente':
+        user.is_customer = True
+        user.save()
+        customer = Customer(user=user, username=request.data['username'], password=request.data['password'], email=request.data['email'],balance=request.data.get('balance', 0))
+        customer.save()
+        print("customer JSON\n", customer.to_json())
+        return JsonResponse(customer.to_json(), status = 200)
+    elif role == 'ristorante':
+        user.is_restaurant = True
+        user.save()
+        restaurant = Restaurant(user=user, name=request.data['username'],username=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
+        restaurant.save()
+        print("restaurant JSON\n", restaurant.to_json())
+        return JsonResponse(restaurant.to_json(), status = 200)
+    elif role == 'rider':
+        user.is_rider = True
+        user.save()
+        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], password = request.data['password'], status='available' ,balance=request.data.get('balance', 0))
+        rider.save()
+        print("rider JSON\n", rider.to_json())
+        return JsonResponse(rider.to_json(), status = 200)
+    
+    print("base user", user)
+    return Response({'message': 'User created successfully'}, status=200)'''
