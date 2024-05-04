@@ -92,13 +92,10 @@ function LoginForm(props: any) {
 
   const handleFormSubmit = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/login",
-        formData
-      );
-      console.log("Response:", response.data[0]);
-      props.setUser(response.data[0]);
-      console.log("setUser", response.data[0]);
+      const response = await axios.post("http://localhost:8000/login",formData);
+      console.log("Response:", response.data);
+      props.setUser(response.data);
+      console.log("setUser", response.data);
     } catch (error:any) {
       console.error("Error:", error);
       setErrors(error.response.data);

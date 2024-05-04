@@ -11,7 +11,7 @@ function MenuPage(props:any) {
     const getProducts = async () => {
       console.log("getProducts user  ", props.user)
       try {
-        let response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
+        let response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.name}/menu`);
         if(props.user.ruolo === 'ristorante') response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
         console.log("menu response", response);
         if (response) props.setProducts(response.data);
@@ -27,10 +27,8 @@ function MenuPage(props:any) {
     setSelectedItems(prevSelectedItems => {
       const isSelected = prevSelectedItems.includes(product);
       if (isSelected) {
-        // If selected, remove it from the selectedItems array
         return prevSelectedItems.filter(item => item !== product);
       } else {
-        // If not selected, add it to the selectedItems array
         return [...prevSelectedItems, product];
       }
     });
@@ -39,13 +37,6 @@ function MenuPage(props:any) {
   useEffect(() => {
     props.setCartItems(selectedItems);
   }, [selectedItems]);
-
-  /* <label>Add to cart:</label>
-            <input
-              type="checkbox"
-              checked={selectedItems.includes(product)}
-              onChange={() => handleCheckboxChange(product)}
-              /> */
 
   return (
     <>

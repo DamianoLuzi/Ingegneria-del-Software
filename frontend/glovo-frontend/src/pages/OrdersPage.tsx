@@ -6,9 +6,8 @@ function OrdersPage(props: any) {
   useEffect(() => {
     console.log("props user", props.user)
     const fetchOrders = async () => {
-      const username = props.user.ruolo === 'ristorante' ? props.user.name : props.user.username
-      console.log("username orders", username)
-      const response = await axios.get(`http://localhost:8000/${username}/orders`)
+      console.log("username orders", props.user.username)
+      const response = await axios.get(`http://localhost:8000/${props.user.username}/orders`)
       console.log("orders response", response)
       if(response) setOrders(response.data)
     }
@@ -16,8 +15,8 @@ function OrdersPage(props: any) {
   }, [])
 
   const handleStatusChange = async (order:any) => {
-    const username = props.user.ruolo === 'ristorante' ? props.user.name : props.user.username
-    const response = await axios.put(`http://localhost:8000/${username}/orders`, order )
+    console.log("status change", props.user)
+    const response = await axios.put(`http://localhost:8000/${props.user.username}/orders`, order )
     console.log("PUT response", response.data)
   }
   return(
@@ -32,6 +31,7 @@ function OrdersPage(props: any) {
             <h2>{order.fields.items}</h2>
             <p>Price: {order.fields.price} €</p>
             <p>Status: {order.fields.status}</p>
+            {/* Buttons for status changes depending on the type of user */}
             {props.user.ruolo === 'ristorante' && <button onClick={() => handleStatusChange(order)}>Order Ready!</button>}
             {props.user.ruolo === 'rider' && <button onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
             {props.user.ruolo === 'cliente' && <button onClick={() => handleStatusChange(order)}>Order Received!</button>}
