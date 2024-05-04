@@ -7,7 +7,7 @@ function OrdersPage(props: any) {
     console.log("props user", props.user)
     const fetchOrders = async () => {
       console.log("username orders", props.user.username)
-      const response = await axios.get(`http://localhost:8000/${props.user.username}/orders`)
+      const response = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`)
       console.log("orders response", response)
       if(response) setOrders(response.data)
     }
@@ -16,7 +16,7 @@ function OrdersPage(props: any) {
 
   const handleStatusChange = async (order:any) => {
     console.log("status change", props.user)
-    const response = await axios.put(`http://localhost:8000/${props.user.username}/orders`, order )
+    const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, order )
     console.log("PUT response", response.data)
   }
   return(
