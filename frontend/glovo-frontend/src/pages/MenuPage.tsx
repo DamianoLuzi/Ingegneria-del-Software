@@ -47,9 +47,9 @@ function MenuPage(props:any) {
         props.products.map((product: any, index: number) => (
           <li>
             <div key={index} className="card">
-            <h2>{product.fields.name}</h2>
-            <p>Description: {product.fields.description}</p>
-            <p>Price: {product.fields.price} €</p>
+            <h2>{product.name}</h2>
+            <p>Description: {product.description}</p>
+            <p>Price: {product.price} €</p>
             <button onClick={() => handleCheckboxChange(product)}>
             {selectedItems.includes(product) ? "Remove from Cart" : "Add to Cart"}
             </button>

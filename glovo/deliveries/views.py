@@ -44,8 +44,9 @@ def orders(request,user_role, user_name):
     orders = Order.get_orders_by_user(user_role, user_name)
     print("GET orders\n", orders)
     serialized_orders = serialize('json', orders)
-    #orders_json = [order.to_json() for order in orders]
-    return HttpResponse(serialized_orders, status = 200)
+    orders_json = [order.to_json() for order in orders]
+    #return HttpResponse(serialized_orders, status = 200)
+    return JsonResponse(orders_json, status = 200, safe=False)
   
   if request.method == 'POST':
     print("orders POST req ", request.data)
@@ -53,14 +54,14 @@ def orders(request,user_role, user_name):
     order_price = request.data['price']
     print("items", items[0], type(items[0]))
     print("order price", order_price, type(order_price))
-    restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
+    restaurant = Restaurant.objects.get(username = items[0]['restaurant'])
     user = Customer.objects.get(username = request.data['user']['username'])
     rider = Rider.objects.filter(status = 'available').first()
     if rider is None: return HttpResponse({'No riders available at the moment'}, status = 500)
     print("user", user)
     print("restaurant", restaurant)
     try:
-      items_names = [item['fields']['name'] for item in items]
+      items_names = [item['name'] for item in items]
       serialized_items = json.dumps(items_names)
       print("ser it", serialized_items, type(serialized_items))
       new_order = Order(

@@ -52,7 +52,7 @@ function OrdersPage(props: any) {
             <h2 onClick={() => {
               fetchOrderDetails(order)
               setShowDetails(true)
-            }}>{order.fields.items}</h2>
+            }}>{order.items}</h2>
             {console.log("expanded order\n\n", expandedOrder)}
             {expandedOrder && expandedOrder.pk == order.pk &&
               (<div>

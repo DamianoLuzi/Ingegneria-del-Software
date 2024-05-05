@@ -10,7 +10,7 @@ function CartPage (props: any) {
     const orderData = {
       'user' : props.user,
       'items' : props.cartItems,
-      'price': props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)
+      'price': props.cartItems.reduce((total: number, item: any) => total + item.price, 0)
     }
     const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData)
     if(response) {
@@ -39,11 +39,11 @@ function CartPage (props: any) {
     <ul>
     {props.cartItems && props.cartItems.map((item:any) => (
       <li>
-        <h3>{item.fields.name} - {item.fields.price} €</h3> 
+        <h3>{item.name} - {item.price} €</h3> 
       </li>
     ))}
     </ul>
-    <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)} €</h2>
+    <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.price, 0)} €</h2>
     {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Pay</button>}
     {<button onClick={() => props.setCartItems([])}>Cancel</button>}
     </>
