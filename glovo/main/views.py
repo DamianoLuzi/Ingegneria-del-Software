@@ -91,16 +91,7 @@ def users(request):
       serialize('json',users), status= 200)
   except:
     return Response({"message":'unable to fetch'})
-  
-""" @api_view(['GET'])
-def restaurants(request):
-  try:
-    restaurants = Restaurant.objects.all()
-    data = serialize('json', restaurants)
-    print("restaurants", data)
-    return HttpResponse(data, status= 200)
-  except:
-    return Response({"message":'unable to fetch'}) """
+
   
 @api_view(['GET'])
 def items(request):
@@ -113,22 +104,19 @@ def items(request):
     return Response({"message":'unable to fetch'})
   
 @api_view(['GET', 'POST'])
-def menu(request,**kwargs):
-  restaurant_name = kwargs.get('restaurant_name')
-  print("restaurant menu", restaurant_name)
+def menu(request,restaurant_name):
   if request.method == "GET":
     try:
       products = Item.get_restaurant_items(restaurant_name)
       if products is not None:
         products_json = [product.to_json() for product in products]
         return JsonResponse(products_json, status = 200, safe = False)
-    except Restaurant.DoesNotExist:
+    except Restaurant.DoesNotExist or Item.DoesNotExist:
       return HttpResponse(status=404)
   if request.method == "POST":
     print("menu POST\n", request.data)
     try:
       newProduct = Item.add_new_product(restaurant_name, request.data)
-      print("new Prod\n\n", newProduct)
       if newProduct is not None:
         return JsonResponse(newProduct.to_json(), status = 200)
     except Exception as e:
@@ -147,7 +135,6 @@ def menu_details(request, restaurant_name, id):
   if request.method == 'PUT':
     try:
       updatedProduct = Item.update_product(id, restaurant_name, request.data)
-      print("new Prod\n\n", updatedProduct)
       if updatedProduct is not None:
         return JsonResponse(updatedProduct.to_json(), status = 200)
       else:
@@ -155,89 +142,3 @@ def menu_details(request, restaurant_name, id):
     except Exception as e:
       return HttpResponse(e, status = 500)
      
-
-  
-""" @api_view(['GET','POST','PUT'])
-def orders(request,**kwargs):
-  print("orders request", request.data)
-  print("kwargs", kwargs)
-  user_name = kwargs.get('user_name')
-  print("user order", user_name)
-  try:
-      try:
-        user = Restaurant.objects.get(name=user_name)
-        orders = Order.objects.filter(restaurant_id = user.pk)
-      except ObjectDoesNotExist:
-        try:
-          user = Customer.objects.get(username=user_name)
-          orders = Order.objects.filter(customer_id = user.pk)
-        except ObjectDoesNotExist:
-          try:
-            user = Rider.objects.get(username=user_name)
-            orders = Order.objects.filter(rider_id = user.pk)
-          except ObjectDoesNotExist:
-            return HttpResponse({'error': 'User not found'}, status=404)      
-  except Exception as e:
-    return HttpResponse({'error':str(e)}, status = 500)
-  
-  if request.method == 'GET':
-    serialized_orders = serialize('json', orders)
-    print("serialized")
-    return HttpResponse(serialized_orders, status = 200)
-  
-  if request.method == 'POST':
-    print("orders POST req ", request.data)
-    items = request.data['items']
-    order_price = request.data['price']
-    print("items", items[0], type(items[0]))
-    print("order price", order_price, type(order_price))
-    restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
-    user = Customer.objects.get(username = request.data['user']['username'])
-    rider = Rider.objects.filter(status = 'available').first()
-    if rider is None: return HttpResponse({'No riders available at the moment'}, status = 500)
-    print("user", user)
-    print("restaurant", restaurant)
-    try:
-      items_names = [item['fields']['name'] for item in items]
-      serialized_items = json.dumps(items_names)
-      print("ser it", serialized_items, type(serialized_items))
-      new_order = Order(
-      restaurant_id = restaurant,
-      customer_id = user,
-      rider_id = rider,
-      items = serialized_items,
-      price = float(order_price),
-      status='in progress...',
-      destination = '')
-      if user.balance >= order_price:
-        new_order.save()
-        print("new order", new_order)
-        #updating balances and status
-        user.balance = user.balance - order_price
-        user.save()
-        restaurant.balance = restaurant.balance + order_price * 80/100
-        restaurant.save()
-        rider.balance = rider.balance + order_price * 20 /100
-        rider.status = 'assigned'
-        rider.save()
-      else:
-        return HttpResponse({'Insufficient Credit Balance,Top up your card first!'}, status = 500)
-      return HttpResponse(new_order, status = 200)
-    except Exception as e:
-      print("ERROR ", str(e))
-      return HttpResponse({'error':str(e)},status=500)
-  if request.method == 'PUT':
-    print("orders PUT", request.data)
-    user_data = serialize('json', [user])
-    print("user PUT", user_data)
-    order = Order.objects.get(pk = request.data['pk'])
-    if isinstance(user, Restaurant):  ##need to check that it is the irght restaurant as well
-      order.status = 'in transit'
-    elif isinstance(user, Rider):  ##need to check that it is the irght rider as well
-      order.status = 'delivered'
-    else: ##need to check that it is the irght user as well
-      order.status = 'completed'
-    order.save()
-    serialized_order = serialize('json', [order])
-    return HttpResponse(serialized_order, status=200)
-     """

@@ -83,5 +83,4 @@ def orders(request,user_role, user_name):
 @api_view(['GET'])
 def order_details(request, id):
   order = Order.objects.get(pk = id)
-  print("order to return\n", order)
   return JsonResponse(order.to_json(), status = 200, safe = False)

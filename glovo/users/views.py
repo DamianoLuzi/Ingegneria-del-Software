@@ -18,13 +18,13 @@ def home(request):
 def login(request):
     print("login request ", request.data)
     try:
-        user = BaseUser.authenticate_user(request.data['username'], request.data['ruolo'])
-        print("login base user", user)
-        if user:
-            print("authenticated user\n", user.to_json())
-            return JsonResponse(user.to_json(), status = 200)
-        else:
-            return HttpResponse({'User not found'}, status=404)
+      user = BaseUser.authenticate_user(request.data['username'], request.data['ruolo'])
+      print("login base user", user)
+      if user:
+        print("authenticated user\n", user.to_json())
+        return JsonResponse(user.to_json(), status = 200)
+      else:
+        return HttpResponse({'User not found'}, status=404)
     except Exception as e:
         return HttpResponse({'Error authenticating user'}, status=500)
   
@@ -39,53 +39,20 @@ def signup(request):
         return JsonResponse(user.to_json(), status=200)
   
 @api_view(['GET','PUT'])
-def balance(request, user_name):
+def balance(request, user_name, user_role):
   print("GET balance", request.data)
   if request.method == 'GET':
-    print('username', user_name)
     try:
-      try:
-        customer = Customer.objects.get(username = user_name)
-        return HttpResponse(customer.balance, status  = 200)
-      except:
-        try:
-          res = Restaurant.objects.get(name = user_name)
-          return HttpResponse(res.balance, status  = 200)
-        except:
-          try:
-            rider = Rider.objects.get(username = user_name)
-            return HttpResponse(rider.balance, status  = 200)
-          except Exception as e:
-            return HttpResponse({'error':str(e)}, status = 404)
-
+      user = BaseUser.get_user_by_role(user_role, user_name)
+      return JsonResponse(user.balance, status = 200, safe= False)
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
   if request.method == 'PUT':
-    print("PUT request.user", request.data)
-    print("balance PUT", request.data)
-    username = request.data['username'] 
-    #user_name = kwargs.get('user_name')
-    print(' kwargs username', user_name, username)
     try:
-      try:
-        customer = Customer.objects.get(username = user_name)
-        customer.balance = request.data['balance']
-        customer.save()
-        return HttpResponse(customer, status  = 200)
-      except:
-        try:
-          res = Restaurant.objects.get(name = user_name)
-          res.balance = request.data['balance']
-          res.save()
-          return HttpResponse(res, status  = 200)
-        except:
-          try:
-            rider = Rider.objects.get(username = user_name)
-            rider.balance = request.data['balance']
-            rider.save()
-            return HttpResponse(rider, status  = 200)
-          except Exception as e:
-            return HttpResponse({'error':str(e)}, status = 404)
+      user = BaseUser.get_user_by_role(user_role, user_name)
+      print("user balance\n", user.to_json())
+      user.update_balance(request.data['balance'])
+      return JsonResponse(user.to_json(), status = 200, safe = False)
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
 
