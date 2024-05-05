@@ -75,7 +75,6 @@ class BaseUser(models.Model):
   def update_user(cls, role, username, data):
     try:
       user = cls.get_user_by_role(role, username)
-      print("user to be updated\t", user.to_json())
       user.username = data['username']
       user.password = data['password']
       user.email = data['email']
@@ -91,12 +90,6 @@ class Customer(BaseUser):
     return str(self.username+' '+str(self.pk))
   
   def to_json(self):
-    print("customer\n\n", {
-      'username': self.username,
-      'password': self.password,
-      'email': self.email,
-      'ruolo': self.ruolo
-    })
     return {
       'username': self.username,
       'password': self.password,
@@ -128,7 +121,7 @@ class Rider(BaseUser):
   position  = models.CharField(max_length=100)
 
   def __str__(self):
-    return str(str(self.ruolo)+ ' '+ self.status)
+    return str(self.username+ ' '+ self.status)
   
   def to_json(self):
     return {

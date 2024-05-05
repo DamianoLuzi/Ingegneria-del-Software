@@ -11,7 +11,7 @@ function BalancePage(props: any) {
       const u = props.user
       u.balance = updatedBalance
       console.log("PUT username", props.user.username.replace(" ",'%20'))
-      const response = await axios.put(`http://localhost:8000/${encodeURIComponent(props.user.username)}/balance`,u);
+      const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${encodeURIComponent(props.user.username)}/balance`,u);
       console.log("top up response", response)
       props.user.balance = updatedBalance
     } catch (error) {
@@ -22,7 +22,7 @@ function BalancePage(props: any) {
   useEffect(() => {
     console.log("props user", props.user)
     const fetchBalance = async () => {
-      const response = await axios.get(`http://localhost:8000/${props.user.username}/balance`)
+      const response = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/balance`)
       console.log("balanceresponse", response)
       if(response) setBalance(response.data)
     }
