@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from main.models import Item
 from users.models import Restaurant, Rider
-from users.models import Customer
+from users.models import Customer, BaseUser
 from deliveries.models import Order
 import json
 from django.core.serializers import serialize
@@ -13,11 +13,8 @@ from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 # Create your views here.
 @api_view(['GET','POST','PUT'])
-def orders(request,user_name):
+def orders(request,user_role, user_name):
   print("orders request", request.data)
-  #print("kwargs", kwargs)
-  # user_name = kwargs.get('user_name')
-  print("user order", user_name)
   try:
       try:
         user = Restaurant.objects.get(name=user_name)
@@ -33,12 +30,23 @@ def orders(request,user_name):
           except ObjectDoesNotExist:
             return HttpResponse({'error': 'User not found'}, status=404)      
   except Exception as e:
-    return HttpResponse({'error':str(e)}, status = 500)
+    return HttpResponse({'error':str(e)}, status = 500) 
+  
+  """  try:
+    orders = Order.get_orders_by_user(user_role, user_name)
+    if orders:
+      return JsonResponse(orders.to_json(), status = 200)
+  except ObjectDoesNotExist:
+    return HttpResponse({'error':"Orders not found"}, status = 500) """
+    
   
   if request.method == 'GET':
+    orders = Order.get_orders_by_user(user_role, user_name)
+    print("GET orders\n", orders)
     serialized_orders = serialize('json', orders)
-    print("serialized")
-    return HttpResponse(serialized_orders, status = 200)
+    orders_json = [order.to_json() for order in orders]
+    #return HttpResponse(serialized_orders, status = 200)
+    return JsonResponse(orders_json, status = 200, safe=False)
   
   if request.method == 'POST':
     print("orders POST req ", request.data)
@@ -46,14 +54,14 @@ def orders(request,user_name):
     order_price = request.data['price']
     print("items", items[0], type(items[0]))
     print("order price", order_price, type(order_price))
-    restaurant = Restaurant.objects.get(pk = items[0]['fields']['restaurant'])
+    restaurant = Restaurant.objects.get(username = items[0]['restaurant'])
     user = Customer.objects.get(username = request.data['user']['username'])
     rider = Rider.objects.filter(status = 'available').first()
     if rider is None: return HttpResponse({'No riders available at the moment'}, status = 500)
     print("user", user)
     print("restaurant", restaurant)
     try:
-      items_names = [item['fields']['name'] for item in items]
+      items_names = [item['name'] for item in items]
       serialized_items = json.dumps(items_names)
       print("ser it", serialized_items, type(serialized_items))
       new_order = Order(
@@ -95,4 +103,9 @@ def orders(request,user_name):
     order.save()
     serialized_order = serialize('json', [order])
     return HttpResponse(serialized_order, status=200)
-    
+
+@api_view(['GET'])
+def order_details(request, id):
+  order = Order.objects.get(pk = id)
+  print("order to return\n", order)
+  return JsonResponse(order.to_json(), status = 200, safe = False)

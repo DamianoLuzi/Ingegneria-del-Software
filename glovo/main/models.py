@@ -4,62 +4,6 @@ from datetime import datetime
 from users.models import BaseUser, Customer, Restaurant
 # Create your models here.
 
-""" 
-  class BaseUser(models.Model):
-  is_customer = models.BooleanField(default=False)
-  is_restaurant = models.BooleanField(default=False)
-  is_rider = models.BooleanField(default=False)
-
-  def __str__(self):
-    if self.is_customer:
-      return 'customer '+str(self.pk)#+' - '+str(self.customer)
-    elif self.is_restaurant:
-      return 'restaurant '+str(self.pk)#+' - '+str(self.restaurant)
-    else:
-      return 'rider '+str(self.pk)#+' - '+str(self.rider) """
-
-""" class Customer(models.Model):
-  user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, primary_key=True)
-  username = models.CharField(max_length=100, blank=True, default='Customer')
-  password = models.CharField(max_length=100, default='')
-  email = models.CharField(max_length=100)
-  balance = models.FloatField(default=0.0)
-  def __str__(self):
-    return str(self.username) """ 
-
-""" class Restaurant(BaseUser):
-  name = models.CharField(max_length=100, blank=True, default='restaurant')
-  password = models.CharField(max_length=100, default='')
-  email = models.CharField(max_length=100)
-  balance = models.FloatField(default=0.0)
-  position = models.CharField(max_length=100)
-  def __str__(self):
-    return str(self.name+' '+self.balance) 
-  
-class Rider(BaseUser):
-  username = models.CharField(max_length=100, blank=True, default='rider')
-  status = models.CharField(max_length=100)
-  position  = models.CharField(max_length=100)
-  balance = models.FloatField()
-  def __str__(self):
-    return str(self.username+ ' '+ self.status) """
-
-
-""" class Order(models.Model):
-  restaurant_id = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING)
-  customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE) #cascade: if user is deleted -> order is deleted
-  rider_id = models.ForeignKey(Rider, on_delete=models.DO_NOTHING)
-  items = models.CharField(max_length=1000)
-  price = models.FloatField(default=0.0)
-  destination= models.CharField(max_length=100)
-  status = models.CharField(max_length=100)
-  payment = models.ForeignKey(Payment, on_delete=models.CASCADE, blank=True, null= True)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-  def __str__(self):
-    return str(str(self.items)+'-'+str(self.restaurant_id)+'-'+str(self.destination)) """
-  
-
 class Item(models.Model):
   restaurant=models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank = True)  #if restaurant is deleted -> item is deleted
   price = models.FloatField()
@@ -67,9 +11,69 @@ class Item(models.Model):
   description = models.CharField(max_length=100, default='')
   def __str__(self):
     return str(self.name+' - '+str(self.restaurant))
+  
+  def to_json(self):
+    print(str(self.pk), "\t belonging to \t", self.restaurant)
+    return ({  
+      'pk': str(self.pk) ,
+      'name': self.name,
+      'price':self.price,
+      'description': self.description,
+      'restaurant': Restaurant.objects.get(pk = self.restaurant.pk).username,
+    })
+  
+  @classmethod
+  def delete_item(cls,id):
+    try:
+      item = cls.objects.get(pk = id)
+      aux = item
+      print("ITEM item to be deleted\n", item)
+      item.delete()
+      return aux
+    except Exception as e:
+      print("error fetching item to be deletd\n", str(e))
+      return None
+  @classmethod
+  def get_restaurant_items(cls,restaurant_name):
+    try:
+      res = Restaurant.objects.get(name = restaurant_name)
+      products = cls.objects.filter(restaurant = res.pk)
+      if products is not None:
+        return products
+    except Restaurant.DoesNotExist or cls.DoesNotExist:
+      return None
+  
+  @classmethod
+  def add_new_product(cls,restaurant_name, data):
+    try:
+      res = Restaurant.objects.get(username = restaurant_name)
+      print("res adding product\n", res)
+      newProduct = cls(
+        restaurant_id = res.pk,
+        name = data['name'],
+        description = data['description'],
+        price= data['price']
+      )
+      newProduct.save()
+      return newProduct
+    except Exception:
+      return None
+  @classmethod
+  def update_product(cls, item_id, restaurant_name, data):
+    try:
+      print(restaurant_name)
+      res = Restaurant.objects.get(username = restaurant_name)
+      item = cls.objects.get(pk = item_id)
+      item.restaurant = res
+      item.name = data['name']
+      item.description = data['description']
+      item.price= data['price']
+      item.save()
+      return item
+    except Exception as e:
+      print("PUT exception\n", str(e))
+      return None
+      
 
-""" class OrderDetails:
-  order = models.ForeignKey(Order, on_delete=models.CASCADE)
-  item = models.ForeignKey(Item, on_delete=models.CASCADE) """
 
   
