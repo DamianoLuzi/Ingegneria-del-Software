@@ -14,7 +14,8 @@ class BaseUser(models.Model):
   def __str__(self):
     return self.ruolo +" "+str(self.pk)
   
-  def get_user_by_role(self, role, username):
+  @classmethod
+  def get_user_by_role(cls, role, username):
     if role == 'cliente':
       return Customer.objects.get(username = username)
     elif role == 'ristorante':
@@ -69,6 +70,20 @@ class BaseUser(models.Model):
           balance=kwargs.get('balance', 0))
     user.save()
     return user
+  
+  @classmethod
+  def update_user(cls, role, username, data):
+    try:
+      user = cls.get_user_by_role(role, username)
+      print("user to be updated\t", user.to_json())
+      user.username = data['username']
+      user.password = data['password']
+      user.email = data['email']
+      user.save()
+      return user
+    except Exception as e:
+      print("exception\n", str(e))
+      return None
     
 class Customer(BaseUser):
   posizione = models.CharField(max_length=20, default="", null=True, blank =True)

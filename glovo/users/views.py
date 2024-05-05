@@ -90,23 +90,17 @@ def balance(request, user_name):
       return HttpResponse({'error':str(e)}, status = 500)
 
 @api_view(['GET','PUT'])
-def account(request, user_name):
+def account(request, user_name, user_role):
   print("account user_name", user_name)
-  user = BaseUser.objects.get(username = user_name)
-  if request.method == "GET":
-    print("account GET", user_name)
-    return HttpResponse(user, status = 200)
-  elif request.method == "PUT":
-    print("account PUT", request.data)
-    if user.is_customer:
-      return HttpResponse(user, status = 202)
-    elif user.is_restaurant:
-      return HttpResponse(user, status = 203)
-    elif user.is_rider:
-      return HttpResponse(user, status = 204)
-    
-    return HttpResponse(user, status = 201)
-     
+  if request.method == 'PUT':
+    updatedUser = BaseUser.update_user(user_role,user_name, request.data)
+    if updatedUser is not None:
+       return JsonResponse(updatedUser.to_json(),status = 200, safe = False)
+  elif request.method == 'GET':
+    user = BaseUser.get_user_by_role(user_name, user_name)
+    if user is not None:
+      return user.to_json()
+   
    
   
 

@@ -61,7 +61,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage user={user} setUser={setUser} />} />
           <Route path="/cart" element={<CartPage user={user} cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/menu" element={<EditMenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
-          <Route path="/account" element = {<AccountPage user={user}/>}/>
+          <Route path="/account" element = {<AccountPage user={user} setUser={setUser}/>}/>
         </Routes>
       </div>
     </Router>
