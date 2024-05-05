@@ -11,6 +11,69 @@ class Item(models.Model):
   description = models.CharField(max_length=100, default='')
   def __str__(self):
     return str(self.name+' - '+str(self.restaurant))
+  
+  def to_json(self):
+    print(str(self.pk), "\t belonging to \t", self.restaurant)
+    return ({  
+      'pk': str(self.pk) ,
+      'name': self.name,
+      'price':self.price,
+      'description': self.description,
+      'restaurant': Restaurant.objects.get(pk = self.restaurant.pk).username,
+    })
+  
+  @classmethod
+  def delete_item(cls,id):
+    try:
+      item = cls.objects.get(pk = id)
+      aux = item
+      print("ITEM item to be deleted\n", item)
+      item.delete()
+      return aux
+    except Exception as e:
+      print("error fetching item to be deletd\n", str(e))
+      return None
+  @classmethod
+  def get_restaurant_items(cls,restaurant_name):
+    try:
+      res = Restaurant.objects.get(name = restaurant_name)
+      products = cls.objects.filter(restaurant = res.pk)
+      if products is not None:
+        return products
+    except Restaurant.DoesNotExist or cls.DoesNotExist:
+      return None
+  
+  @classmethod
+  def add_new_product(cls,restaurant_name, data):
+    try:
+      res = Restaurant.objects.get(username = restaurant_name)
+      print("res adding product\n", res)
+      newProduct = cls(
+        restaurant_id = res.pk,
+        name = data['name'],
+        description = data['description'],
+        price= data['price']
+      )
+      newProduct.save()
+      return newProduct
+    except Exception:
+      return None
+  @classmethod
+  def update_product(cls, item_id, restaurant_name, data):
+    try:
+      print(restaurant_name)
+      res = Restaurant.objects.get(username = restaurant_name)
+      item = cls.objects.get(pk = item_id)
+      item.restaurant = res
+      item.name = data['name']
+      item.description = data['description']
+      item.price= data['price']
+      item.save()
+      return item
+    except Exception as e:
+      print("PUT exception\n", str(e))
+      return None
+      
 
 
   

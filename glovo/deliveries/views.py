@@ -44,7 +44,7 @@ def orders(request,user_role, user_name):
     orders = Order.get_orders_by_user(user_role, user_name)
     print("GET orders\n", orders)
     serialized_orders = serialize('json', orders)
-    orders_json = [order.to_json() for order in orders]
+    #orders_json = [order.to_json() for order in orders]
     return HttpResponse(serialized_orders, status = 200)
   
   if request.method == 'POST':
@@ -102,4 +102,9 @@ def orders(request,user_role, user_name):
     order.save()
     serialized_order = serialize('json', [order])
     return HttpResponse(serialized_order, status=200)
-    
+
+@api_view(['GET'])
+def order_details(request, id):
+  order = Order.objects.get(pk = id)
+  print("order to return\n", order)
+  return JsonResponse(order.to_json(), status = 200, safe = False)

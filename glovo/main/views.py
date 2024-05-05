@@ -15,12 +15,13 @@ def home(request):
     return Response({"message": 'Welcome back!'})
   
 @api_view(['GET'])
-def restaurants(request):
+def restaurants(request, **kwargs):
   if request.method == 'GET':
     restaurants = Restaurant.objects.all()
     restaurants_json = [restaurant.to_json() for restaurant in restaurants]
     print("res JSON", restaurants_json)
     return JsonResponse(restaurants_json, status=200, safe=False)
+
   
 @api_view(['POST'])
 def login(request):
@@ -117,43 +118,43 @@ def menu(request,**kwargs):
   print("restaurant menu", restaurant_name)
   if request.method == "GET":
     try:
-      res = Restaurant.objects.get(name = restaurant_name)
-      products = Item.objects.filter(restaurant = res.pk)
-      serialized_products = serialize('json', products)
-      print("serialized")
-      return HttpResponse(serialized_products, status = 200)
+      products = Item.get_restaurant_items(restaurant_name)
+      if products is not None:
+        products_json = [product.to_json() for product in products]
+        return JsonResponse(products_json, status = 200, safe = False)
     except Restaurant.DoesNotExist:
       return HttpResponse(status=404)
   if request.method == "POST":
     print("menu POST\n", request.data)
     try:
-      res = Restaurant.objects.get(username = restaurant_name)
-      print("res adding prooduct\n", res)
-      newProduct = Item(
-        restaurant_id = res.pk,
-        name = request.data['name'],
-        description = request.data['description'],
-        price= request.data['price']
-      )
+      newProduct = Item.add_new_product(restaurant_name, request.data)
       print("new Prod\n\n", newProduct)
-      newProduct.save()
+      if newProduct is not None:
+        return JsonResponse(newProduct.to_json(), status = 200)
     except Exception as e:
       return HttpResponse(e, status = 500)
     return HttpResponse(newProduct, status=200)
-  if request.method == "PUT":
-    print("menu PUT\n", request.data)
+  
+@api_view(['GET','PUT','DELETE','POST'])
+def menu_details(request, restaurant_name, id):
+  if request.method == "DELETE":
     try:
-      res = Restaurant.objects.get(name = restaurant_name)
-      updatedProduct = Item(
-        restaurant_id = res.pk,
-        name = request.data['name'],
-        description = request.data['description'],
-        price= request.data['price']
-      )
-      updatedProduct.save()
+      item_to_delete = Item.delete_item(id)
+      if item_to_delete is not None:
+        return JsonResponse(item_to_delete.to_json(), status = 201)
+    except Exception as e:
+      return HttpResponse({'error':str(e)}, status = 500)
+  if request.method == 'PUT':
+    try:
+      updatedProduct = Item.update_product(id, restaurant_name, request.data)
+      print("new Prod\n\n", updatedProduct)
+      if updatedProduct is not None:
+        return JsonResponse(updatedProduct.to_json(), status = 200)
+      else:
+        return HttpResponse({'error':'updating error'}, status = 500)
     except Exception as e:
       return HttpResponse(e, status = 500)
-    return HttpResponse(updatedProduct, status=200)
+     
 
   
 @api_view(['GET','POST','PUT'])

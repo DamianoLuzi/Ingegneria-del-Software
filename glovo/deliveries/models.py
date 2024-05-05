@@ -3,6 +3,7 @@ from main.models import Item
 from users.models import Restaurant, Rider, BaseUser
 from users.models import Customer
 from django.core.exceptions import ObjectDoesNotExist
+import random
 # Create your models here.
 
 class Order(models.Model):
@@ -70,16 +71,20 @@ class Order(models.Model):
       return None """
     
   def to_json(self):
-    return ({   
+    print("cstmr id\n",self.customer_id.pk)
+    print("\ncustomer\n",Customer.objects.get(pk = self.customer_id.pk))
+    return ({  
+      'pk': str(self.pk) ,
       'created_at': self.created_at,
-      'customer_id': self.customer_id,
+      'customer': Customer.objects.get(pk = self.customer_id.pk).username,
       'destination': self.destination,
       'items': self.items,
       'price':self.price,
-      'restaurant_id': self.restaurant_id,
-      'rider_id':self.rider_id,
+      'restaurant': Restaurant.objects.get(pk = self.restaurant_id.pk).username,
+      'rider': Rider.objects.get(pk = self.rider_id.pk).username,
       'status':self.status,
-      'updated_at': self.updated_at
+      'updated_at': self.updated_at,
+      "delivery_time": random.randint(0,30)
     })
   
 class OrderDetails:

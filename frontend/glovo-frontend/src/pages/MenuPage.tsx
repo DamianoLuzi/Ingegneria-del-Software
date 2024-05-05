@@ -41,12 +41,12 @@ function MenuPage(props:any) {
   return (
     <>
     <h1>Menu</h1>
-      <div className ="container">
+      <div>
         <ul className="card-list">
         {props.products && 
         props.products.map((product: any, index: number) => (
-          <li className="card">
-            <div key={index}>
+          <li>
+            <div key={index} className="card">
             <h2>{product.fields.name}</h2>
             <p>Description: {product.fields.description}</p>
             <p>Price: {product.fields.price} €</p>

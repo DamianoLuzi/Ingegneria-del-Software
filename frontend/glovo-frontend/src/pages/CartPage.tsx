@@ -12,7 +12,7 @@ function CartPage (props: any) {
       'items' : props.cartItems,
       'price': props.cartItems.reduce((total: number, item: any) => total + item.fields.price, 0)
     }
-    const response = await axios.post(`http://localhost:8000/${props.user.username}/orders`, orderData)
+    const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData)
     if(response) {
       setMessage('Order successfully placed!')
     }
