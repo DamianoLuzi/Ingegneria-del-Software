@@ -157,7 +157,7 @@ def menu_details(request, restaurant_name, id):
      
 
   
-@api_view(['GET','POST','PUT'])
+""" @api_view(['GET','POST','PUT'])
 def orders(request,**kwargs):
   print("orders request", request.data)
   print("kwargs", kwargs)
@@ -240,55 +240,4 @@ def orders(request,**kwargs):
     order.save()
     serialized_order = serialize('json', [order])
     return HttpResponse(serialized_order, status=200)
-    
-    
-  
-""" @api_view(['GET','PUT'])
-def balance(request, **kwargs):
-  if request.method == 'GET':
-    user_name = kwargs.get('user_name')
-    print('username', user_name)
-    try:
-      try:
-        customer = Customer.objects.get(username = user_name)
-        return HttpResponse(customer.balance, status  = 200)
-      except:
-        try:
-          res = Restaurant.objects.get(name = user_name)
-          return HttpResponse(res.balance, status  = 200)
-        except:
-          try:
-            rider = Rider.objects.get(username = user_name)
-            return HttpResponse(rider.balance, status  = 200)
-          except Exception as e:
-            return HttpResponse({'error':str(e)}, status = 404)
-
-    except Exception as e:
-      return HttpResponse({'error':str(e)}, status = 500)
-  if request.method == 'PUT':
-    print("balance PUT", request.data)
-    username = request.data['username'] 
-    try:
-      try:
-        customer = Customer.objects.get(username = username)
-        customer.balance = request.data['balance']
-        customer.save()
-        return HttpResponse(customer, status  = 200)
-      except:
-        try:
-          res = Restaurant.objects.get(name = username)
-          res.balance = request.data['balance']
-          res.save()
-          return HttpResponse(res, status  = 200)
-        except:
-          try:
-            rider = Rider.objects.get(username = username)
-            rider.balance = request.data['balance']
-            rider.save()
-            return HttpResponse(rider, status  = 200)
-          except Exception as e:
-            return HttpResponse({'error':str(e)}, status = 404)
-    except Exception as e:
-      return HttpResponse({'error':str(e)}, status = 500)
-   
-    """
+     """

@@ -15,30 +15,6 @@ from datetime import datetime
 @api_view(['GET','POST','PUT'])
 def orders(request,user_role, user_name):
   print("orders request", request.data)
-  try:
-      try:
-        user = Restaurant.objects.get(name=user_name)
-        orders = Order.objects.filter(restaurant_id = user.pk)
-      except ObjectDoesNotExist:
-        try:
-          user = Customer.objects.get(username=user_name)
-          orders = Order.objects.filter(customer_id = user.pk)
-        except ObjectDoesNotExist:
-          try:
-            user = Rider.objects.get(username=user_name)
-            orders = Order.objects.filter(rider_id = user.pk)
-          except ObjectDoesNotExist:
-            return HttpResponse({'error': 'User not found'}, status=404)      
-  except Exception as e:
-    return HttpResponse({'error':str(e)}, status = 500) 
-  
-  """  try:
-    orders = Order.get_orders_by_user(user_role, user_name)
-    if orders:
-      return JsonResponse(orders.to_json(), status = 200)
-  except ObjectDoesNotExist:
-    return HttpResponse({'error':"Orders not found"}, status = 500) """
-    
   
   if request.method == 'GET':
     orders = Order.get_orders_by_user(user_role, user_name)
