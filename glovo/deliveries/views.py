@@ -35,45 +35,6 @@ def orders(request,user_role, user_name):
     else:
         return HttpResponse({error}, status=500)
 
-    items = request.data['items']
-    order_price = request.data['price']
-    print("items", items[0], type(items[0]))
-    print("order price", order_price, type(order_price))
-    restaurant = Restaurant.objects.get(username = items[0]['restaurant'])
-    user = Customer.objects.get(username = request.data['user']['username'])
-    rider = Rider.objects.filter(status = 'available').first()
-    if rider is None: return HttpResponse({'No riders available at the moment'}, status = 500)
-    print("user", user)
-    print("restaurant", restaurant)
-    try:
-      items_names = [item['name'] for item in items]
-      serialized_items = json.dumps(items_names)
-      print("ser it", serialized_items, type(serialized_items))
-      new_order = Order(
-      restaurant_id = restaurant,
-      customer_id = user,
-      rider_id = rider,
-      items = serialized_items,
-      price = float(order_price),
-      status='in progress...',
-      destination = '')
-      if user.balance >= order_price:
-        new_order.save()
-        print("new order", new_order)
-        #updating balances and status
-        user.balance = user.balance - order_price
-        user.save()
-        restaurant.balance = restaurant.balance + order_price * 80/100
-        restaurant.save()
-        rider.balance = rider.balance + order_price * 20 /100
-        rider.status = 'assigned'
-        rider.save()
-      else:
-        return HttpResponse({'Insufficient Credit Balance,Top up your card first!'}, status = 500)
-      return HttpResponse(new_order, status = 200)
-    except Exception as e:
-      print("ERROR ", str(e))
-      return HttpResponse({'error':str(e)},status=500)
   if request.method == 'PUT':
     order_id = request.data['pk']   
     order, error = Order.update_order_status(order_id, user_role, user_name)
