@@ -144,3 +144,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # Add the origin of your React development server
     'http://localhost:5173'
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
