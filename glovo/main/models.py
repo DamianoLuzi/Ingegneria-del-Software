@@ -13,7 +13,6 @@ class Item(models.Model):
     return str(self.name+' - '+str(self.restaurant))
   
   def to_json(self):
-    print(str(self.pk), "\t belonging to \t", self.restaurant)
     return ({  
       'pk': str(self.pk) ,
       'name': self.name,
@@ -27,7 +26,6 @@ class Item(models.Model):
     try:
       item = cls.objects.get(pk = id)
       aux = item
-      print("ITEM item to be deleted\n", item)
       item.delete()
       return aux
     except Exception as e:
@@ -58,6 +56,7 @@ class Item(models.Model):
       return newProduct
     except Exception:
       return None
+    
   @classmethod
   def update_product(cls, item_id, restaurant_name, data):
     try:

@@ -49,7 +49,6 @@ function EditMenuPage(props: any) {
   };
 
   const handleAddNewItem = () => {
-
     setShowAddForm(true);
   };
 
@@ -88,6 +87,7 @@ function EditMenuPage(props: any) {
   };
 
   return (
+    <>
     <div>
       <h1>Edit Menu</h1>
       <button onClick={handleAddNewItem}>Add New Item</button>
@@ -101,17 +101,19 @@ function EditMenuPage(props: any) {
       )}
       {
         showEditForm && (
-          <form onSubmit={handleEditFormSubmit}>
+          <div className="card">
+            <form onSubmit={handleEditFormSubmit}>
             <input type="text" name="name" placeholder="Item Name" value={formData.name} onChange={handleInputChange} />
             <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />
             <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} />
             <button type="submit">Update</button>
-          </form>)
+            </form>
+          </div>)
       }
-      <ul>
+      <ul className="card-list">
         {menuItems.map((item: any) => (
           <li key={item.id}>
-            <div>
+            <div className="card">
               <h2>{item.name}</h2>
               <p>Description: {item.description}</p>
               <p>Price: {item.price} €</p>
@@ -122,6 +124,7 @@ function EditMenuPage(props: any) {
         ))}
       </ul>
     </div>
+    </>
   );
 }
 

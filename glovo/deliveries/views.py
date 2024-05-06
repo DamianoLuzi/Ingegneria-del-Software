@@ -22,8 +22,6 @@ def orders(request,user_role, user_name):
     return JsonResponse(orders_json, status = 200, safe=False)
   
   if request.method == 'POST':
-    print("orders POST req ", request.data)
-    
     items = request.data['items']
     order_price = request.data['price']
     restaurant_username = items[0]['restaurant']
