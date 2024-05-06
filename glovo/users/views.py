@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.forms.models import model_to_dict
 from datetime import datetime
+from django.core.mail import send_mail
 
 # Create your views here.
 def home(request):
@@ -32,6 +33,8 @@ def signup(request):
         if role not in ['cliente', 'ristorante', 'rider']:
             return Response({'error': 'Invalid role'}, status=400)
         user = BaseUser.create_user(role, **request.data)
+        text = f"Ciao {user.username},\n la tua iscrizione e andata a buon fine!\nTi ringraziamo per aver scelto il nostro servizio"
+        send_mail( subject="Sign Up", message=text, recipient_list=[user.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
         return JsonResponse(user.to_json(), status=200)
   
 @api_view(['GET','PUT'])
