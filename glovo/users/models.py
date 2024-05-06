@@ -30,10 +30,9 @@ class BaseUser(models.Model):
   @classmethod
   def authenticate_user(cls, username, role):
     try:
-      print("login role\n", role, "\nlogin username\n", username)
+      #checking whether user exists, might eventually add password check as well
       if role == 'cliente':
         u = Customer.objects.get(username=username)
-        print("authenticate user case", u)
         return u
       elif role == 'ristorante':
         return Restaurant.objects.get(username=username)

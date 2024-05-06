@@ -54,7 +54,6 @@ def menu(request,restaurant_name):
     except Restaurant.DoesNotExist or Item.DoesNotExist:
       return HttpResponse(status=404)
   if request.method == "POST":
-    print("menu POST\n", request.data)
     try:
       newProduct = Item.add_new_product(restaurant_name, request.data)
       if newProduct is not None:

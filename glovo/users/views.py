@@ -35,7 +35,6 @@ def signup(request):
         if role not in ['cliente', 'ristorante', 'rider']:
             return Response({'error': 'Invalid role'}, status=400)
         user = BaseUser.create_user(role, **request.data)
-        print(f"{role.capitalize()} JSON\n", user.to_json())
         return JsonResponse(user.to_json(), status=200)
   
 @api_view(['GET','PUT'])
@@ -51,7 +50,6 @@ def balance(request, user_name, user_role):
   if request.method == 'PUT':
     try:
       user = BaseUser.get_user_by_role(user_role, user_name)
-      print("user balance\n", user.to_json())
       user.update_balance(request.data['balance'])
       return JsonResponse(user.to_json(), status = 200, safe = False)
     except Exception as e:
