@@ -94,7 +94,8 @@ class Customer(BaseUser):
       'username': self.username,
       'password': self.password,
       'email': self.email,
-      'ruolo': self.ruolo
+      'ruolo': self.ruolo,
+      'balance': self.balance
     }
   
 class Restaurant(BaseUser):
@@ -113,7 +114,8 @@ class Restaurant(BaseUser):
       'password': self.password,
       'email': self.email,
       'ruolo': self.ruolo,
-      'posizione': self.position
+      'posizione': self.position,
+      'balance': self.balance
     }
   
 class Rider(BaseUser):
@@ -128,5 +130,6 @@ class Rider(BaseUser):
       'username': self.username,
       'password': self.password,
       'ruolo': self.ruolo,
-      'posizione': self.position
+      'posizione': self.position,
+      'balance': self.balance
     }

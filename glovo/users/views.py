@@ -44,7 +44,8 @@ def balance(request, user_name, user_role):
   if request.method == 'GET':
     try:
       user = BaseUser.get_user_by_role(user_role, user_name)
-      return JsonResponse(user.balance, status = 200, safe= False)
+      print("balnce user\t", user.to_json())
+      return JsonResponse(user.to_json(), status = 200, safe= False)
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
   if request.method == 'PUT':

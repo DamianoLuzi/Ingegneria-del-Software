@@ -24,7 +24,7 @@ function BalancePage(props: any) {
     const fetchBalance = async () => {
       const response = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/balance`)
       console.log("balanceresponse", response)
-      if(response) setBalance(response.data)
+      if(response) setBalance(response.data.balance)
     }
     fetchBalance()
   }, [])
