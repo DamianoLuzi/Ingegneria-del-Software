@@ -94,7 +94,7 @@ function SignUpForm(props: any) {
             onChange={handleChange}
           />
         </div>
-        {(formData.ruolo === "rider" || formData.ruolo === "ristorante") && (
+        {(/*formData.ruolo === "rider"||*/ formData.ruolo === "ristorante") && (
           <div>
             <label htmlFor="posizione">Posizione:</label>
             <input

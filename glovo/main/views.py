@@ -21,66 +21,6 @@ def restaurants(request, **kwargs):
     restaurants_json = [restaurant.to_json() for restaurant in restaurants]
     print("res JSON", restaurants_json)
     return JsonResponse(restaurants_json, status=200, safe=False)
-
-  
-@api_view(['POST'])
-def login(request):
-    print("login request ", request.data)
-    try:
-        if request.data['ruolo'] == 'cliente':
-          user = Customer.objects.get(username=request.data['username'])
-        elif request.data['ruolo'] == 'ristorante':
-          user = Restaurant.objects.get(name=request.data['username'])
-        else:
-          user = Rider.objects.get(username=request.data['username'])
-        print("user", user)
-        if user.user.is_customer:
-            user_role = 'cliente'
-        elif user.user.is_restaurant:
-            user_role = 'ristorante'
-        else:
-            user_role = 'rider'
-        user_data = serialize('json', [user])
-        user_data_dict = json.loads(user_data)
-        print("udd ", user_data_dict)
-        user_data_dict[0]['fields']['ruolo'] = user_role
-        print("update", user_data_dict)
-        return Response([user_data_dict[0]['fields']])
-
-    except Customer.DoesNotExist or Restaurant.DoesNotExist or Rider.DoesNotExist:
-        return HttpResponse({'User not found'}, status=404)
-    except Exception as e:
-       return HttpResponse({'User not found'}, status=500)
-       return Response([{"error":'Internal Server Error'}])
-  
-@api_view(['POST'])
-def signup(request):
-  if request.method == 'POST':
-    print("signup request", request.data)
-        
-    role = request.data.get('ruolo', None)
-    if role not in ['cliente', 'ristorante', 'rider']:
-        return Response({'error': 'Invalid role'}, status=400)
-    user = BaseUser()
-    if role == 'cliente':
-        user.is_customer = True
-        user.save()
-        customer = Customer(user=user, username=request.data['username'], password=request.data['password'], email=request.data['email'],balance=request.data.get('balance', 0))
-        customer.save()
-    elif role == 'ristorante':
-        user.is_restaurant = True
-        user.save()
-        restaurant = Restaurant(user=user, name=request.data['username'], password=request.data['password'],position = request.data['posizione'], email=request.data['email'],balance=request.data.get('balance', 0))
-        restaurant.save()
-    elif role == 'rider':
-        user.is_rider = True
-        user.save()
-        rider = Rider(user=user,username=request.data['username'], position = request.data['posizione'], status='available' ,balance=request.data.get('balance', 0))
-        rider.save()
-    
-    print("base user", user)
-    
-    return Response({'message': 'User created successfully'}, status=200)
   
 @api_view(['GET'])
 def users(request):
