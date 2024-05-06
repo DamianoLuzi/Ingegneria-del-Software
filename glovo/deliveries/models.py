@@ -4,6 +4,7 @@ from users.models import Restaurant, Rider, BaseUser
 from users.models import Customer
 from django.core.exceptions import ObjectDoesNotExist
 import random
+import json
 # Create your models here.
 
 class Order(models.Model):
@@ -40,35 +41,57 @@ class Order(models.Model):
       return None
     print("models orders\n", orders)
     return orders
-    """ try: 
-      user = BaseUser.get_user_by_role(role, username)
-      #print("filter query\n\n",**f"{role}_id")
-      print("Order user\n", user.to_json())
+    
+  @classmethod
+  def create_new_order(cls, items, order_price, restaurant_username, customer_username):
       try:
-        roles_dict = {
-          'cliente':'customer',
-          'ristorante':'restaurant',
-          'rider':'rider'
-        }
-        r = roles_dict['role']
-        try:
-          orders = cls.objects.filter(restaurant_id = user.pk)
-        except ObjectDoesNotExist:
-          try:
-            orders = cls.objects.filter(customer_id = user.pk)
-          except ObjectDoesNotExist:
-            try:
-              orders = cls.objects.filter(rider_id = user.pk)
-            except ObjectDoesNotExist:
-              return None
-        #orders = Order.objects.filter(**{f"{r}_id": user.pk})
-        print("fetched orders\n", orders)
-        if orders is not None:
-          return orders
-      except Order.DoesNotExist:
-        return []
-    except Exception:
-      return None """
+          restaurant = Restaurant.objects.get(username=restaurant_username)
+          customer = Customer.objects.get(username=customer_username)
+          rider = Rider.objects.filter(status='available').first()
+          if rider is None:
+              return None, "No riders available at the moment"
+          
+          items_names = [item['name'] for item in items]
+          serialized_items = json.dumps(items_names)
+          
+          new_order = cls.objects.create(
+              restaurant_id=restaurant,
+              customer_id=customer,
+              rider_id=rider,
+              items=serialized_items,
+              price=float(order_price),
+              status='in progress...',
+              destination=''
+          )
+          if customer.balance >= order_price:
+            customer.balance -= float(order_price)
+            customer.save()
+            restaurant.balance += float(order_price) * 80 / 100
+            restaurant.save()
+            rider.balance += float(order_price) * 20 / 100
+            rider.status = 'assigned'
+            rider.save()
+            return new_order, None
+          else:
+            return None, "Insufficient Credit Balance! Top up your card first."
+      except Exception as e:
+          return None, str(e)
+      
+  @classmethod
+  def update_order_status(cls, order_id, user_role, username):
+      try:
+          order = cls.objects.get(pk=order_id)
+          user = BaseUser.get_user_by_role(user_role, username)
+          if isinstance(user, Restaurant):
+              order.status = 'in transit'
+          elif isinstance(user, Rider):
+              order.status = 'delivered'
+          else:
+              order.status = 'completed'
+          order.save()
+          return order, None
+      except Exception as e:
+          return None, str(e)
     
   def to_json(self):
     print("cstmr id\n",self.customer_id.pk)
