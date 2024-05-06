@@ -16,12 +16,9 @@ def home(request):
 
 @api_view(['POST'])
 def login(request):
-    print("login request ", request.data)
     try:
       user = BaseUser.authenticate_user(request.data['username'], request.data['ruolo'])
-      print("login base user", user)
       if user:
-        print("authenticated user\n", user.to_json())
         return JsonResponse(user.to_json(), status = 200)
       else:
         return HttpResponse({'User not found'}, status=404)
@@ -39,7 +36,6 @@ def signup(request):
   
 @api_view(['GET','PUT'])
 def balance(request, user_name, user_role):
-  print("GET balance", request.data)
   if request.method == 'GET':
     try:
       user = BaseUser.get_user_by_role(user_role, user_name)
@@ -57,7 +53,6 @@ def balance(request, user_name, user_role):
 
 @api_view(['GET','PUT'])
 def account(request, user_name, user_role):
-  print("account user_name", user_name)
   if request.method == 'PUT':
     updatedUser = BaseUser.update_user(user_role,user_name, request.data)
     if updatedUser is not None:

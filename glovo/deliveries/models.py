@@ -39,7 +39,6 @@ class Order(models.Model):
             return None     
     except Exception as e:
       return None
-    print("models orders\n", orders)
     return orders
     
   @classmethod
@@ -47,7 +46,9 @@ class Order(models.Model):
       try:
           restaurant = Restaurant.objects.get(username=restaurant_username)
           customer = Customer.objects.get(username=customer_username)
+          #no particular logic -> just fetching the first available rider
           rider = Rider.objects.filter(status='available').first()
+          #logic might eventually handle order creation without available riders -> delayed rider assignment
           if rider is None:
               return None, "No riders available at the moment"
           
@@ -94,8 +95,6 @@ class Order(models.Model):
           return None, str(e)
     
   def to_json(self):
-    print("cstmr id\n",self.customer_id.pk)
-    print("\ncustomer\n",Customer.objects.get(pk = self.customer_id.pk))
     return ({  
       'pk': str(self.pk) ,
       'created_at': self.created_at,
