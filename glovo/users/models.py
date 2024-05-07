@@ -1,13 +1,14 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
-
 class BaseUser(models.Model):
   ruolo = models.CharField(max_length=50, default="user")
   username = models.CharField(max_length=100, blank=True, null=True, default="base user")
   password = models.CharField(max_length=100, default='')
   email = models.CharField(max_length=100, default='email')
-  balance = models.FloatField(default=0.0)
+  #balance = models.OneToOneField(BankAccount)
   phone = models.CharField(max_length=20, default="00000", null=True, blank =True)
   class Meta:
      abstract = True
@@ -24,8 +25,14 @@ class BaseUser(models.Model):
       return Rider.objects.get(username = username)
 
   def update_balance(self, balance):
-    self.balance = balance
+    bank_account = BankAccount.objects.get(object_id = self.pk)
+    bank_account.credit = balance
+    bank_account.save()
+    #self.balance = balance
     self.save()
+
+  def get_balance(self):
+    return BankAccount.objects.get(object_id = self.pk).credit
 
   @classmethod
   def authenticate_user(cls, username, role):
@@ -43,13 +50,14 @@ class BaseUser(models.Model):
 
   @classmethod 
   def create_user(cls, role, **kwargs):
+    
     if role == 'cliente':
         user = Customer( 
           username=kwargs['username'],
           password=kwargs['password'],
           ruolo = role,
-          email=kwargs['email'],
-          balance=kwargs.get('balance', 0))
+          email=kwargs['email'])
+          #balance=kwargs.get('balance', 0))
     elif role == 'ristorante':
         user = Restaurant(
           name=kwargs['username'],
@@ -57,17 +65,25 @@ class BaseUser(models.Model):
           ruolo = role,
           password=kwargs['password'],
           position = kwargs['posizione'],
-          email=kwargs['email'],
-          balance=kwargs.get('balance', 0))
+          email=kwargs['email'])
+          #balance=kwargs.get('balance', 0))
     elif role == 'rider':
         user = Rider.objects.create(
           username=kwargs['username'],
           position = kwargs['posizione'], 
           ruolo = role,
           password = kwargs['password'],
-          status='available' ,
-          balance=kwargs.get('balance', 0))
+          status='available' )
+          #balance=kwargs.get('balance', 0))
     user.save()
+    #creating associated bank account
+    bank_account = BankAccount(
+        active=True,
+        credit=kwargs.get('balance', 0),
+        content_type=ContentType.objects.get_for_model(user),
+        object_id=user.pk)
+    bank_account.save()
+    
     return user
   
   @classmethod
@@ -83,6 +99,17 @@ class BaseUser(models.Model):
       print("exception\n", str(e))
       return None
     
+class BankAccount(models.Model):
+ # user = models.ForeignKey('BaseUser', on_delete=models.CASCADE)
+  active = models.BooleanField()
+  credit = models.FloatField()
+  content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+  object_id = models.PositiveIntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+
+  def __str__(self):
+    return "active" if self.active else 'inactive' +" "+str(self.object_id)
+    
 class Customer(BaseUser):
   posizione = models.CharField(max_length=20, default="", null=True, blank =True)
   def __str__(self):
@@ -94,7 +121,7 @@ class Customer(BaseUser):
       'password': self.password,
       'email': self.email,
       'ruolo': self.ruolo,
-      'balance': self.balance
+      'balance': self.get_balance()
     }
   
 class Restaurant(BaseUser):
@@ -104,7 +131,7 @@ class Restaurant(BaseUser):
   orarioChiusura=models.DateField(blank=True, null=True)
 
   def __str__(self):
-    return str(self.name+' '+str(self.balance)) 
+    return self.username+' '+str(self.pk)
   
   def to_json(self):
     return {
@@ -114,7 +141,7 @@ class Restaurant(BaseUser):
       'email': self.email,
       'ruolo': self.ruolo,
       'posizione': self.position,
-      'balance': self.balance
+      'balance': self.get_balance()
     }
   
 class Rider(BaseUser):
@@ -130,5 +157,5 @@ class Rider(BaseUser):
       'password': self.password,
       'ruolo': self.ruolo,
       'posizione': self.position,
-      'balance': self.balance
+      'balance': self.get_balance()
     }

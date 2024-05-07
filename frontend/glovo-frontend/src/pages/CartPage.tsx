@@ -15,6 +15,7 @@ function CartPage (props: any) {
     const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData)
     if(response) {
       setMessage('Order successfully placed!')
+      props.setCartItems([])
     }
    } catch (error:any) {
       console.log("POST error", error)

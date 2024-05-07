@@ -55,7 +55,7 @@ class Order(models.Model):
           items_names = [item['name'] for item in items]
           serialized_items = json.dumps(items_names)
           
-          new_order = cls.objects.create(
+          new_order = Order(
               restaurant_id=restaurant,
               customer_id=customer,
               rider_id=rider,
@@ -64,14 +64,15 @@ class Order(models.Model):
               status='in progress...',
               destination=''
           )
-          if customer.balance >= order_price:
-            customer.balance -= float(order_price)
+          if customer.get_balance() >= order_price:
+            customer.update_balance(customer.get_balance() - order_price)
             customer.save()
-            restaurant.balance += float(order_price) * 80 / 100
+            restaurant.update_balance( restaurant.get_balance() + float(order_price) * 80 / 100)
             restaurant.save()
-            rider.balance += float(order_price) * 20 / 100
+            rider.update_balance( rider.get_balance() + float(order_price) * 20 / 100)
             rider.status = 'assigned'
             rider.save()
+            new_order.save()
             return new_order, None
           else:
             return None, "Insufficient Credit Balance! Top up your card first."
