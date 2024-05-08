@@ -17,7 +17,7 @@ def home(request):
 @api_view(['GET'])
 def restaurants(request, **kwargs):
   if request.method == 'GET':
-    restaurants = Restaurant.objects.all()
+    restaurants = Restaurant.get_all_restaurants()
     restaurants_json = [restaurant.to_json() for restaurant in restaurants]
     print("res JSON", restaurants_json)
     return JsonResponse(restaurants_json, status=200, safe=False)

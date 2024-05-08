@@ -133,6 +133,10 @@ class Restaurant(BaseUser):
   def __str__(self):
     return self.username+' '+str(self.pk)
   
+  @classmethod
+  def get_all_restaurants(cls):
+    return cls.objects.all()
+  
   def to_json(self):
     return {
       'name': self.name,
