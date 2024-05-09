@@ -122,6 +122,7 @@ class BaseUser(models.Model):
       user = cls.get_user_by_role( user_role,user_name)
       print("reset pw\n", user.to_json())
       user.password = new_password
+      user.save()
       return user
     except Exception as e:
       print("password reset error\n", str(e))
