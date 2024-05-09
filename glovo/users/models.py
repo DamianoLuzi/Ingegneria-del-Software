@@ -32,7 +32,10 @@ class BaseUser(models.Model):
     self.save()
 
   def get_balance(self):
-    return BankAccount.objects.get(object_id = self.pk).credit
+    try:
+      return BankAccount.objects.get(object_id = self.pk).credit
+    except BankAccount.DoesNotExist:
+      return float(0)
 
   @classmethod
   def authenticate_user(cls, username, role):
@@ -95,6 +98,20 @@ class BaseUser(models.Model):
       user.email = data['email']
       user.save()
       return user
+    except Exception as e:
+      print("exception\n", str(e))
+      return None
+    
+  @classmethod
+  def delete_user(cls, username, role):
+    try:
+      user = cls.get_user_by_role(role, username)
+      print("user to be deleted\t", user.to_json())
+      bank_account = BankAccount.objects.get(object_id = user.pk)
+      aux = user
+      user.delete()
+      bank_account.delete()
+      return aux
     except Exception as e:
       print("exception\n", str(e))
       return None
