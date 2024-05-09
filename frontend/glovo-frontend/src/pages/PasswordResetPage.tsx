@@ -2,26 +2,36 @@ import { useState } from "react";
 import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
 
-function LoginForm(props: any) {
-  const [errors, setErrors] = useState(null);
+function PasswordResetPage(props: any) {
+  const [errors, setErrors] = useState('');
   const [formData, setFormData] = useState({
     username: "",
+    email:"",
+    ruolo:"",
     password: "",
-    ruolo: "",
+    password2: "",
   });
 
   const handleFormSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/login",formData);
+      if(formData.password === formData.password2) {
+        const response = await axios.put(`http://localhost:8000/${formData.ruolo}/${formData.username}/password_reset`, formData);
       console.log("Response:", response.data);
       props.setUser(response.data);
+      setErrors("La tua password di recupero è "+ response.data.password+ "")
       console.log("setUser", response.data);
+      } else {
+        setTimeout(() => {
+          return setErrors('Passwords did not match');
+        }, 5000);
+      }
     } catch (error:any) {
       console.error("Error:", error);
       setErrors(error.response.data);
       setTimeout(() => {
-        setErrors(null);
+        return setErrors(error.response.data);
       }, 5000);
+      
     }
   };
 
@@ -38,8 +48,7 @@ function LoginForm(props: any) {
 
   return (
     <div>
-      <h2>Login</h2>
-      <h3>Scegli il tuo ruolo</h3>
+      <h3>Reset your password!</h3>
       <div>
         <button
           className={formData.ruolo === "cliente" ? "active" : ""}
@@ -81,28 +90,25 @@ function LoginForm(props: any) {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="email">Email:</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
           />
         </div>
-        <p>
-          Forgot your password? Reset it <a href="/resetpw">Here!</a>
-        </p>
         <p>
           Don't have an account? Create one <a href="/signup">Here</a>!
         </p>
         
         <button type="button" onClick={handleFormSubmit}>
-          Log In
+          Reset
         </button>
       </form>
     </div>
   );
 }
 
-export default LoginForm;
+export default PasswordResetPage;
