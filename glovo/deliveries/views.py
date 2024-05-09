@@ -9,6 +9,7 @@ import json
 from django.core.serializers import serialize
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
+from django.core.mail import send_mail
 
 from datetime import datetime
 # Create your views here.
@@ -29,6 +30,8 @@ def orders(request,user_role, user_name):
 
     new_order, error = Order.create_new_order(items, order_price, restaurant_username, customer_username)
     if new_order:
+        text = f"Ciao {customer_username},\n il tuo ordine è andato a buon fine!\nTi ringraziamo per aver scelto il nostro servizio"
+        send_mail( subject="Sign Up", message=text, recipient_list=[request.data['user']['email']], from_email='nerf.an120@gmail.com',  fail_silently=False)
         return JsonResponse(new_order.to_json(), status=200)
     else:
         return HttpResponse({error}, status=500)

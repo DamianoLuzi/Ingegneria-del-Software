@@ -13,6 +13,7 @@ import CartPage from './pages/CartPage';
 import EditMenuPage from './pages/EditMenuPage';
 import AccountPage from './pages/AccountPage';
 import './styles/App.css'; // Import the CSS file for styling
+import PasswordResetPage from './pages/PasswordResetPage';
 
 function App() {
   
@@ -62,6 +63,7 @@ function App() {
           <Route path="/cart" element={<CartPage user={user} cartItems={cartItems} setCartItems={setCartItems} />} />
           <Route path="/menu" element={<EditMenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
           <Route path="/account" element = {<AccountPage user={user} setUser={setUser}/>}/>
+          <Route path="/resetpw" element = {<PasswordResetPage setUser={setUser}/>}/>
         </Routes>
       </div>
     </Router>

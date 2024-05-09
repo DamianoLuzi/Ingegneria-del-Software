@@ -115,6 +115,18 @@ class BaseUser(models.Model):
     except Exception as e:
       print("exception\n", str(e))
       return None
+  @classmethod
+  def reset_password(cls,user_name,user_role,new_password):
+    print("reset pw\n", user_name, user_role)
+    try:
+      user = cls.get_user_by_role( user_role,user_name)
+      print("reset pw\n", user.to_json())
+      user.password = new_password
+      return user
+    except Exception as e:
+      print("password reset error\n", str(e))
+      return None
+
     
 class BankAccount(models.Model):
  # user = models.ForeignKey('BaseUser', on_delete=models.CASCADE)
