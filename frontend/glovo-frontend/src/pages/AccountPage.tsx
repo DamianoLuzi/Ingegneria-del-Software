@@ -53,6 +53,23 @@ function AccountPage(props: any) {
       console.error("Error updating profile:", error);
     }
   };
+  
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`);
+      console.log("deleted user\t", response.data);
+      setMessage(response.data.username +" was successfully deleted!")
+      props.setUser(response.data)
+      setTimeout(() => {
+        window.location.href = "/"; 
+        props.setUser(null);
+      }, 5000);
+      
+    } catch (error:any) {
+      setError(error.response.data.message || "An error occurred while deleting the account.");
+      console.error("Error deleting account:", error);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -111,6 +128,7 @@ function AccountPage(props: any) {
         </div>
         <button type="submit">Update Profile</button>
       </form>
+      <button type="button" onClick={handleDeleteAccount}>Delete Account</button>
     </div>
   );
 }

@@ -54,7 +54,7 @@ def balance(request, user_name, user_role):
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'DELETE'])
 def account(request, user_name, user_role):
   if request.method == 'PUT':
     updatedUser = BaseUser.update_user(user_role,user_name, request.data)
@@ -64,3 +64,8 @@ def account(request, user_name, user_role):
     user = BaseUser.get_user_by_role(user_name, user_name)
     if user is not None:
       return user.to_json()
+  elif request.method == 'DELETE':
+    user = BaseUser.delete_user(user_name, user_role)
+    if user is not None:
+      return JsonResponse(user.to_json(), status=201, safe=False)
+
