@@ -44,8 +44,6 @@ class Order(models.Model):
   @classmethod
   def create_new_order(cls, items, order_price, restaurant_username, customer_username):
       try:
-          #restaurant = Restaurant.objects.get(username=restaurant_username)
-          #customer = Customer.objects.get(username=customer_username)
           restaurant = BaseUser.get_user_by_role('ristorante', restaurant_username)
           customer = BaseUser.get_user_by_role('cliente', customer_username)
           #no particular logic -> just fetching the first available rider
