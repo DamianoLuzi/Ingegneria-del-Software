@@ -6,6 +6,12 @@ import { Link } from "react-router-dom";
 function MenuPage(props:any) {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [itemCount, setItemCount] = useState<{[key: string]: number}>({});
+  const [filterText, setFilterText] = useState('')
+  
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(e.target.value); // Update filter text state when input changes
+  };
+
 
   useEffect(() => {
     const getProducts = async () => {
@@ -68,9 +74,19 @@ function MenuPage(props:any) {
     <>
       <h1>Menu</h1>
       <div>
+      <input
+        type="text"
+        placeholder="Filter by product name"
+        value={filterText}
+        onChange={handleFilterChange}
+      />
         <ul className="card-list">
           {props.products && 
-            props.products.map((product: any, index: number) => (
+            props.products
+            .filter((product: any) =>
+              product.name.toLowerCase().includes(filterText.toLowerCase())
+            )
+            .map((product: any, index: number) => (
               <li key={index}>
                 <div className="card">
                   <h2>{product.name}</h2>

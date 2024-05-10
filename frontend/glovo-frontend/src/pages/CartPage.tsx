@@ -37,9 +37,9 @@ function CartPage (props: any) {
     {message && <h1>{message}</h1>}
     {error && <h1>Error: {error}</h1>}
     <h1>Your cart:</h1>
-    <ul>
+    <ul className="card-list">
     {props.cartItems && props.cartItems.map((item:any) => (
-      <li>
+      <li className="card">
         <h3>{item.name} - {item.price} €</h3> 
       </li>
     ))}

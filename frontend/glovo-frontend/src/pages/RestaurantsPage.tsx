@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 function RestaurantsPage(props: any) {
+  const [filterText, setFilterText] = useState(''); // State for filter text
   useEffect(() => {
     const getRistoranti = async () => {
       const response = await axios.get('http://localhost:8000/restaurants')
@@ -12,16 +13,29 @@ function RestaurantsPage(props: any) {
     getRistoranti()
   },[])
 
-  /* useEffect(() => {
-    props.setRestaurants(props.selectedRestaurant);
-  }, [props.selectedRestaurant]); */
+ 
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(e.target.value); // Update filter text state when input changes
+  };
+
 
   return (
     <div>
+      <input
+        type="text"
+        placeholder="Filter by restaurant name"
+        value={filterText}
+        onChange={handleFilterChange}
+      />
     <br />
     <ul>
       {props.restaurants && 
-        props.restaurants.map((restaurant:any, index:any) => (
+        props.restaurants
+        .filter((restaurant: any) =>
+          restaurant.username.toLowerCase().includes(filterText.toLowerCase())
+        )
+        .map((restaurant:any, index:any) => (
         <div key={index} className="col-md-4">
           <div className="card mb-3">
             <div className="card-body">
