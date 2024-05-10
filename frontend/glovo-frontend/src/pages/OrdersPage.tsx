@@ -16,6 +16,11 @@ function OrdersPage(props: any) {
     'updated_at': ''
   })
   const [expandedOrder, setExpandedOrder] = useState<any>(null);
+  const [filterText, setFilterText] = useState('')
+  
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(e.target.value); // Update filter text state when input changes
+  };
   useEffect(() => {
     console.log("props user", props.user)
     const fetchOrders = async () => {
@@ -44,9 +49,19 @@ function OrdersPage(props: any) {
     <>
     <h1>Your orders:</h1>
       <div>
+      <input
+        type="text"
+        placeholder="Filter by products in your order"
+        value={filterText}
+        onChange={handleFilterChange}
+      />
       <ul className="card-list">
         {orders && 
-        orders.map((order: any, index: number) => (
+        orders
+        .filter((order: any) =>
+          order.items.toLowerCase().includes(filterText.toLowerCase())
+        )
+        .map((order: any, index: number) => (
           <li>
             <div key={index} className = 'card'>
             <h2 onClick={() => {
