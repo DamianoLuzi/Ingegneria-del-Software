@@ -68,7 +68,6 @@ function OrdersPage(props: any) {
               fetchOrderDetails(order)
               setShowDetails(true)
             }}>{order.items}</h2>
-            {console.log("expanded order\n\n", expandedOrder)}
             {expandedOrder && expandedOrder.pk == order.pk &&
               (<div>
                 <h2>Order Details:</h2>
