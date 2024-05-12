@@ -79,7 +79,7 @@ def password_reset(request, user_name, user_role):
     text = f"Ciao {user_name},\n la tua password di recupero è {new_password}!\nTi ringraziamo per aver scelto il nostro servizio"
     updatedUser = BaseUser.reset_password(user_name,user_role,new_password)
     if updatedUser is not None:
-      send_mail( subject="Sign Up", message=text, recipient_list=[updatedUser.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
+      send_mail(subject="Sign Up", message=text, recipient_list=[updatedUser.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
       return JsonResponse(updatedUser.to_json(), status = 200, safe=False)
     else:
       return Response({'error': 'Invalid role'})
