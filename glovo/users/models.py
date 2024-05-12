@@ -53,7 +53,6 @@ class BaseUser(models.Model):
 
   @classmethod 
   def create_user(cls, role, **kwargs):
-    
     if role == 'cliente':
         user = Customer( 
           username=kwargs['username'],
