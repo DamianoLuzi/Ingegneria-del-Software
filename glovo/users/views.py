@@ -36,9 +36,12 @@ def signup(request):
         if role not in ['cliente', 'ristorante', 'rider']:
             return Response({'error': 'Invalid role'}, status=400)
         user = BaseUser.create_user(role, **request.data)
-        text = f"Ciao {user.username},\n la tua iscrizione e andata a buon fine!\nTi ringraziamo per aver scelto il nostro servizio"
-        send_mail( subject="Sign Up", message=text, recipient_list=[user.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
-        return JsonResponse(user.to_json(), status=200)
+        if user != None:
+            text = f"Ciao {user.username},\n la tua iscrizione e andata a buon fine!\nTi ringraziamo per aver scelto il nostro servizio"
+            send_mail( subject="Sign Up", message=text, recipient_list=[user.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
+            return JsonResponse(user.to_json(), status=200)
+        else:
+            return Response({'error': 'Error saving user'}, status=500)
   
 @api_view(['GET','PUT'])
 def balance(request, user_name, user_role):
