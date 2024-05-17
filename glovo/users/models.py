@@ -65,12 +65,12 @@ class BaseUser(models.Model):
           username=kwargs['username'],
           ruolo = role,
           password=kwargs['password'],
-          position = kwargs['posizione'],
+          indirizzo = kwargs['posizione'],
           email=kwargs['email'])
     elif role == 'rider':
         user = Rider.objects.create(
           username=kwargs['username'],
-          position = kwargs['posizione'], 
+          #position = kwargs['posizione'], 
           ruolo = role,
           password = kwargs['password'],
           status='available' )

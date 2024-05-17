@@ -17,6 +17,7 @@ class Order(models.Model):
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+  delivery_time = models.IntegerField(default = random.randint(0,30))
 
   def __str__(self):
     return str(str(self.items)+'-'+str(self.restaurant_id)+'-'+str(self.destination))
@@ -107,7 +108,7 @@ class Order(models.Model):
       'rider': Rider.objects.get(pk = self.rider_id.pk).username,
       'status':self.status,
       'updated_at': self.updated_at,
-      "delivery_time": random.randint(0,30)
+      "delivery_time": self.delivery_time
     })
   
 class OrderDetails:
