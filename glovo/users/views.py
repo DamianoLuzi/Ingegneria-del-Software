@@ -23,6 +23,7 @@ def login(request):
     try:
       user = BaseUser.authenticate_user(request.data['username'], request.data['ruolo'])
       if user:
+        print("logged in user\n", user.to_json())
         return JsonResponse(user.to_json(), status = 200)
       else:
         return HttpResponse({'User not found'}, status=404)

@@ -9,7 +9,7 @@ class BaseUser(models.Model):
   password = models.CharField(max_length=100, default='')
   email = models.CharField(max_length=100, default='email')
   #balance = models.OneToOneField(BankAccount)
-  phone = models.CharField(max_length=20, default="00000", null=True, blank =True)
+  telefono = models.CharField(max_length=20, default="+39 3332224888", null=True, blank =True)
   class Meta:
      abstract = True
   def __str__(self):
@@ -39,15 +39,15 @@ class BaseUser(models.Model):
 
   @classmethod
   def authenticate_user(cls, username, role):
+    print("username role\n", username, role)
     try:
       #checking whether user exists, might eventually add password check as well
       if role == 'cliente':
-        u = Customer.objects.get(username=username)
-        return u
+        return Customer.objects.get(username=username)
       elif role == 'ristorante':
-        return Restaurant.objects.get(username=username)
+        return Restaurant.objects.get(username=username)   
       elif role == 'rider':
-        return Rider.objects.get(username=username)
+        return Rider.objects.get(username=username)   
     except (Customer.DoesNotExist, Restaurant.DoesNotExist, Rider.DoesNotExist):
         return None
 
@@ -59,7 +59,6 @@ class BaseUser(models.Model):
           password=kwargs['password'],
           ruolo = role,
           email=kwargs['email'])
-          #balance=kwargs.get('balance', 0))
     elif role == 'ristorante':
         user = Restaurant(
           name=kwargs['username'],
@@ -68,7 +67,6 @@ class BaseUser(models.Model):
           password=kwargs['password'],
           position = kwargs['posizione'],
           email=kwargs['email'])
-          #balance=kwargs.get('balance', 0))
     elif role == 'rider':
         user = Rider.objects.create(
           username=kwargs['username'],
@@ -76,7 +74,6 @@ class BaseUser(models.Model):
           ruolo = role,
           password = kwargs['password'],
           status='available' )
-          #balance=kwargs.get('balance', 0))
     user.save()
     #creating associated bank account
     bank_account = BankAccount(
@@ -159,7 +156,7 @@ class Customer(BaseUser):
   
 class Restaurant(BaseUser):
   name = models.CharField(max_length=100, default="restaurant name")
-  position = models.CharField(max_length=100)
+  indirizzo = models.CharField(max_length=100)
   orarioApertura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
   orarioChiusura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
 
@@ -188,7 +185,7 @@ class Restaurant(BaseUser):
       'password': self.password,
       'email': self.email,
       'ruolo': self.ruolo,
-      'posizione': self.position,
+      'indirizzo': self.indirizzo,
       'balance': self.get_balance(),
       'orarioApertura':datetime.fromisoformat(str(self.orarioApertura)).strftime('%H:%M'),
       'orarioChiusura':datetime.fromisoformat(str(self.orarioChiusura)).strftime('%H:%M')
@@ -196,7 +193,7 @@ class Restaurant(BaseUser):
   
 class Rider(BaseUser):
   status = models.CharField(max_length=100)
-  position  = models.CharField(max_length=100)
+  #position  = models.CharField(max_length=100)
 
   def __str__(self):
     return str(self.username+ ' '+ self.status)
@@ -206,6 +203,6 @@ class Rider(BaseUser):
       'username': self.username,
       'password': self.password,
       'ruolo': self.ruolo,
-      'posizione': self.position,
+      #'posizione': self.position,
       'balance': self.get_balance()
     }
