@@ -41,6 +41,7 @@ function RestaurantsPage(props: any) {
             <div className="card-body">
               <h1 className="card-title">{restaurant.username}</h1>
               <p className="card-text">Location: {restaurant.posizione}</p> 
+              <p>Opening Hours: {restaurant.orarioApertura} - {restaurant.orarioChiusura}</p>
               <Link to={`/${restaurant.username.toLowerCase().replace(/\s+/g, '')}/menu`}>
               <button
                 className="btn btn-primary"

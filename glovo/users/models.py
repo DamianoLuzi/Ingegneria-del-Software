@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-
+from datetime import datetime
 # Create your models here.
 class BaseUser(models.Model):
   ruolo = models.CharField(max_length=50, default="user")
@@ -156,8 +156,8 @@ class Customer(BaseUser):
 class Restaurant(BaseUser):
   name = models.CharField(max_length=100, default="restaurant name")
   position = models.CharField(max_length=100)
-  orarioApertura=models.DateField(blank=True, null=True)
-  orarioChiusura=models.DateField(blank=True, null=True)
+  orarioApertura=models.DateTimeField(blank=True, null=True)
+  orarioChiusura=models.DateTimeField(blank=True, null=True)
 
   def __str__(self):
     return self.username+' '+str(self.pk)
@@ -174,7 +174,9 @@ class Restaurant(BaseUser):
       'email': self.email,
       'ruolo': self.ruolo,
       'posizione': self.position,
-      'balance': self.get_balance()
+      'balance': self.get_balance(),
+      'orarioApertura':datetime.fromisoformat(str(self.orarioApertura)).strftime('%H:%M'),
+      'orarioChiusura':datetime.fromisoformat(str(self.orarioChiusura)).strftime('%H:%M')
     }
   
 class Rider(BaseUser):

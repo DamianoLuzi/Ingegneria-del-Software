@@ -4,18 +4,7 @@ import '../styles/App.css'
 function OrdersPage(props: any) {
   const [orders, setOrders] = useState([])
   const [showDetails, setShowDetails] = useState(false)
-  const [orderDetails, setOrderDetails] = useState({   
-    'created_at': '',
-    'customer': '',
-    'destination': '',
-    'items':'',
-    'price': '',
-    'restaurant':  '',
-    'rider': '',
-    'status': '',
-    'updated_at': ''
-  })
-  const [expandedOrder, setExpandedOrder] = useState<any>(null);
+  const [orderDetails, setOrderDetails] = useState<any>(null);
   const [filterText, setFilterText] = useState('')
   
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +26,7 @@ function OrdersPage(props: any) {
     const response = await axios.get(`http://localhost:8000/orders/${order.pk.toString()}`)
     console.log("order details\n", response)
     setShowDetails(true)
-    setExpandedOrder(response.data);
+    setOrderDetails(response.data);
   }
 
   const handleStatusChange = async (order:any) => {
@@ -68,18 +57,18 @@ function OrdersPage(props: any) {
               fetchOrderDetails(order)
               setShowDetails(true)
             }}>{order.items}</h2>
-            {expandedOrder && expandedOrder.pk == order.pk &&
+            {orderDetails && orderDetails.pk == order.pk &&
               (<div>
                 <h2>Order Details:</h2>
-                <p>Order ID: {expandedOrder.pk}</p>
-                <p>Price: {expandedOrder.price} €</p>
-                <p>Status: {expandedOrder.status}</p>
-                <p>Restaurant: {expandedOrder.restaurant}</p>
-                <p>Customer: {expandedOrder.customer}</p>
-                <p>Assigned Rider: {expandedOrder.rider}</p>
-                <p>Placed at: {expandedOrder.created_at}</p>
-                <p>Updated at: {expandedOrder.updated_at}</p>
-                <p>Expected delivery time: {expandedOrder.delivery_time} minutes</p>
+                <p>Order ID: {orderDetails.pk}</p>
+                <p>Price: {orderDetails.price} €</p>
+                <p>Status: {orderDetails.status}</p>
+                <p>Restaurant: {orderDetails.restaurant}</p>
+                <p>Customer: {orderDetails.customer}</p>
+                <p>Assigned Rider: {orderDetails.rider}</p>
+                <p>Placed at: {orderDetails.created_at}</p>
+                <p>Updated at: {orderDetails.updated_at}</p>
+                <p>Expected delivery time: {orderDetails.delivery_time} minutes</p>
                 {/* Buttons for status changes depending on the type of user */}
                 {props.user.ruolo === 'ristorante' && <button onClick={() => handleStatusChange(order)}>Order Ready!</button>}
                 {props.user.ruolo === 'rider' && <button onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
