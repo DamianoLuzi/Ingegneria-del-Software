@@ -6,12 +6,16 @@ function AccountPage(props: any) {
     username: props.user.username || "",
     password: props.user.password || "",
     email: props.user.email || "",
+    orarioApertura: props.user.orarioApertura || "",
+    orarioChiusura: props.user.orarioChiusura || "",
   });
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState({
     username: false,
     password: false,
     email: false,
+    orarioApertura: false,
+    orarioChiusura: false
   });
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -37,6 +41,7 @@ function AccountPage(props: any) {
   };
 
   const handleFieldBlur = (fieldName: string) => {
+    console.log("field to edit", fieldName)
     setEditMode({ ...editMode, [fieldName]: false });
   };
 
@@ -111,6 +116,40 @@ function AccountPage(props: any) {
             <p onClick={() => handleFieldClick("password")}>{formData.password}</p>
           )}
         </div>
+        {props.user.ruolo === "ristorante" && (
+          <>
+            <div>
+              <label htmlFor="orarioApertura">Orario di Apertura:</label>
+              {editMode.orarioApertura ? (
+                <input
+                  type="text"
+                  id="orarioApertura"
+                  name="orarioApertura"
+                  value={formData.orarioApertura}
+                  onChange={handleChange}
+                  onBlur={() => handleFieldBlur("orarioApertura")}
+                />
+              ) : (
+                <p onClick={() => handleFieldClick("orarioApertura")}>{formData.orarioApertura}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="orarioChiusura">Orario di Chiusura:</label>
+              {editMode.orarioChiusura ? (
+                <input
+                  type="text"
+                  id="orarioChiusura"
+                  name="orarioChiusura"
+                  value={formData.orarioChiusura}
+                  onChange={handleChange}
+                  onBlur={() => handleFieldBlur("orarioChiusura")}
+                />
+              ) : (
+                <p onClick={() => handleFieldClick("orarioChiusura")}>{formData.orarioChiusura}</p>
+              )}
+            </div>
+          </>
+        )}
         <div>
           <label htmlFor="email">Email:</label>
           {editMode.email ? (

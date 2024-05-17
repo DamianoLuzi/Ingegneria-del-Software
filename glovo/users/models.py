@@ -90,12 +90,16 @@ class BaseUser(models.Model):
   
   @classmethod
   def update_user(cls, role, username, data):
+    print("account PUT\n", data)
     try:
       user = cls.get_user_by_role(role, username)
       user.username = data['username']
       user.password = data['password']
       user.email = data['email']
+      if user.ruolo == "ristorante":
+        user = Restaurant.update_opening_hours(user, data)
       user.save()
+      print("updated user\n", user.to_json())
       return user
     except Exception as e:
       print("exception\n", str(e))
@@ -156,8 +160,8 @@ class Customer(BaseUser):
 class Restaurant(BaseUser):
   name = models.CharField(max_length=100, default="restaurant name")
   position = models.CharField(max_length=100)
-  orarioApertura=models.DateTimeField(blank=True, null=True)
-  orarioChiusura=models.DateTimeField(blank=True, null=True)
+  orarioApertura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
+  orarioChiusura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
 
   def __str__(self):
     return self.username+' '+str(self.pk)
@@ -166,6 +170,17 @@ class Restaurant(BaseUser):
   def get_all_restaurants(cls):
     return cls.objects.all()
   
+  @classmethod
+  def update_opening_hours(cls,user, data):
+    current_date = datetime.now().date()
+    orario_apertura_time = datetime.strptime(data['orarioApertura'], '%H:%M').time()
+    orario_chiusura_time = datetime.strptime(data['orarioChiusura'], '%H:%M').time()
+    print("combined \n", datetime.combine(current_date, orario_apertura_time))
+    user.orarioApertura = datetime.combine(current_date, orario_apertura_time)
+    user.orarioChiusura = datetime.combine(current_date, orario_chiusura_time)
+    print("updated opening hours\n", user.to_json())
+    return user
+    
   def to_json(self):
     return {
       'name': self.name,
