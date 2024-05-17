@@ -24,6 +24,7 @@ def orders(request,user_role, user_name):
   
   if request.method == 'POST':
     items = request.data['items']
+    print("POST items\n", items)
     order_price = request.data['price']
     restaurant_username = items[0]['restaurant']
     customer_username = request.data['user']['username']

@@ -67,6 +67,7 @@ function MenuPage(props:any) {
   };
 
   useEffect(() => {
+    console.log("selected items\n", selectedItems)
     props.setCartItems(selectedItems);
   }, [selectedItems]); 
 

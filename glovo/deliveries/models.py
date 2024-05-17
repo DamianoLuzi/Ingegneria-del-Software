@@ -52,9 +52,11 @@ class Order(models.Model):
           #logic might eventually handle order creation without available riders -> delayed rider assignment
           if rider is None:
               return None, "No riders available at the moment"
-          
-          items_names = [item['name'] for item in items]
-          serialized_items = json.dumps(items_names)
+          print("items\n", items)
+          #items_names = [item['name'] for item in items]
+          #storing a json array -> needs to be updated in class diagrams
+          serialized_items = json.dumps(items)
+          print("serialized items\n", serialized_items)
           
           new_order = Order(
               restaurant_id=restaurant,
