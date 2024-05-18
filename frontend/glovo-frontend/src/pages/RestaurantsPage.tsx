@@ -2,13 +2,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 function RestaurantsPage(props: any) {
-  const [filterText, setFilterText] = useState(''); // State for filter text
+  const [filterText, setFilterText] = useState(''); 
   useEffect(() => {
     const getRistoranti = async () => {
       const response = await axios.get('http://localhost:8000/restaurants')
-      console.log("restaurant response", response.data)
       if(response) props.setRestaurants(response.data)
-      console.log("props rest", props.restaurants)
     }
     getRistoranti()
   },[])
@@ -16,7 +14,7 @@ function RestaurantsPage(props: any) {
  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value); // Update filter text state when input changes
+    setFilterText(e.target.value); 
   };
 
 

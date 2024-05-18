@@ -41,16 +41,13 @@ function AccountPage(props: any) {
   };
 
   const handleFieldBlur = (fieldName: string) => {
-    console.log("field to edit", fieldName)
     setEditMode({ ...editMode, [fieldName]: false });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      console.log("form PUT  ", formData)
       const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`, formData);
-      console.log("updated user\t", response.data)
       if(response) props.setUser(response.data)
       setMessage("Profile updated successfully!")
     } catch (error:any) {
@@ -62,7 +59,6 @@ function AccountPage(props: any) {
   const handleDeleteAccount = async () => {
     try {
       const response = await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`);
-      console.log("deleted user\t", response.data);
       setMessage(response.data.username +" was successfully deleted!")
       props.setUser(response.data)
       setTimeout(() => {
@@ -72,7 +68,6 @@ function AccountPage(props: any) {
       
     } catch (error:any) {
       setError(error.response.data.message || "An error occurred while deleting the account.");
-      console.error("Error deleting account:", error);
     }
   };
 

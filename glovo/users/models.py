@@ -138,7 +138,8 @@ class BankAccount(models.Model):
   content_object = GenericForeignKey('content_type', 'object_id')
 
   def __str__(self):
-    return "active" if self.active else 'inactive' +" "+str(self.object_id)
+    user = self.content_type
+    return "active" if self.active else 'inactive' +" "+str(self.object_id) + " " + str(user)
     
 class Customer(BaseUser):
   posizione = models.CharField(max_length=20, default="", null=True, blank =True)

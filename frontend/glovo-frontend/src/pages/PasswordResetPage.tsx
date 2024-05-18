@@ -16,10 +16,8 @@ function PasswordResetPage(props: any) {
     try {
       if(formData.password === formData.password2) {
         const response = await axios.put(`http://localhost:8000/${formData.ruolo}/${formData.username}/password_reset`, formData);
-      console.log("Response:", response.data);
       props.setUser(response.data);
       setErrors("La tua password di recupero è "+ response.data.password+ "")
-      console.log("setUser", response.data);
       } else {
         setTimeout(() => {
           return setErrors('Passwords did not match');
