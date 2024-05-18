@@ -12,6 +12,7 @@ class Order(models.Model):
   customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True) #cascade: if user is deleted -> order is deleted
   rider_id = models.ForeignKey(Rider, on_delete=models.DO_NOTHING, null=True, blank=True)
   items = models.CharField(max_length=1000)
+  items_list = models.JSONField(default=[])
   price = models.FloatField(default=0.0)
   destination= models.CharField(max_length=100)
   status = models.CharField(max_length=100)
@@ -63,6 +64,7 @@ class Order(models.Model):
               customer_id=customer,
               rider_id=rider,
               items=serialized_items,
+              items_list = items,
               price=float(order_price),
               status='in progress...',
               destination=''
@@ -109,6 +111,7 @@ class Order(models.Model):
       'restaurant': Restaurant.objects.get(pk = self.restaurant_id.pk).username,
       'rider': Rider.objects.get(pk = self.rider_id.pk).username,
       'status':self.status,
+      'items_list':self.items_list,
       'updated_at': self.updated_at,
       "delivery_time": self.delivery_time
     })
