@@ -12,11 +12,13 @@ class Order(models.Model):
   customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True) #cascade: if user is deleted -> order is deleted
   rider_id = models.ForeignKey(Rider, on_delete=models.DO_NOTHING, null=True, blank=True)
   items = models.CharField(max_length=1000)
+  items_list = models.JSONField(default=[])
   price = models.FloatField(default=0.0)
   destination= models.CharField(max_length=100)
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+  delivery_time = models.IntegerField(default = random.randint(0,30))
 
   def __str__(self):
     return str(str(self.items)+'-'+str(self.restaurant_id)+'-'+str(self.destination))
@@ -51,15 +53,18 @@ class Order(models.Model):
           #logic might eventually handle order creation without available riders -> delayed rider assignment
           if rider is None:
               return None, "No riders available at the moment"
-          
-          items_names = [item['name'] for item in items]
-          serialized_items = json.dumps(items_names)
+          print("items\n", items)
+          #items_names = [item['name'] for item in items]
+          #storing a json array -> needs to be updated in class diagrams
+          serialized_items = json.dumps(items)
+          print("serialized items\n", serialized_items)
           
           new_order = Order(
               restaurant_id=restaurant,
               customer_id=customer,
               rider_id=rider,
               items=serialized_items,
+              items_list = items,
               price=float(order_price),
               status='in progress...',
               destination=''
@@ -106,8 +111,9 @@ class Order(models.Model):
       'restaurant': Restaurant.objects.get(pk = self.restaurant_id.pk).username,
       'rider': Rider.objects.get(pk = self.rider_id.pk).username,
       'status':self.status,
+      'items_list':self.items_list,
       'updated_at': self.updated_at,
-      "delivery_time": random.randint(0,30)
+      "delivery_time": self.delivery_time
     })
   
 class OrderDetails:
