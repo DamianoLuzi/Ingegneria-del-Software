@@ -11,9 +11,7 @@ function OrdersPage(props: any) {
     setFilterText(e.target.value); // Update filter text state when input changes
   };
   useEffect(() => {
-    console.log("props user", props.user)
     const fetchOrders = async () => {
-      console.log("username orders", props.user.username)
       const response = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`)
       console.log("orders response", response)
       if(response) setOrders(response.data)
@@ -22,7 +20,6 @@ function OrdersPage(props: any) {
   }, [])
 
   const fetchOrderDetails = async (order: any) => {
-    console.log("order to fetch\n" , order.pk, typeof order.pk)
     const response = await axios.get(`http://localhost:8000/orders/${order.pk.toString()}`)
     console.log("order details\n", response)
     setShowDetails(true)
@@ -30,9 +27,7 @@ function OrdersPage(props: any) {
   }
 
   const handleStatusChange = async (order:any) => {
-    console.log("status change", props.user)
     const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, order )
-    console.log("PUT response", response.data)
   }
   return(
     <>
@@ -48,7 +43,9 @@ function OrdersPage(props: any) {
         {orders && 
         orders
         .filter((order: any) =>
-          order.items.toLowerCase().includes(filterText.toLowerCase())
+          order.prodotti.some((item: any) =>
+            item.name.toLowerCase().includes(filterText.toLowerCase())
+          )
         )
         .map((order: any, index: number) => (
           <li>
@@ -56,7 +53,7 @@ function OrdersPage(props: any) {
             <h2 onClick={() => {
               fetchOrderDetails(order)
               setShowDetails(true)
-            }}>{order.items}</h2>
+            }}>{order.prodotti.map((i :any )=> " - " + i.name)}</h2>
             {orderDetails && orderDetails.pk == order.pk &&
               (<div>
                 <h2>Order Details:</h2>

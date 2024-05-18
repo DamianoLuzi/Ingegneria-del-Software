@@ -12,6 +12,7 @@ function EditMenuPage(props: any) {
     description: '',
     price:0
   });
+  const [filterText, setFilterText] = useState('')
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -86,10 +87,21 @@ function EditMenuPage(props: any) {
     }
   };
 
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(e.target.value); // Update filter text state when input changes
+  };
+
+
   return (
     <>
     <div>
       <h1>Edit Menu</h1>
+      <input
+        type="text"
+        placeholder="Filter by product name"
+        value={filterText}
+        onChange={handleFilterChange}
+      />
       <button onClick={handleAddNewItem}>Add New Item</button>
       {showAddForm && (
         <form onSubmit={handleAddFormSubmit}>
@@ -111,7 +123,11 @@ function EditMenuPage(props: any) {
           </div>)
       }
       <ul className="card-list">
-        {menuItems.map((item: any) => (
+        {menuItems
+        .filter((item: any) =>
+          item.name.toLowerCase().includes(filterText.toLowerCase())
+        )
+        .map((item: any) => (
           <li key={item.id}>
             <div className="card">
               <h2>{item.name}</h2>

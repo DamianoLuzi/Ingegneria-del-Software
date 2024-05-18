@@ -15,17 +15,14 @@ function MenuPage(props:any) {
 
   useEffect(() => {
     const getProducts = async () => {
-      console.log("getProducts user  ", props.user)
       try {
         let response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.name}/menu`);
         if(props.user.ruolo === 'ristorante') response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
-        console.log("menu response", response);
         if (response) props.setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     }
-    console.log("selected restaurant", props.selectedRestaurant)
     getProducts()
   }, [])
 
@@ -33,29 +30,23 @@ function MenuPage(props:any) {
     setSelectedItems(prevSelectedItems => {
       const isSelected = prevSelectedItems.includes(product);
       if (isSelected) {
-        // Remove the product from selected items
       const updatedItems = prevSelectedItems.filter(item => item !== product);
-      // Reset the count for the removed product
       setItemCount(prevItemCount => ({
         ...prevItemCount,
-        [product.pk]: 0 // Set count to zero
+        [product.pk]: 0 
       }));
       return updatedItems;
-        //return prevSelectedItems.filter(item => item !== product);
       } else {
         return [...prevSelectedItems, product];
       }
     });
-    //props.setCartItems(selectedItems)
   };
 
   const handleItemCountChange = (product: any, value: number) => {
-    console.log("product item count\t", product, value)
     setItemCount(prevState => ({
       ...prevState,
       [product.pk]: value
     }));
-    console.log("product id\t", product.id)
     setSelectedItems(prevSelectedItems => {
       const updatedItems = [];
       for (let i = 0; i < value; i++) {
@@ -63,11 +54,9 @@ function MenuPage(props:any) {
       }
       return [...prevSelectedItems.filter(item => item.pk !== product.pk), ...updatedItems];
     });
-    //props.setCartItems(selectedItems)
   };
 
   useEffect(() => {
-    console.log("selected items\n", selectedItems)
     props.setCartItems(selectedItems);
   }, [selectedItems]); 
 
