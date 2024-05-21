@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import "../styles/App.css"
 function BalancePage(props: any) {
   const [balance, setBalance] = useState(0)
   const handleTopUp = async () => {
@@ -47,8 +47,8 @@ function BalancePage(props: any) {
       <div>
         <h2>{`${balance} €`}</h2>
       </div>}
-      <button onClick={handleTopUp}>Top Up</button>
-      <button onClick={handleWithdraw}>Withdraw</button>
+      <button className="button" onClick={handleTopUp}>Top Up</button>
+      <button className="button" onClick={handleWithdraw}>Withdraw</button>
     </div>
   )
 

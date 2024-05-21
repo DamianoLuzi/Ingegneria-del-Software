@@ -49,7 +49,7 @@ function App() {
             {user && <li><Link to="/balance"> Balance</Link></li>}
             {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Cart</Link></li>}
             {user && <li><Link to="/account">{`Logged in as ${user ? user.username : ''} | `}</Link></li>} 
-            {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <Link to="/login">Login</Link>}    
+            {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <li><Link to="/login">Login</Link></li>}    
           </ul>
         </nav>
         <Routes>

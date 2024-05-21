@@ -1,17 +1,18 @@
- /* App.css */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #008c4f; /* Light gray background */
+  background-color: #fffeb0; /* Light gray background */
 }
 
 .container {
+  background-color: #ffcc00;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 .navbar {
-  background-color: #ffcc00; /* Yellow */
-  color: #000000; /* Black */
+  background-color: #ff4500; /* Yellow */
+  color: #ffffff; /* White */
   padding: 1rem;
 }
 
@@ -27,17 +28,13 @@ body {
 }
 
 .navbar li a {
-  color: #000000; /* Black */
+  color: #ffffff; /* White */
   text-decoration: none;
   font-weight: bold;
 }
 
 .navbar li a:hover {
   text-decoration: underline;
-}
-
-.navbar li a.active {
-  color: #228b22; /* Evergreen */
 }
 
 .card {
@@ -54,35 +51,9 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
 }
 
-
-.container {
-  background-color: #ffffcc; /* Pale yellow */
-  padding: 2rem;
-}
-
-.navbar li a {
-  transition: color 0.3s ease; /* Smooth color transition */
-}
-
-.navbar li a:hover {
-  color: #228b22; /* Evergreen */
-}
-
-.card {
-  border: 1px solid #dddddd; /* Light gray border */
-}
-
-.card h2 {
-  color: #228b22; /* Evergreen */
-}
-
-.card p {
-  color: #000000; /* Black */
-}
-
 .button {
-  background-color: #228b22; /* Green */
-  color: #ffffff; /* White */
+  background-color: #ff8c00; /* Darker Orange */
+  color: #ff792b; /* White */
   border: none;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
@@ -92,34 +63,8 @@ body {
 }
 
 .button:hover {
-  background-color: #006400; /* Dark green on hover */
+  background-color: #ffffff; /* Darker Orange Red on hover */
   transform: translateY(-2px); /* Lift the button on hover */
-}
-
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
-}
-
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-}
-
-button:hover {
-  background-color: #228b22; /* Green on hover */
-  color: #ffffff; /* White text on hover */
-}
-
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
-}
-
-
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
 }
 
 .form-input {
@@ -130,18 +75,19 @@ button:hover {
 
 .form-input:focus {
   outline: none;
-  border-color: #228b22; /* Green on focus */
-  box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.2); /* Green glow on focus */
+  border-color: #ffcc00; /* Yellow on focus */
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2); /* Yellow glow on focus */
 }
 
-.container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+.form-input:hover {
+  text-decoration: underline;
 }
 
 button.active {
-  background-color: green;
+  background-color: #ff4500; /* Yellow */
   color: white;
 }
+
 
 /* Add styles for the role selection buttons */
 .role-selection {
@@ -161,7 +107,7 @@ button.active {
 
 /* Add styles for the active button */
 .role-selection button.active {
-  background-color: #007bff; /* Change the background color for active button */
+  background-color: #ff5500; /* Change the background color for active button */
   color: #fff; /* Change the text color for active button */
 }
 
@@ -193,7 +139,76 @@ button.active {
 .form-container button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #ff2600;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+.form-container p {
+  text-align: center;
+}
+
+/* Styles for the form container */
+.form-container {
+  max-width: 400px; /* Optional: Limit the maximum width of the form */
+  margin: auto; /* Center the form horizontally */
+  padding: 20px; /* Add some padding around the form */
+  border: 1px solid #ccc; /* Add a border around the form */
+  border-radius: 5px; /* Round the corners of the form */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better appearance */
+}
+
+/* Styles for the role selection buttons */
+.role-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the buttons horizontally */
+  margin-bottom: 20px; /* Add some space below the buttons */
+}
+
+.role-selection button {
+  width: 100%; /* Make the buttons full width */
+  max-width: 300px; /* Optional: Limit the maximum width of the buttons */
+  margin-bottom: 10px; /* Add some space between buttons */
+  padding: 10px; /* Add some padding for better appearance */
+  font-size: 16px; /* Increase the font size */
+  background-color: #f0f0f0; /* Default button color */
+  border: 1px solid #ccc; /* Default button border */
+  border-radius: 5px; /* Round the button corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.1s; /* Smooth transition for background color */
+}
+
+/* Styles for the active button */
+.role-selection button.active {
+  background-color: #ff4400; /* Change the background color for active button */
+  color: #fff; /* Change the text color for active button */
+  border: 1px solid #ffd500; /* Change the border color for active button */
+}
+
+/* Add styles for form elements */
+.form-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #049942;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -202,10 +217,5 @@ button.active {
 }
 
 .form-container button:hover {
-  background-color: #0056b3;
+  background-color: #b30000;
 }
-
-.form-container p {
-  text-align: center;
-}
-

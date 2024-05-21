@@ -38,9 +38,9 @@ class BaseUser(models.Model):
       return float(0)
 
   @classmethod
-  def authenticate_user(cls, username, role):
-    print("username role\n", username, role)
-    try:
+  def authenticate_user(cls, username):
+    print("username role\n", username)
+    """ try:
       #checking whether user exists, might eventually add password check as well
       if role == 'cliente':
         return Customer.objects.get(username=username)
@@ -49,7 +49,25 @@ class BaseUser(models.Model):
       elif role == 'rider':
         return Rider.objects.get(username=username)   
     except (Customer.DoesNotExist, Restaurant.DoesNotExist, Rider.DoesNotExist):
-        return None
+        return None """
+    
+    user = None
+    try:
+        user = Customer.objects.get(username=username)
+    except Customer.DoesNotExist:
+        pass
+    if not user:
+        try:
+            user = Restaurant.objects.get(username=username)
+        except Restaurant.DoesNotExist:
+            pass
+    if not user:
+        try:
+            user = Rider.objects.get(username=username)
+        except Rider.DoesNotExist:
+            pass
+
+    return user
 
   @classmethod 
   def create_user(cls, role, **kwargs):
@@ -70,6 +88,7 @@ class BaseUser(models.Model):
     elif role == 'rider':
         user = Rider.objects.create(
           username=kwargs['username'],
+          email=kwargs['email'],
           #position = kwargs['posizione'], 
           ruolo = role,
           password = kwargs['password'],

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import "../styles/App.css"
 function RestaurantsPage(props: any) {
   const [filterText, setFilterText] = useState(''); 
   useEffect(() => {
@@ -42,7 +43,7 @@ function RestaurantsPage(props: any) {
               <p>Indirizzo: {restaurant.indirizzo}</p>
               <Link to={`/${restaurant.username.toLowerCase().replace(/\s+/g, '')}/menu`}>
               <button
-                className="btn btn-primary"
+                className="button"
                 onClick={() => {
                   props.setSelectedRestaurant(restaurant); //globally updating selectedRestaurant
                   console.log("selected restaurant", restaurant)

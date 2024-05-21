@@ -84,19 +84,19 @@ function MenuPage(props:any) {
                   <p>Price: {product.price} €</p>
                   {/* selectedItems.includes(product) */ true && (
                     <div>
-                      <button onClick={() => handleItemCountChange(product , itemCount[product.pk] ? itemCount[product.pk] + 1 : 1)}>+</button>
+                      <button className="button" onClick={() => handleItemCountChange(product , itemCount[product.pk] ? itemCount[product.pk] + 1 : 1)}>+</button>
                       <span>{itemCount[product.pk] || 0}</span>
-                      <button onClick={() => handleItemCountChange(product, itemCount[product.pk] ? Math.max(itemCount[product.pk] - 1, 0) : 0)}>-</button>
+                      <button className="button"  onClick={() => handleItemCountChange(product, itemCount[product.pk] ? Math.max(itemCount[product.pk] - 1, 0) : 0)}>-</button>
                     </div>
                   )}
-                  <button onClick={() => handleCheckboxChange(product)}>
+                  <button className="button"  onClick={() => handleCheckboxChange(product)}>
                     {selectedItems.includes(product) ? "Remove from Cart" : "Add to Cart"}
                   </button>
                 </div>
               </li>
             ))}
         </ul>
-        {selectedItems.length !== 0 && <Link to={`/cart`}><button>Check your Cart</button></Link>}
+        {selectedItems.length !== 0 && <Link to={`/cart`}><button className="button">Check your Cart</button></Link>}
       </div>
     </>
   );

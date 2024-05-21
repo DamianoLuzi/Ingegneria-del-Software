@@ -6,6 +6,7 @@ function OrdersPage(props: any) {
   const [showDetails, setShowDetails] = useState(false)
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const [filterText, setFilterText] = useState('')
+  const [successMessage, setSuccessMessage] = useState(false); 
   
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value); // Update filter text state when input changes
@@ -28,6 +29,12 @@ function OrdersPage(props: any) {
 
   const handleStatusChange = async (order:any) => {
     const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, order )
+    if (response.status === 200) {
+      setSuccessMessage(true);
+      setTimeout(() => {
+        setSuccessMessage(false);
+      }, 5000); // Hide the message after 5 seconds
+    }
   }
   return(
     <>
@@ -39,6 +46,7 @@ function OrdersPage(props: any) {
         value={filterText}
         onChange={handleFilterChange}
       />
+      {successMessage && <div className="success-message"><h1>Successfully updated order status!</h1></div>}
       <ul className="card-list">
         {orders && 
         orders
@@ -67,9 +75,9 @@ function OrdersPage(props: any) {
                 <p>Updated at: {orderDetails.updated_at}</p>
                 <p>Expected delivery time: {orderDetails.delivery_time} minutes</p>
                 {/* Buttons for status changes depending on the type of user */}
-                {props.user.ruolo === 'ristorante' && <button onClick={() => handleStatusChange(order)}>Order Ready!</button>}
-                {props.user.ruolo === 'rider' && <button onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
-                {props.user.ruolo === 'cliente' && <button onClick={() => handleStatusChange(order)}>Order Received!</button>}
+                {props.user.ruolo === 'ristorante' && <button className="button" onClick={() => handleStatusChange(order)}>Order Ready!</button>}
+                {props.user.ruolo === 'rider' && <button className="button" onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
+                {props.user.ruolo === 'cliente' && <button className="button" onClick={() => handleStatusChange(order)}>Order Received!</button>}
               </div>)}
           </div>   
           </li>
