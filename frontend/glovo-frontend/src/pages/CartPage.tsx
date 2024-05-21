@@ -45,7 +45,7 @@ function CartPage (props: any) {
     ))}
     </ul>
     <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.price, 0)} €</h2>
-    {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Pay</button>}
+    {props.cartItems.length != 0 && <button className="button" onClick={handlePlaceOrder}>Pay</button>}
     {<button className="button" onClick={() => props.setCartItems([])}>Cancel</button>}
     </>
   )
