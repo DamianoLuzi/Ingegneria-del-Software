@@ -10,12 +10,37 @@ function RestaurantsPage(props: any) {
       if(response) props.setRestaurants(response.data)
     }
     getRistoranti()
+    props.setFavouriteRestaurants(props.user.favourite_restaurants)
   },[])
 
  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value); 
+  };
+
+  const handleToggleFavourite = async (restaurant: any) => {
+    props.user.favourite_restaurants.map((p:any) => console.log(p, typeof p))
+    const isFavourite = props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username);
+    console.log("is fav\n", isFavourite)
+    try {
+      if (isFavourite) {
+        const res = await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_restaurants`,{
+          data: restaurant,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("DEL res\n", res)
+        props.setFavouriteRestaurants(props.favouriteRestaurants.filter((fav: any) => fav.username !== restaurant.username));
+        console.log("updated favs\n",props.favouriteRestaurants)
+      } else {
+        await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_restaurants`, restaurant);
+        props.setFavouriteRestaurants([...props.favouriteRestaurants, restaurant]);
+      }
+    } catch (error) {
+      console.error(`Error ${isFavourite ? 'removing from' : 'adding to'} favourites:`, error);
+    }
   };
 
 
@@ -52,6 +77,12 @@ function RestaurantsPage(props: any) {
                 View Menu
               </button>
               </Link>
+              {
+                props.user && props.user.ruolo == "cliente" &&
+                <button className="button" onClick={() => handleToggleFavourite(restaurant)}>
+                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Remove from Favourites' : 'Add to Favourites'}
+                </button>
+              }
             </div>
           </div>
         </div>

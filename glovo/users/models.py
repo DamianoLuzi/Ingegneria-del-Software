@@ -161,7 +161,9 @@ class BankAccount(models.Model):
     return "active" if self.active else 'inactive' +" "+str(self.object_id) + " " + str(user)
     
 class Customer(BaseUser):
-  posizione = models.CharField(max_length=20, default="", null=True, blank =True)
+  #posizione = models.CharField(max_length=20, default="", null=True, blank =True)
+  ristoranti_preferiti = models.JSONField(default=[])
+  prodotti_preferiti = models.JSONField(default=[])
   def __str__(self):
     return str(self.username+' '+str(self.pk))
   
@@ -171,7 +173,9 @@ class Customer(BaseUser):
       'password': self.password,
       'email': self.email,
       'ruolo': self.ruolo,
-      'balance': self.get_balance()
+      'balance': self.get_balance(),
+      'favourite_restaurants' : self.ristoranti_preferiti,
+      'favourite_items' : self.prodotti_preferiti
     }
   
 class Restaurant(BaseUser):
