@@ -33,6 +33,7 @@ function SignUpForm(props: any) {
 
   const handleRoleSelection = (selectedRole: string) => {
     setFormData({ ...formData, ruolo: selectedRole });
+    console.log(formData)
   };
 
   const handleChange = (e: any) => {
@@ -41,27 +42,27 @@ function SignUpForm(props: any) {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h2>Sign Up</h2>
       <h3>Scegli il tuo ruolo</h3>
-      <div>
+      <div className="role-selection">
         <button
           className={formData.ruolo === "cliente" ? "active" : ""}
           onClick={() => handleRoleSelection("cliente")}
         >
-          Customer
+          Join the Customers Community Now!
         </button>
         <button
           className={formData.ruolo === "ristorante" ? "active" : ""}
           onClick={() => handleRoleSelection("ristorante")}
         >
-          Restaurant
+          Join the Restaurants Community Now!
         </button>
         <button
           className={formData.ruolo === "rider" ? "active" : ""}
           onClick={() => handleRoleSelection("rider")}
         >
-          Rider
+          Join the Riders Community Now!
         </button>
       </div>
       <br />

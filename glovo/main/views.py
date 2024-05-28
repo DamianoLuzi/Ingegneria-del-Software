@@ -81,3 +81,66 @@ def menu_details(request, restaurant_name, id):
     except Exception as e:
       return HttpResponse(e, status = 500)
      
+     
+@api_view(['GET','POST','DELETE'])
+def favourite_products(request, role, username):
+    if request.method == "POST":
+      print("req\n", request.data)
+      try:
+          customer = Customer.objects.get(username=username)
+          if request.data not in customer.prodotti_preferiti:
+            customer.prodotti_preferiti.append(request.data)
+          customer.save()
+          return JsonResponse(request.data, status = 200, safe=False)
+      except Exception as e:
+          return HttpResponse(e, status = 500)
+    if request.method == "GET":
+      try:
+        customer = Customer.objects.get(username=username)
+        return JsonResponse(customer.prodotti_preferiti, status=200, safe=False)
+      except Exception as e:
+        return HttpResponse(e, status = 500)
+    if request.method == "DELETE":
+      try:
+        item = request.data
+        print("DEL\n",item)
+        customer = Customer.objects.get(username=username)
+        if item in customer.prodotti_preferiti:
+          customer.prodotti_preferiti.remove(item)
+        #customer.prodotti_preferiti = [item for item in customer.prodotti_preferiti if item != data]
+        customer.save()
+        return JsonResponse(customer.prodotti_preferiti, status=200, safe=False)
+      except Exception as e:
+        return HttpResponse(e, status = 500)
+
+
+@api_view(['GET','POST','DELETE'])
+def favourite_restaurants(request, role, username):
+    if request.method == "POST":
+      print("req\n", request.data)
+      try:
+          customer = Customer.objects.get(username=username)
+          if request.data not in customer.ristoranti_preferiti:
+            customer.ristoranti_preferiti.append(request.data)
+          customer.save()
+          return JsonResponse(request.data, status = 200, safe=False)
+      except Exception as e:
+          return HttpResponse(e, status = 500)
+    if request.method == "GET":
+      try:
+        customer = Customer.objects.get(username=username)
+        return JsonResponse(customer.ristoranti_preferiti, status=200, safe=False)
+      except Exception as e:
+        return HttpResponse(e, status = 500)
+    if request.method == "DELETE":
+      try:
+        item = request.data
+        print("DEL\n",item)
+        customer = Customer.objects.get(username=username)
+        if item in customer.ristoranti_preferiti:
+          customer.ristoranti_preferiti.remove(item)
+        #customer.prodotti_preferiti = [item for item in customer.prodotti_preferiti if item != data]
+        customer.save()
+        return JsonResponse(customer.ristoranti_preferiti, status=200, safe=False)
+      except Exception as e:
+        return HttpResponse(e, status = 500)

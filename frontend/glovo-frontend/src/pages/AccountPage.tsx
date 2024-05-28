@@ -76,7 +76,7 @@ function AccountPage(props: any) {
   }
 
   return (
-    <div className="container">
+    <div className="form-container">
       {message && <h1>{message}</h1>}
       {error && <h1>Error: {error}</h1>}
       <h1>Profile</h1>
@@ -90,7 +90,7 @@ function AccountPage(props: any) {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              onBlur={() => handleFieldBlur("username")}
+              //onBlur={() => handleFieldBlur("username")}
             />
           ) : (
             <p onClick={() => handleFieldClick("username")}>{formData.username}</p>
@@ -160,9 +160,9 @@ function AccountPage(props: any) {
             <p onClick={() => handleFieldClick("email")}>{formData.email}</p>
           )}
         </div>
-        <button type="submit">Update Profile</button>
+        <button type="submit" className="button">Update Profile</button>
       </form>
-      <button type="button" onClick={handleDeleteAccount}>Delete Account</button>
+      <button type="button" className="button" onClick={handleDeleteAccount}>Delete Account</button>
     </div>
   );
 }

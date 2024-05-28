@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect} from "react";
-
+import "../styles/App.css"
 function CartPage (props: any) {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -12,6 +12,7 @@ function CartPage (props: any) {
       'items' : props.cartItems,
       'price': props.cartItems.reduce((total: number, item: any) => total + item.price, 0)
     }
+    console.log("cart items\n", props.cartItems)
     const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData)
     if(response) {
       setMessage('Order successfully placed!')
@@ -45,8 +46,8 @@ function CartPage (props: any) {
     ))}
     </ul>
     <h2>Total: {props.cartItems.reduce((total: number, item: any) => total + item.price, 0)} €</h2>
-    {props.cartItems.length != 0 && <button onClick={handlePlaceOrder}>Pay</button>}
-    {<button onClick={() => props.setCartItems([])}>Cancel</button>}
+    {props.cartItems.length != 0 && <button className="button" onClick={handlePlaceOrder}>Pay</button>}
+    {<button className="button" onClick={() => props.setCartItems([])}>Cancel</button>}
     </>
   )
 }

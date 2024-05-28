@@ -14,6 +14,7 @@ import EditMenuPage from './pages/EditMenuPage';
 import AccountPage from './pages/AccountPage';
 import './styles/App.css'; // Import the CSS file for styling
 import PasswordResetPage from './pages/PasswordResetPage';
+import FavouritesPage from './pages/FavouritesPage';
 
 function App() {
   
@@ -22,7 +23,8 @@ function App() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [products, setProducts] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-
+  const [favouriteProducts, setFavouriteProducts] = useState<any>([])
+  const [favouriteRestaurants, setFavouriteRestaurants] = useState<any>([])
   return (
     <Router>
       <div className="container">
@@ -32,9 +34,14 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             {user && user.ruolo === 'cliente' && 
-              <li>
+              <>
+                <li>
                 <Link to="/restaurants">Restaurants</Link>
               </li>
+              <li>
+                <Link to="/favourites">Favourites</Link>
+              </li>
+              </>
             }
             {user && user.ruolo === 'ristorante' && 
               <li>
@@ -49,14 +56,14 @@ function App() {
             {user && <li><Link to="/balance"> Balance</Link></li>}
             {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Cart</Link></li>}
             {user && <li><Link to="/account">{`Logged in as ${user ? user.username : ''} | `}</Link></li>} 
-            {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <Link to="/login">Login</Link>}    
+            {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <li><Link to="/login">Login</Link></li>}    
           </ul>
         </nav>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginForm setUser={setUser} />} />
-          <Route path="/restaurants" element={<RestaurantsPage restaurants={restaurants} setRestaurants={setRestaurants} setSelectedRestaurant={setSelectedRestaurant} />} />
-          <Route path="/:restaurantName/menu/" element={<MenuPage user={user} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} /> 
+          <Route path="/restaurants" element={<RestaurantsPage user={user} restaurants={restaurants} setRestaurants={setRestaurants} setSelectedRestaurant={setSelectedRestaurant} favouriteRestaurants={favouriteRestaurants} setFavouriteRestaurants={setFavouriteRestaurants}/>} />
+          <Route path="/:restaurantName/menu/" element={<MenuPage user={user} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} favouriteProducts={favouriteProducts} setFavouriteProducts={setFavouriteProducts}/>} /> 
           <Route path="/orders" element={<OrdersPage user={user} />} /> 
           <Route path="/balance" element={<BalancePage user={user} />} />
           <Route path="/signup" element={<SignUpPage user={user} setUser={setUser} />} />
@@ -64,6 +71,7 @@ function App() {
           <Route path="/menu" element={<EditMenuPage user={user} cartItems={cartItems} products={products} setProducts={setProducts} selectedRestaurant={selectedRestaurant} setCartItems={setCartItems} />} />
           <Route path="/account" element = {<AccountPage user={user} setUser={setUser}/>}/>
           <Route path="/resetpw" element = {<PasswordResetPage setUser={setUser}/>}/>
+          <Route path="/favourites" element = {<FavouritesPage user={user} favouriteProducts={favouriteProducts} setFavouriteProducts={setFavouriteProducts}  favouriteRestaurants={favouriteRestaurants} setFavouriteRestaurants={setFavouriteRestaurants}/>}/>
         </Routes>
       </div>
     </Router>

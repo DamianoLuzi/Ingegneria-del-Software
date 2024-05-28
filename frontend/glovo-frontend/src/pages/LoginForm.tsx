@@ -1,6 +1,7 @@
 import { useState } from "react";
 import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
+import "../styles/App.css";
 
 function LoginForm(props: any) {
   const [errors, setErrors] = useState(null);
@@ -34,10 +35,8 @@ function LoginForm(props: any) {
     setFormData({ ...formData, [name]: value });
   };
 
-  return (
-    <div>
-      <h2>Login</h2>
-      <h3>Scegli il tuo ruolo</h3>
+
+  {/* <h3>Scegli il tuo ruolo</h3>
       <div>
         <button
           className={formData.ruolo === "cliente" ? "active" : ""}
@@ -57,7 +56,11 @@ function LoginForm(props: any) {
         >
           Rider
         </button>
-      </div>
+      </div> */}
+
+  return (
+    <div className="form-container">
+      <h2>Login</h2>
       <br />
       <form>
         <div>
@@ -95,7 +98,7 @@ function LoginForm(props: any) {
           Don't have an account? Create one <a href="/signup">Here</a>!
         </p>
         
-        <button type="button" onClick={handleFormSubmit}>
+        <button className="button" type="button" onClick={handleFormSubmit}>
           Log In
         </button>
       </form>

@@ -14,7 +14,7 @@ class Order(models.Model):
   items = models.CharField(max_length=1000)
   prodotti = models.JSONField(default=[])
   price = models.FloatField(default=0.0)
-  destination= models.CharField(max_length=100)
+  #destination= models.CharField(max_length=100)
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -51,6 +51,10 @@ class Order(models.Model):
           #no particular logic -> just fetching the first available rider
           rider = Rider.objects.filter(status='available').first()
           #logic might eventually handle order creation without available riders -> delayed rider assignment
+          ##Rider.notify_rider(rider)
+          ##def notify_rider(rider)
+          ##text = f"Ciao {rider.username},\n Hai una nuova consegna da effettuare!"
+          ##send_mail(subject="Delivery", message=text, recipient_list=[rider.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
           if rider is None:
               return None, "No riders available at the moment"
           print("items\n", items)
@@ -93,6 +97,8 @@ class Order(models.Model):
               order.status = 'in transit'
           elif isinstance(user, Rider):
               order.status = 'delivered'
+              user.status = "available"
+              user.save()
           else:
               order.status = 'completed'
           order.save()

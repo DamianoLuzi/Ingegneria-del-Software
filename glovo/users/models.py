@@ -38,9 +38,9 @@ class BaseUser(models.Model):
       return float(0)
 
   @classmethod
-  def authenticate_user(cls, username, role):
-    print("username role\n", username, role)
-    try:
+  def authenticate_user(cls, username):
+    print("username role\n", username)
+    """ try:
       #checking whether user exists, might eventually add password check as well
       if role == 'cliente':
         return Customer.objects.get(username=username)
@@ -49,7 +49,25 @@ class BaseUser(models.Model):
       elif role == 'rider':
         return Rider.objects.get(username=username)   
     except (Customer.DoesNotExist, Restaurant.DoesNotExist, Rider.DoesNotExist):
-        return None
+        return None """
+    
+    user = None
+    try:
+        user = Customer.objects.get(username=username)
+    except Customer.DoesNotExist:
+        pass
+    if not user:
+        try:
+            user = Restaurant.objects.get(username=username)
+        except Restaurant.DoesNotExist:
+            pass
+    if not user:
+        try:
+            user = Rider.objects.get(username=username)
+        except Rider.DoesNotExist:
+            pass
+
+    return user
 
   @classmethod 
   def create_user(cls, role, **kwargs):
@@ -70,6 +88,7 @@ class BaseUser(models.Model):
     elif role == 'rider':
         user = Rider.objects.create(
           username=kwargs['username'],
+          email=kwargs['email'],
           #position = kwargs['posizione'], 
           ruolo = role,
           password = kwargs['password'],
@@ -116,7 +135,7 @@ class BaseUser(models.Model):
       print("exception\n", str(e))
       return None
   @classmethod
-  def reset_password(cls,user_name,user_role,new_password):
+  def reset_user_password(cls,user_name,user_role,new_password):
     print("reset pw\n", user_name, user_role)
     try:
       user = cls.get_user_by_role( user_role,user_name)
@@ -142,7 +161,9 @@ class BankAccount(models.Model):
     return "active" if self.active else 'inactive' +" "+str(self.object_id) + " " + str(user)
     
 class Customer(BaseUser):
-  posizione = models.CharField(max_length=20, default="", null=True, blank =True)
+  #posizione = models.CharField(max_length=20, default="", null=True, blank =True)
+  ristoranti_preferiti = models.JSONField(default=[])
+  prodotti_preferiti = models.JSONField(default=[])
   def __str__(self):
     return str(self.username+' '+str(self.pk))
   
@@ -152,7 +173,9 @@ class Customer(BaseUser):
       'password': self.password,
       'email': self.email,
       'ruolo': self.ruolo,
-      'balance': self.get_balance()
+      'balance': self.get_balance(),
+      'favourite_restaurants' : self.ristoranti_preferiti,
+      'favourite_items' : self.prodotti_preferiti
     }
   
 class Restaurant(BaseUser):

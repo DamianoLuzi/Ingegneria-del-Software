@@ -1,18 +1,19 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #fffeb0; /* Light gray background */
+  color:#fff;
+  background-color: #448cff;
 }
 
 .container {
-  background-color: #ffcc00;
+  background-color: #2c64bf;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
 .navbar {
-  background-color: #ff4500; /* Yellow */
-  color: #ffffff; /* White */
+  background-color:#071ba3;
+  color: #fff;
   padding: 1rem;
 }
 
@@ -28,7 +29,7 @@ body {
 }
 
 .navbar li a {
-  color: #ffffff; /* White */
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
 }
@@ -38,8 +39,9 @@ body {
 }
 
 .card {
-  background-color: #ffffff; /* White */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background-color: #ffffff;
+  color:black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -47,15 +49,16 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .button {
-  background-color: #ff8c00; /* Darker Orange */
-  color: #ff792b; /* White */
+  background-color: #071ba3;
+  color: #ffffff;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.50rem .50rem;
+  margin: 0.25rem;
   font-size: 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -63,8 +66,7 @@ body {
 }
 
 .button:hover {
-  background-color: #ffffff; /* Darker Orange Red on hover */
-  transform: translateY(-2px); /* Lift the button on hover */
+  background-color: #000432;
 }
 
 .form-input {
@@ -75,15 +77,76 @@ body {
 
 .form-input:focus {
   outline: none;
-  border-color: #ffcc00; /* Yellow on focus */
-  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2); /* Yellow glow on focus */
+  border-color: #ffcc00;
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
 }
 
 .form-input:hover {
   text-decoration: underline;
 }
 
-button.active {
-  background-color: #ff4500; /* Yellow */
-  color: white;
+.role-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.role-selection button {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.role-selection button.active {
+  background-color: #01004f;
+  color: #fff;
+  border: 1px solid #ffffff;
+}
+
+.form-container {
+  background-color: #7d8efa;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 4rem;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #041099;
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.form-container button:hover {
+  background-color: #000432;
 }

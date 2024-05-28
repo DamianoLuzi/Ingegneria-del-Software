@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
-
+import "../styles/App.css"
 function PasswordResetPage(props: any) {
   const [errors, setErrors] = useState('');
   const [formData, setFormData] = useState({
@@ -25,9 +25,9 @@ function PasswordResetPage(props: any) {
       }
     } catch (error:any) {
       console.error("Error:", error);
-      setErrors(error.response.data);
+      setErrors(error.message);
       setTimeout(() => {
-        return setErrors(error.response.data);
+        return setErrors('');
       }, 5000);
       
     }
@@ -43,11 +43,10 @@ function PasswordResetPage(props: any) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  
 
-  return (
-    <div>
-      <h3>Reset your password!</h3>
-      <div>
+  /* 
+  <div>
         <button
           className={formData.ruolo === "cliente" ? "active" : ""}
           onClick={() => handleRoleSelection("cliente")}
@@ -65,6 +64,31 @@ function PasswordResetPage(props: any) {
           onClick={() => handleRoleSelection("rider")}
         >
           Rider
+        </button>
+      </div>
+       */
+  return (
+    <div>
+      <h3>Reset your password!</h3>
+      <div className="form-container">
+      <div className="role-selection">
+        <button
+          className={formData.ruolo === "cliente" ? "active" : ""}
+          onClick={() => handleRoleSelection("cliente")}
+        >
+         Recover your Customer Password!
+        </button>
+        <button
+          className={formData.ruolo === "ristorante" ? "active" : ""}
+          onClick={() => handleRoleSelection("ristorante")}
+        >
+          Recover Your Restaurant Password!
+        </button>
+        <button
+          className={formData.ruolo === "rider" ? "active" : ""}
+          onClick={() => handleRoleSelection("rider")}
+        >
+          Recover Your Rider Password!
         </button>
       </div>
       <br />
@@ -105,6 +129,7 @@ function PasswordResetPage(props: any) {
           Reset
         </button>
       </form>
+    </div>
     </div>
   );
 }
