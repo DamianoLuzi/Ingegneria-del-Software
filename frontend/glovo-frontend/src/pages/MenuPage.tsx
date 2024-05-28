@@ -76,10 +76,12 @@ function MenuPage(props:any) {
         });
         console.log("DEL res\n", res)
         props.setFavouriteProducts(props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk));
+        props.user.favourite_items = props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk)
         console.log("updated favs\n",props.favouriteProducts)
       } else {
         await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_products`, item);
         props.setFavouriteProducts([...props.favouriteProducts, item]);
+        props.user.favourite_items = [...props.favouriteProducts, item]
       }
     } catch (error) {
       console.error(`Error ${isFavourite ? 'removing from' : 'adding to'} favourites:`, error);

@@ -14,7 +14,7 @@ class Order(models.Model):
   items = models.CharField(max_length=1000)
   prodotti = models.JSONField(default=[])
   price = models.FloatField(default=0.0)
-  destination= models.CharField(max_length=100)
+  #destination= models.CharField(max_length=100)
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

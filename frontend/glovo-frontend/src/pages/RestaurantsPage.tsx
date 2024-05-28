@@ -31,13 +31,14 @@ function RestaurantsPage(props: any) {
             'Content-Type': 'application/json'
           }
         });
-        console.log("DEL res\n", res)
         props.setFavouriteRestaurants(props.favouriteRestaurants.filter((fav: any) => fav.username !== restaurant.username));
-        console.log("updated favs\n",props.favouriteRestaurants)
+        props.user.favourite_restaurants = props.favouriteRestaurants.filter((fav: any) => fav.username !== restaurant.username)
       } else {
         await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_restaurants`, restaurant);
         props.setFavouriteRestaurants([...props.favouriteRestaurants, restaurant]);
+        props.user.favourite_restaurants = [...props.favouriteRestaurants, restaurant]
       }
+      
     } catch (error) {
       console.error(`Error ${isFavourite ? 'removing from' : 'adding to'} favourites:`, error);
     }
