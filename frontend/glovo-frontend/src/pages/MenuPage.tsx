@@ -38,6 +38,10 @@ function MenuPage(props:any) {
       }));
       return updatedItems;
       } else {
+        setItemCount(prevItemCount => ({
+          ...prevItemCount,
+          [product.pk]: 1 
+        }));
         return [...prevSelectedItems, product];
       }
     });
