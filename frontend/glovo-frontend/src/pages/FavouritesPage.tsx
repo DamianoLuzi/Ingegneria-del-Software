@@ -23,7 +23,7 @@ function FavouritesPage(props: any) {
             'Content-Type': 'application/json'
           }
         });
-        
+        //updating state from child to parent
         if (isProduct) {
           props.setFavouriteProducts(props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk));
           props.user.favourite_items = props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk);
@@ -33,7 +33,7 @@ function FavouritesPage(props: any) {
         }
       } else {
         await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/${isProduct ? 'favourite_products' : 'favourite_restaurants'}`, item);
-        
+        //updating state from child to parent
         if (isProduct) {
           props.setFavouriteProducts([...props.favouriteProducts, item]);
           props.user.favourite_items = [...props.favouriteProducts, item];
