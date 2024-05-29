@@ -70,8 +70,7 @@ class Order(models.Model):
               items=serialized_items,
               prodotti = items,
               price=float(order_price),
-              status='in progress...',
-              destination=''
+              status='in progress...'
           )
           if customer.get_balance() >= order_price:
             customer.update_balance(customer.get_balance() - order_price)
@@ -111,7 +110,6 @@ class Order(models.Model):
       'pk': str(self.pk) ,
       'created_at': self.created_at,
       'customer': Customer.objects.get(pk = self.customer_id.pk).username,
-      'destination': self.destination,
       'price':self.price,
       'restaurant': Restaurant.objects.get(pk = self.restaurant_id.pk).username,
       'rider': Rider.objects.get(pk = self.rider_id.pk).username,
