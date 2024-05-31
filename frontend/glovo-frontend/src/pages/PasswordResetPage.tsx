@@ -1,5 +1,4 @@
 import { useState } from "react";
-import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
 import "../styles/App.css"
 function PasswordResetPage(props: any) {

@@ -23,7 +23,6 @@ def login(request):
     try:
       user = BaseUser.authenticate_user(request.data['username'])
       if user:
-        print("logged in user\n", user.to_json())
         return JsonResponse(user.to_json(), status = 200)
       else:
         return HttpResponse({'User not found'}, status=404)
@@ -49,7 +48,6 @@ def balance(request, user_name, user_role):
   if request.method == 'GET':
     try:
       user = BaseUser.get_user_by_role(user_role, user_name)
-      print("balnce user\t", user.to_json())
       return JsonResponse(user.to_json(), status = 200, safe= False)
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
@@ -61,8 +59,9 @@ def balance(request, user_name, user_role):
     except Exception as e:
       return HttpResponse({'error':str(e)}, status = 500)
 
-@api_view(['GET','PUT', 'DELETE'])
+@api_view(['GET','PUT','DELETE','POST'])
 def account(request, user_name, user_role):
+  print("account view req.method\n", request.method)
   if request.method == 'PUT':
     updatedUser = BaseUser.update_user(user_role,user_name, request.data)
     if updatedUser is not None:
@@ -71,7 +70,8 @@ def account(request, user_name, user_role):
     user = BaseUser.get_user_by_role(user_name, user_name)
     if user is not None:
       return user.to_json()
-  elif request.method == 'DELETE':
+  elif request.method == 'DELETE' or request.method == 'POST':
+    print("DELETE method recognized")
     user = BaseUser.delete_user(user_name, user_role)
     if user is not None:
       return JsonResponse(user.to_json(), status=201, safe=False)

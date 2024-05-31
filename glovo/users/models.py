@@ -39,18 +39,7 @@ class BaseUser(models.Model):
 
   @classmethod
   def authenticate_user(cls, username):
-    print("username role\n", username)
-    """ try:
-      #checking whether user exists, might eventually add password check as well
-      if role == 'cliente':
-        return Customer.objects.get(username=username)
-      elif role == 'ristorante':
-        return Restaurant.objects.get(username=username)   
-      elif role == 'rider':
-        return Rider.objects.get(username=username)   
-    except (Customer.DoesNotExist, Restaurant.DoesNotExist, Rider.DoesNotExist):
-        return None """
-    
+    #only checking whether user exists, might eventually add password check as well
     user = None
     try:
         user = Customer.objects.get(username=username)
@@ -89,7 +78,6 @@ class BaseUser(models.Model):
         user = Rider.objects.create(
           username=kwargs['username'],
           email=kwargs['email'],
-          #position = kwargs['posizione'], 
           ruolo = role,
           password = kwargs['password'],
           status='available' )
@@ -106,7 +94,6 @@ class BaseUser(models.Model):
   
   @classmethod
   def update_user(cls, role, username, data):
-    print("account PUT\n", data)
     try:
       user = cls.get_user_by_role(role, username)
       user.username = data['username']
@@ -115,7 +102,6 @@ class BaseUser(models.Model):
       if user.ruolo == "ristorante":
         user = Restaurant.update_opening_hours(user, data)
       user.save()
-      print("updated user\n", user.to_json())
       return user
     except Exception as e:
       print("exception\n", str(e))
@@ -125,7 +111,6 @@ class BaseUser(models.Model):
   def delete_user(cls, username, role):
     try:
       user = cls.get_user_by_role(role, username)
-      print("user to be deleted\t", user.to_json())
       bank_account = BankAccount.objects.get(object_id = user.pk)
       aux = user
       user.delete()
@@ -136,10 +121,8 @@ class BaseUser(models.Model):
       return None
   @classmethod
   def reset_user_password(cls,user_name,user_role,new_password):
-    print("reset pw\n", user_name, user_role)
     try:
       user = cls.get_user_by_role( user_role,user_name)
-      print("reset pw\n", user.to_json())
       user.password = new_password
       user.save()
       return user
@@ -149,19 +132,19 @@ class BaseUser(models.Model):
 
     
 class BankAccount(models.Model):
- # user = models.ForeignKey('BaseUser', on_delete=models.CASCADE)
   active = models.BooleanField()
   credit = models.FloatField()
   content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
   object_id = models.PositiveIntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
+  class Meta:
+        unique_together = ('content_type', 'object_id')
 
   def __str__(self):
     user = self.content_type
     return "active" if self.active else 'inactive' +" "+str(self.object_id) + " " + str(user)
     
 class Customer(BaseUser):
-  #posizione = models.CharField(max_length=20, default="", null=True, blank =True)
   ristoranti_preferiti = models.JSONField(default=[])
   prodotti_preferiti = models.JSONField(default=[])
   def __str__(self):
@@ -199,7 +182,6 @@ class Restaurant(BaseUser):
     print("combined \n", datetime.combine(current_date, orario_apertura_time))
     user.orarioApertura = datetime.combine(current_date, orario_apertura_time)
     user.orarioChiusura = datetime.combine(current_date, orario_chiusura_time)
-    print("updated opening hours\n", user.to_json())
     return user
     
   def to_json(self):
@@ -217,7 +199,6 @@ class Restaurant(BaseUser):
   
 class Rider(BaseUser):
   status = models.CharField(max_length=100)
-  #position  = models.CharField(max_length=100)
 
   def __str__(self):
     return str(self.username+ ' '+ self.status)
@@ -227,6 +208,5 @@ class Rider(BaseUser):
       'username': self.username,
       'password': self.password,
       'ruolo': self.ruolo,
-      #'posizione': self.position,
       'balance': self.get_balance()
     }

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
-import "../styles/App.css"; // Import your CSS file for styling
+import "../styles/App.css"; 
 
 function SignUpForm(props: any) {
   const [errors, setErrors] = useState(null);

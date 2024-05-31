@@ -1,8 +1,10 @@
 from django.db import models
 from main.models import Item
-from users.models import Restaurant, Rider, BaseUser
+from users.models import Restaurant, Rider, BaseUser, BankAccount
 from users.models import Customer
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 import random
 import json
 # Create your models here.
@@ -14,20 +16,19 @@ class Order(models.Model):
   items = models.CharField(max_length=1000)
   prodotti = models.JSONField(default=[])
   price = models.FloatField(default=0.0)
-  #destination= models.CharField(max_length=100)
   status = models.CharField(max_length=100)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   delivery_time = models.IntegerField(default = random.randint(0,30))
 
   def __str__(self):
-    return str(str(self.items)+'-'+str(self.restaurant_id)+'-'+str(self.destination))
+    return str(str(self.items)+'-'+str(self.restaurant_id))
   
   @classmethod
   def get_orders_by_user(cls, role, username):
     try:
       try:
-        user = Restaurant.objects.get(name=username)
+        user = Restaurant.objects.get(username=username)
         orders = cls.objects.filter(restaurant_id = user.pk)
       except ObjectDoesNotExist:
         try:
@@ -57,11 +58,16 @@ class Order(models.Model):
           ##send_mail(subject="Delivery", message=text, recipient_list=[rider.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
           if rider is None:
               return None, "No riders available at the moment"
-          print("items\n", items)
           #items_names = [item['name'] for item in items]
           #storing a json array -> needs to be updated in class diagrams
-          serialized_items = json.dumps(items)
-          print("serialized items\n", serialized_items)
+          serialized_items = json.dumps(items)     
+
+          # Fetching the customer's bank account
+          customer_content_type = ContentType.objects.get_for_model(customer)
+          customer_bank_account = BankAccount.objects.get(content_type=customer_content_type, object_id=customer.pk)
+
+          if customer_bank_account.credit < order_price:
+              return None, "Insufficient Credit Balance! Top up your card first."
           
           new_order = Order(
               restaurant_id=restaurant,
@@ -119,6 +125,4 @@ class Order(models.Model):
       "delivery_time": self.delivery_time
     })
   
-class OrderDetails:
-  order = models.ForeignKey(Order, on_delete=models.CASCADE)
-  item = models.ForeignKey(Item, on_delete=models.CASCADE)
+

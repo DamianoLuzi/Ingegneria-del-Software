@@ -1,5 +1,4 @@
 import { useState } from "react";
-import RuoliMenu from "../components/RuoliMenu";
 import axios from "axios";
 import "../styles/App.css";
 
@@ -34,29 +33,6 @@ function LoginForm(props: any) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-
-  {/* <h3>Scegli il tuo ruolo</h3>
-      <div>
-        <button
-          className={formData.ruolo === "cliente" ? "active" : ""}
-          onClick={() => handleRoleSelection("cliente")}
-        >
-          Customer
-        </button>
-        <button
-          className={formData.ruolo === "ristorante" ? "active" : ""}
-          onClick={() => handleRoleSelection("ristorante")}
-        >
-          Restaurant
-        </button>
-        <button
-          className={formData.ruolo === "rider" ? "active" : ""}
-          onClick={() => handleRoleSelection("rider")}
-        >
-          Rider
-        </button>
-      </div> */}
 
   return (
     <div className="form-container">
