@@ -5,3 +5,4 @@ __pycache__
 glovo/db.sqlite3
 glovo/deliveries/__pycache__/
 glovo/deliveries/__pycache__/*.pyc
+*.pyc
