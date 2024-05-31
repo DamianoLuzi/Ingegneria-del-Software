@@ -12,8 +12,6 @@ from datetime import datetime
 from django.core.mail import send_mail
 import random
 import string
-
-
 # Create your views here.
 def home(request):
   return HttpResponse("Hello, world!")
