@@ -1,4 +1,7 @@
 venv
 node_modules
-./__pycache__
-./migrations
+__pycache__
+*/__pycache__/
+glovo/db.sqlite3
+glovo/deliveries/__pycache__/
+glovo/deliveries/__pycache__/*.pyc
