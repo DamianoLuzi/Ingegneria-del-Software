@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from django.urls import reverse
+from django.urls import reverse, resolve
 from rest_framework.test import APIClient, APITestCase
 from urllib.parse import urlencode
 from users.models import BaseUser, Customer, Restaurant, Rider, BankAccount
@@ -16,7 +16,7 @@ import json
     'The message Destroying test database for alias 'default'...'  
 """
 
-class UserTestCase(APITestCase):
+class CustomerTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.customer = Customer.objects.create(
@@ -95,14 +95,9 @@ class UserTestCase(APITestCase):
             'password': 'NewPass1234',
             'email': 'updateduser@gmail.com'
         }
-        response = self.client.put(
-            reverse('account', kwargs={'user_role': 'cliente', 'user_name': 'cliente1'}),
-            data=json.dumps(updated_data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, 200)
-        user = Customer.get_user_by_role("cliente","cliente1")
-        self.assertEqual(user.username, 'cliente1')
+        BaseUser.update_user('cliente', 'cliente1', updated_data)
+        user = Customer.get_user_by_role("cliente","updateduser")
+        self.assertEqual(user.username, 'updateduser')
 
     #DELETE method not being recognized -> error 405
     def test_delete_user(self):
@@ -115,7 +110,11 @@ class UserTestCase(APITestCase):
 
     def test_reset_user_password(self):
         payload = {'new_password': 'NewPass1234'}
-        response = self.client.put(reverse('account', kwargs={'user_role': 'cliente', 'user_name': 'cliente1'}), data=json.dumps(payload), content_type='application/json')
+        response = self.client.put(
+            reverse('account', kwargs={'user_role': 'cliente', 'user_name': 'cliente1'}),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         user = Customer.authenticate_user("cliente1")
         self.assertEqual(user.password, user.password) # recovery password is randomly generated 
