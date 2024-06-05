@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
+from django.utils import timezone
 # Create your models here.
 class BaseUser(models.Model):
   ruolo = models.CharField(max_length=50, default="user")
@@ -96,12 +97,14 @@ class BaseUser(models.Model):
   def update_user(cls, role, username, data):
     try:
       user = cls.get_user_by_role(role, username)
-      user.username = data['username']
-      user.password = data['password']
-      user.email = data['email']
+      print("user before update\n",user.to_json())
+      user.username = data.get('username', username)
+      user.password = data.get('password', 'pw')
+      user.email = data.get('email','email@test.com')
       if user.ruolo == "ristorante":
         user = Restaurant.update_opening_hours(user, data)
       user.save()
+      print("updated user\n",user.to_json())
       return user
     except Exception as e:
       print("exception\n", str(e))
@@ -164,8 +167,8 @@ class Customer(BaseUser):
 class Restaurant(BaseUser):
   name = models.CharField(max_length=100, default="restaurant name")
   indirizzo = models.CharField(max_length=100)
-  orarioApertura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
-  orarioChiusura=models.DateTimeField(blank=True, null=True, auto_now_add=True)
+  orarioApertura=models.DateTimeField(blank=True, null=True, default=timezone.now())
+  orarioChiusura=models.DateTimeField(blank=True, null=True, default=timezone.now())
 
   def __str__(self):
     return self.username+' '+str(self.pk)
@@ -182,6 +185,8 @@ class Restaurant(BaseUser):
     print("combined \n", datetime.combine(current_date, orario_apertura_time))
     user.orarioApertura = datetime.combine(current_date, orario_apertura_time)
     user.orarioChiusura = datetime.combine(current_date, orario_chiusura_time)
+    user.save()
+    print("updated restaurant\n",user.to_json())
     return user
     
   def to_json(self):
