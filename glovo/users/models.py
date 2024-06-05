@@ -56,7 +56,6 @@ class BaseUser(models.Model):
             user = Rider.objects.get(username=username)
         except Rider.DoesNotExist:
             pass
-
     return user
 
   @classmethod 
