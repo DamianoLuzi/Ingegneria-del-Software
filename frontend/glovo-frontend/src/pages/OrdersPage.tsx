@@ -42,7 +42,7 @@ function OrdersPage(props: any) {
       <div>
       <input
         type="text"
-        placeholder="Filter by products in your order"
+        placeholder="Filtra Ordini"
         value={filterText}
         onChange={handleFilterChange}
       />
@@ -64,7 +64,7 @@ function OrdersPage(props: any) {
             }}>{order.prodotti.map((i :any )=> " - " + i.name)}</h2>
             {orderDetails && orderDetails.pk == order.pk &&
               (<div>
-                <h2>Order Details:</h2>
+                <h2>Dettagli del tuo Ordine:</h2>
                 <p>Order ID: {orderDetails.pk}</p>
                 <p>Price: {orderDetails.price} €</p>
                 <p>Status: {orderDetails.status}</p>

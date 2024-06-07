@@ -7,7 +7,6 @@ function MenuPage(props:any) {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [itemCount, setItemCount] = useState<{[key: string]: number}>({});
   const [filterText, setFilterText] = useState('')
-  //const [favouriteProducts, setFavouriteProducts] = useState<any>([])
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value); // Update filter text state when input changes
   };
@@ -97,7 +96,7 @@ function MenuPage(props:any) {
       <div>
       <input
         type="text"
-        placeholder="Filter by product name"
+        placeholder="Filtra Prodotti"
         value={filterText}
         onChange={handleFilterChange}
       />
@@ -111,8 +110,8 @@ function MenuPage(props:any) {
               <li key={index}>
                 <div className="card">
                   <h2>{product.name}</h2>
-                  <p>Description: {product.description}</p>
-                  <p>Price: {product.price} €</p>
+                  <p>Descrizione: {product.description}</p>
+                  <p>Prezzo: {product.price} €</p>
                   {/* selectedItems.includes(product) */ true && (
                     <div>
                       <button className="button" onClick={() => handleItemCountChange(product , itemCount[product.pk] ? itemCount[product.pk] + 1 : 1)}>+</button>
@@ -121,19 +120,19 @@ function MenuPage(props:any) {
                     </div>
                   )}
                   <button className="button"  onClick={() => handleCheckboxChange(product)}>
-                    {selectedItems.includes(product) ? "Remove from Cart" : "Add to Cart"}
+                    {selectedItems.includes(product) ? "Rimuovi dal Carrello" : "Aggiungi al Carrello"}
                   </button>
                   {
                     props.user && props.user.ruolo == "cliente" &&
                     <button className="button" onClick={() => handleToggleFavourite(product)}>
-                    {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Remove from Favourites' : 'Add to Favourites'}
+                    {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Rimuovi dai Preferiti' : 'Aggiungi ai Preferiti'}
                   </button>
                   }
                 </div>
               </li>
             ))}
         </ul>
-        {selectedItems.length !== 0 && <Link to={`/cart`}><button className="button">Check your Cart</button></Link>}
+        {selectedItems.length !== 0 && <Link to={`/cart`}><button className="button">Vai al Carrello</button></Link>}
       </div>
     </>
   );

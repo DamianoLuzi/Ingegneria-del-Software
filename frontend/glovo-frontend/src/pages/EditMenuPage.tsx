@@ -6,6 +6,7 @@ function EditMenuPage(props: any) {
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [message, setMessage] = useState('');
   const [formData, setFormData] = useState({
     id: '',
     name: '',
@@ -44,6 +45,10 @@ function EditMenuPage(props: any) {
       const response = await axios.delete(`http://localhost:8000/${encodeURIComponent(props.user.username)}/menu/${item.pk.toString()}`);
       console.log("deleted item\n", response.data)
       setMenuItems(prevMenuItems => prevMenuItems.filter(i => i.pk!== item.pk));
+      setMessage("Prodotto Eliminato Correttamente")
+      setTimeout(() => {
+        setMessage('');
+      }, 5000);
     } catch (error) {
       console.error("Error deleting menu item:", error);
     }
@@ -70,6 +75,10 @@ function EditMenuPage(props: any) {
       setShowAddForm(false);
       const response = await axios.get(`http://localhost:8000/${encodeURIComponent(props.user.username)}/menu`);
       setMenuItems(response.data);
+      setMessage("Prodotto Aggiunto Correttamente")
+      setTimeout(() => {
+        setMessage('');
+      }, 5000);
     } catch (error) {
       console.error("Error adding new menu item:", error);
     }
@@ -82,6 +91,10 @@ function EditMenuPage(props: any) {
       setShowEditForm(false);
       const response = await axios.get(`http://localhost:8000/${encodeURIComponent(props.user.username)}/menu`);
       setMenuItems(response.data);
+      setMessage("Prodotto Aggiornato Correttamente")
+      setTimeout(() => {
+        setMessage('');
+      }, 5000);
     } catch (error) {
       console.error("Error updating menu item:", error);
     }
@@ -95,32 +108,33 @@ function EditMenuPage(props: any) {
   return (
     <>
     <div>
-      <h1>Edit Menu</h1>
+      <h1>Modifica Menu</h1>
+      {message && (<h1>{message}</h1>)}
       <input
+        className=""
         type="text"
-        placeholder="Filter by product name"
+        placeholder="Filtra Prodotti"
         value={filterText}
         onChange={handleFilterChange}
       />
-      <button onClick={handleAddNewItem}>Add New Item</button>
+      <button className="button" onClick={handleAddNewItem}>Aggiungi Nuovo Prodotto</button>
       {showAddForm && (
         <form onSubmit={handleAddFormSubmit}>
           <input type="text" name="name" placeholder="Item Name" value={formData.name} onChange={handleInputChange} />
           <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />
           <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} />
-          <button type="submit">Add</button>
+          <button type="submit">Aggiungi</button>
         </form>
       )}
       {
         showEditForm && (
-          <div className="card">
-            <form onSubmit={handleEditFormSubmit}>
+            <form className="form-container" onSubmit={handleEditFormSubmit}>
             <input type="text" name="name" placeholder="Item Name" value={formData.name} onChange={handleInputChange} />
             <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />
             <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} />
-            <button type="submit">Update</button>
+            <button type="submit">Aggiorna</button>
             </form>
-          </div>)
+        )
       }
       <ul className="card-list">
         {menuItems
@@ -131,10 +145,10 @@ function EditMenuPage(props: any) {
           <li key={item.id}>
             <div className="card">
               <h2>{item.name}</h2>
-              <p>Description: {item.description}</p>
-              <p>Price: {item.price} €</p>
-              <button onClick={() => handleEditMenuItem(item)}>Edit</button>
-              <button onClick={() => handleDeleteMenuItem(item)}>Delete</button>
+              <p>Descrizione: {item.description}</p>
+              <p>Prezzo: {item.price} €</p>
+              <button onClick={() => handleEditMenuItem(item)}>Modifica</button>
+              <button onClick={() => handleDeleteMenuItem(item)}>Elimina</button>
             </div>
           </li>
         ))}

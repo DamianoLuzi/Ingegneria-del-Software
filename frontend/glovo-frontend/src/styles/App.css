@@ -69,10 +69,30 @@ body {
   background-color: #000432;
 }
 
+.filter-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.filter-input {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  width: 50%;
+  max-width: 500px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
 .form-input {
   padding: 0.5rem;
   border-radius: 0.25rem;
   border: 1px solid #cccccc;
+  border: 1px solid #ccc;
+  width: 50%;
+  max-width: 500px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .form-input:focus {

@@ -64,16 +64,16 @@ function FavouritesPage(props: any) {
   
   return (
     <>
-      <h1>Your Favourites:</h1>
+      <h1>I Tuoi Preferiti:</h1>
       <div>
         <input
           type="text"
-          placeholder="Filter favourites"
+          placeholder="Filtra Preferiti"
           value={filterText}
           onChange={handleFilterChange}
         />
         
-        <h2>Favourite Products:</h2>
+        <h2>Prodotti Preferiti:</h2>
         <ul className="card-list">
           {props.favouriteProducts
             .filter((product: any) =>
@@ -87,14 +87,14 @@ function FavouritesPage(props: any) {
                 {
                   props.user && props.user.ruolo == "cliente" &&
                   <button className="button" onClick={() => handleToggleFavourite(product)}>
-                  {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Remove' : 'Add to Favourites'}
+                  {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Rimuovi' : 'Add to Favourites'}
                   </button>
                 }
               </li>
             )) }
         </ul> 
 
-        <h2>Favourite Restaurants:</h2>
+        <h2>Ristoranti Preferiti:</h2>
         <ul className="card-list">
           {props.favouriteRestaurants
             .filter((restaurant: any) =>
@@ -108,7 +108,7 @@ function FavouritesPage(props: any) {
                 {
                   props.user && props.user.ruolo == "cliente" &&
                   <button className="button" onClick={() => handleToggleFavourite(restaurant)}>
-                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Remove' : 'Add to Favourites'}
+                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Rimuovi' : 'Add to Favourites'}
                   </button>
                   }
               </li>

@@ -19,16 +19,12 @@ function CartPage(props: any) {
   const handleItemCountChange = (product: any, value: number) => {
     setItemCount(prevState => {
       const updatedCount = { ...prevState, [product.pk]: value } as Record<string, number>;
-
-      // Update the cart items
       let updatedCartItems = [...props.cartItems];
       const itemIndex = updatedCartItems.findIndex((item: any) => item.pk === product.pk);
 
       if (value === 0) {
-        // Remove item if count is zero
         updatedCartItems = updatedCartItems.filter((item: any) => item.pk !== product.pk);
       } else {
-        // Add or update the item in the cart
         if (itemIndex !== -1) {
           updatedCartItems = updatedCartItems.filter((item: any) => item.pk !== product.pk);
           for (let i = 0; i < value; i++) {
@@ -50,8 +46,6 @@ function CartPage(props: any) {
   const handleCheckboxChange = (product: any) => {
     setItemCount(prevState => {
       const updatedCount = { ...prevState };
-
-      // Remove item if it is unchecked
       if (updatedCount[product.pk]) {
         delete updatedCount[product.pk];
         props.setCartItems((prevItems: any) => prevItems.filter((item: any) => item.pk !== product.pk));
@@ -81,7 +75,6 @@ function CartPage(props: any) {
         props.setCartItems([]);
       }
     } catch (error: any) {
-      console.log("POST error", error);
       if (error.response && (error.response.status === 500 || error.response.status === 400)) {
         setError(error.response.data);
       } else {
@@ -101,7 +94,7 @@ function CartPage(props: any) {
     <>
       {message && <h1>{message}</h1>}
       {error && <h1>Error: {error}</h1>}
-      <h1>Your cart:</h1>
+      <h1>Il tuo Carrello:</h1>
       <ul className="card-list">
         {Object.keys(itemCount).map(pk => {
           const item = props.cartItems.find((item: any) => item.pk == pk);
@@ -115,7 +108,7 @@ function CartPage(props: any) {
                 <button className="button" onClick={() => handleItemCountChange(item, Math.max(itemCount[pk] - 1, 0))}>-</button>
                 <div>
                   <button className="button" onClick={() => handleCheckboxChange(item)}>
-                    Remove From Cart
+                    Rimuovi 
                   </button>
                 </div>
               </div>
@@ -125,7 +118,7 @@ function CartPage(props: any) {
       </ul>
       <h2>Total: {getItemTotal()} €</h2>
       {Object.keys(itemCount).length !== 0 && <button className="button" onClick={handlePlaceOrder}>Pay</button>}
-      <button className="button" onClick={() => props.setCartItems([])}>Cancel</button>
+      <button className="button" onClick={() => props.setCartItems([])}>Annulla</button>
     </>
   );
 }

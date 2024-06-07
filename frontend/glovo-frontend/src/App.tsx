@@ -36,10 +36,10 @@ function App() {
             {user && user.ruolo === 'cliente' && 
               <>
                 <li>
-                <Link to="/restaurants">Restaurants</Link>
+                <Link to="/restaurants">Ristoranti</Link>
               </li>
               <li>
-                <Link to="/favourites">Favourites</Link>
+                <Link to="/favourites">Preferiti</Link>
               </li>
               </>
             }
@@ -50,12 +50,12 @@ function App() {
             }
             {user  && 
               <li>
-                <Link to="/orders">Orders</Link>
+                <Link to="/orders">Ordini</Link>
               </li>
             }
-            {user && <li><Link to="/balance"> Balance</Link></li>}
-            {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Cart</Link></li>}
-            {user && <li><Link to="/account">{`Logged in as ${user ? user.username : ''} | `}</Link></li>} 
+            {user && <li><Link to="/balance"> Wallet</Link></li>}
+            {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Carrello</Link></li>}
+            {user && <li><Link to="/account">{/* `Logged in as ${user ? user.username : '' */ "Account"}</Link></li>} 
             {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <li><Link to="/login">Login</Link></li>}    
           </ul>
         </nav>

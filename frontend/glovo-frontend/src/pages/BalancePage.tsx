@@ -42,13 +42,13 @@ function BalancePage(props: any) {
 
   return(
     <div className="container">
-    <h1>Your balance: </h1>
+    <h1>Credito Disponibile: </h1>
     {balance && 
       <div>
         <h2>{`${balance} €`}</h2>
       </div>}
-      <button className="button" onClick={handleTopUp}>Top Up</button>
-      <button className="button" onClick={handleWithdraw}>Withdraw</button>
+      <button className="button" onClick={handleTopUp}>Ricarica</button>
+      <button className="button" onClick={handleWithdraw}>Preleva</button>
     </div>
   )
 

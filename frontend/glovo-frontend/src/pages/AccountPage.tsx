@@ -79,7 +79,7 @@ function AccountPage(props: any) {
     <div className="form-container">
       {message && <h1>{message}</h1>}
       {error && <h1>Error: {error}</h1>}
-      <h1>Profile</h1>
+      <h1>Informazioni Personali</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username:</label>
@@ -160,9 +160,9 @@ function AccountPage(props: any) {
             <p onClick={() => handleFieldClick("email")}>{formData.email}</p>
           )}
         </div>
-        <button type="submit" className="button">Update Profile</button>
+        <button type="submit" className="button">Aggiorna Profilo</button>
       </form>
-      <button type="button" className="button" onClick={handleDeleteAccount}>Delete Account</button>
+      <button type="button" className="button" onClick={handleDeleteAccount}>Elimina Account</button>
     </div>
   );
 }
