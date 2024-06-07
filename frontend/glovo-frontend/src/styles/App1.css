@@ -1,17 +1,20 @@
- /* App.css */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #008c4f; /* Light gray background */
+  color: #333;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 .navbar {
-  background-color: #ffcc00; /* Yellow */
-  color: #000000; /* Black */
+  background-color: #071ba3;
+  color: #fff;
   padding: 1rem;
 }
 
@@ -27,7 +30,7 @@ body {
 }
 
 .navbar li a {
-  color: #000000; /* Black */
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
 }
@@ -36,13 +39,45 @@ body {
   text-decoration: underline;
 }
 
-.navbar li a.active {
-  color: #228b22; /* Evergreen */
+.filter-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.filter-input {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  width: 50%;
+  max-width: 500px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+}
+
+.restaurant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+}
+
+.restaurant-item {
+  flex: 1 1 calc(33.333% - 1.5rem);
+  max-width: calc(33.333% - 1.5rem);
 }
 
 .card {
-  background-color: #ffffff; /* White */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -50,41 +85,16 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-}
-
-
-.container {
-  background-color: #ffffcc; /* Pale yellow */
-  padding: 2rem;
-}
-
-.navbar li a {
-  transition: color 0.3s ease; /* Smooth color transition */
-}
-
-.navbar li a:hover {
-  color: #228b22; /* Evergreen */
-}
-
-.card {
-  border: 1px solid #dddddd; /* Light gray border */
-}
-
-.card h2 {
-  color: #228b22; /* Evergreen */
-}
-
-.card p {
-  color: #000000; /* Black */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .button {
-  background-color: #228b22; /* Green */
-  color: #ffffff; /* White */
+  background-color: #071ba3;
+  color: #fff;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
   font-size: 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -92,120 +102,46 @@ body {
 }
 
 .button:hover {
-  background-color: #006400; /* Dark green on hover */
-  transform: translateY(-2px); /* Lift the button on hover */
+  background-color: #000432;
 }
 
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
+.heart-icon {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  aspect-ratio: 1;
+  position: relative;
+  border-image: radial-gradient(red 69%, #0000 70%) 84.5%/50%;
+  clip-path: polygon(-41% 0, 50% 91%, 141% 0);
 }
 
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-}
-
-button:hover {
-  background-color: #228b22; /* Green on hover */
-  color: #ffffff; /* White text on hover */
-}
-
-.navbar li a:hover {
-  text-decoration: underline;
-  color: #006400; /* Dark green on hover */
-}
-
-
-.card:hover {
-  transform: translateY(-5px); /* Lift the card on hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-}
-
-.form-input {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #cccccc;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #228b22; /* Green on focus */
-  box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.2); /* Green glow on focus */
-}
-
-.container {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-}
-
-button.active {
-  background-color: green;
-  color: white;
-}
-
-/* Add styles for the role selection buttons */
-.role-selection {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center the buttons horizontally */
-  margin-bottom: 20px; /* Add some space below the buttons */
-}
-
-.role-selection button {
-  width: 100%; /* Make the buttons full width */
-  max-width: 200px; /* Optional: Limit the maximum width of the buttons */
-  margin-bottom: 10px; /* Add some space between buttons */
-  padding: 10px; /* Add some padding for better appearance */
-  font-size: 16px; /* Increase the font size */
-}
-
-/* Add styles for the active button */
-.role-selection button.active {
-  background-color: #007bff; /* Change the background color for active button */
-  color: #fff; /* Change the text color for active button */
-}
-
-/* Add styles for form container */
-.form-container {
-  max-width: 400px; /* Optional: Limit the maximum width of the form */
-  margin: auto; /* Center the form horizontally */
-  padding: 20px; /* Add some padding around the form */
-  border: 1px solid #ccc; /* Add a border around the form */
-  border-radius: 5px; /* Round the corners of the form */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better appearance */
-}
-
-/* Add styles for form elements */
-.form-container label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-container input {
+.heart-icon::before,
+.heart-icon::after {
+  content: '';
+  position: absolute;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  height: 100%;
+  background: white;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  border: 2px solid rgb(0, 51, 255); /* Blue border */
 }
 
-.form-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
+.heart-icon::before {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(-41% 0, 50% 91%, 141% 0); /* Matching clip-path */
 }
 
-.form-container button:hover {
-  background-color: #0056b3;
+.heart-icon::after {
+  top: 50%;
+  left: 0;
+  clip-path: polygon(-41% 0, 50% 91%, 141% 0);
 }
 
-.form-container p {
-  text-align: center;
+.heart-icon.favourited::before,
+.heart-icon.favourited::after {
+  background-color: #ff0000; /* Red fill when favourited */
+  border-color: #ff0000; /* Red border when favourited */
 }
-

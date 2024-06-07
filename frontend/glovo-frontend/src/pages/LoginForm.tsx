@@ -68,10 +68,10 @@ function LoginForm(props: any) {
           />
         </div>
         <p>
-          Forgot your password? Reset it <a href="/resetpw">Here!</a>
+          Hai dimenticato la tua password? Clicca <a href="/resetpw">Qui!</a>
         </p>
         <p>
-          Don't have an account? Create one <a href="/signup">Here</a>!
+          Non sei registrato? Crea un account <a href="/signup">Qui!</a>
         </p>
         
         <button className="button" type="button" onClick={handleFormSubmit}>

@@ -49,7 +49,7 @@ function RestaurantsPage(props: any) {
     <div>
       <input
         type="text"
-        placeholder="Filter by restaurant name"
+        placeholder="Filtra Ristoranti"
         value={filterText}
         onChange={handleFilterChange}
       />
@@ -65,7 +65,7 @@ function RestaurantsPage(props: any) {
           <div className="card mb-3">
             <div className="card-body">
               <h1 className="card-title">{restaurant.username}</h1>
-              <p>Opening Hours: {restaurant.orarioApertura} - {restaurant.orarioChiusura}</p>
+              <p>Orari di Apertura: {restaurant.orarioApertura} - {restaurant.orarioChiusura}</p>
               <p>Indirizzo: {restaurant.indirizzo}</p>
               <Link to={`/${restaurant.username.toLowerCase().replace(/\s+/g, '')}/menu`}>
               <button
@@ -75,13 +75,13 @@ function RestaurantsPage(props: any) {
                   console.log("selected restaurant", restaurant)
                 }}
               >
-                View Menu
+               Menu
               </button>
               </Link>
               {
                 props.user && props.user.ruolo == "cliente" &&
                 <button className="button" onClick={() => handleToggleFavourite(restaurant)}>
-                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Remove from Favourites' : 'Add to Favourites'}
+                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Rimuovi dai Preferiti' : 'Aggiungi ai Preferiti'}
                 </button>
               }
             </div>
