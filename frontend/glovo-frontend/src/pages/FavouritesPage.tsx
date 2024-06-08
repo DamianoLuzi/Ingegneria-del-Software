@@ -67,6 +67,7 @@ function FavouritesPage(props: any) {
       <h1>I Tuoi Preferiti:</h1>
       <div>
         <input
+          className="form-input"
           type="text"
           placeholder="Filtra Preferiti"
           value={filterText}
