@@ -41,6 +41,7 @@ function OrdersPage(props: any) {
     <h1>Your orders:</h1>
       <div>
       <input
+      className="form-input"
         type="text"
         placeholder="Filtra Ordini"
         value={filterText}

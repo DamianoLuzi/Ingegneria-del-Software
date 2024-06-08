@@ -84,6 +84,7 @@ function CartPage(props: any) {
   };
 
   const getItemTotal = () => {
+    if (props.cartItems.length == 0) return 0;
     return Object.keys(itemCount).reduce((total, pk) => {
       const item = props.cartItems.find((item: any) => item.pk == pk);
       return total + (item.price * itemCount[pk]);
@@ -96,25 +97,29 @@ function CartPage(props: any) {
       {error && <h1>Error: {error}</h1>}
       <h1>Il tuo Carrello:</h1>
       <ul className="card-list">
-        {Object.keys(itemCount).map(pk => {
-          const item = props.cartItems.find((item: any) => item.pk == pk);
-          if(!item) return null
-          return (
-            <li className="card" key={pk}>
-              <h3>{item.name} - {item.price} €</h3>
-              <div>
-                <button className="button" onClick={() => handleItemCountChange(item, itemCount[pk] + 1)}>+</button>
-                <span>{itemCount[pk]}</span>
-                <button className="button" onClick={() => handleItemCountChange(item, Math.max(itemCount[pk] - 1, 0))}>-</button>
+        {props.cartItems && (
+          <>
+            {Object.keys(itemCount).map(pk => {
+            const item = props.cartItems.find((item: any) => item.pk == pk);
+            if(!item) return null
+            return (
+              <li className="card" key={pk}>
+                <h3>{item.name} - {item.price} €</h3>
                 <div>
-                  <button className="button" onClick={() => handleCheckboxChange(item)}>
-                    Rimuovi 
-                  </button>
+                  <button className="button" onClick={() => handleItemCountChange(item, itemCount[pk] + 1)}>+</button>
+                  <span>{itemCount[pk]}</span>
+                  <button className="button" onClick={() => handleItemCountChange(item, Math.max(itemCount[pk] - 1, 0))}>-</button>
+                  <div>
+                    <button className="button" onClick={() => handleCheckboxChange(item)}>
+                      Rimuovi 
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </li>
-          );
-        })}
+              </li>
+            );
+          })}
+          </>
+        )}
       </ul>
       <h2>Total: {getItemTotal()} €</h2>
       {Object.keys(itemCount).length !== 0 && <button className="button" onClick={handlePlaceOrder}>Pay</button>}

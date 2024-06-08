@@ -48,6 +48,7 @@ function RestaurantsPage(props: any) {
   return (
     <div>
       <input
+        className="form-input"
         type="text"
         placeholder="Filtra Ristoranti"
         value={filterText}
