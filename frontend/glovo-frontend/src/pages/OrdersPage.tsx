@@ -14,7 +14,6 @@ function OrdersPage(props: any) {
   useEffect(() => {
     const fetchOrders = async () => {
       const response = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`)
-      console.log("orders response", response)
       if(response) setOrders(response.data)
     }
     fetchOrders()
@@ -22,7 +21,6 @@ function OrdersPage(props: any) {
 
   const fetchOrderDetails = async (order: any) => {
     const response = await axios.get(`http://localhost:8000/orders/${order.pk.toString()}`)
-    console.log("order details\n", response)
     setShowDetails(true)
     setOrderDetails(response.data);
   }
@@ -33,12 +31,12 @@ function OrdersPage(props: any) {
       setSuccessMessage(true);
       setTimeout(() => {
         setSuccessMessage(false);
-      }, 5000); // Hide the message after 5 seconds
+      }, 5000);
     }
   }
   return(
     <>
-    <h1>Your orders:</h1>
+    <h1>I Tuoi Ordini:</h1>
       <div>
       <input
       className="form-input"
@@ -47,8 +45,8 @@ function OrdersPage(props: any) {
         value={filterText}
         onChange={handleFilterChange}
       />
-      {successMessage && <div className="success-message"><h1>Successfully updated order status!</h1></div>}
-      <ul className="card-list">
+      {successMessage && <div className="success-message"><h1>Ordine Aggiornato Con Successo!</h1></div>}
+      <ul className="list">
         {orders && 
         orders
         .filter((order: any) =>
@@ -58,11 +56,11 @@ function OrdersPage(props: any) {
         )
         .map((order: any, index: number) => (
           <li>
-            <div key={index} className = 'card'>
+            <div key={index} className = 'card' >
             <h2 onClick={() => {
               fetchOrderDetails(order)
               setShowDetails(true)
-            }}>{order.prodotti.map((i :any )=> " - " + i.name)}</h2>
+            }}>{order.prodotti.map((i :any )=> i.name  + " - ")}</h2>
             {orderDetails && orderDetails.pk == order.pk &&
               (<div>
                 <h2>Dettagli del tuo Ordine:</h2>
@@ -75,10 +73,9 @@ function OrdersPage(props: any) {
                 <p>Placed at: {orderDetails.created_at}</p>
                 <p>Updated at: {orderDetails.updated_at}</p>
                 <p>Expected delivery time: {orderDetails.delivery_time} minutes</p>
-                {/* Buttons for status changes depending on the type of user */}
-                {props.user.ruolo === 'ristorante' && <button className="button" onClick={() => handleStatusChange(order)}>Order Ready!</button>}
-                {props.user.ruolo === 'rider' && <button className="button" onClick={() => handleStatusChange(order)}>Order Delivered!</button>}
-                {props.user.ruolo === 'cliente' && <button className="button" onClick={() => handleStatusChange(order)}>Order Received!</button>}
+                {props.user.ruolo === 'ristorante' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Pronto alla Spedizione</button>}
+                {props.user.ruolo === 'rider' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Consegnato</button>}
+                {props.user.ruolo === 'cliente' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Ricevuto</button>}
               </div>)}
           </div>   
           </li>

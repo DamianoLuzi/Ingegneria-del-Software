@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import '../styles/App.css';
 import { Link } from "react-router-dom";
+import food from "../styles/food.png"
 
 function MenuPage(props:any) {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
@@ -100,7 +101,7 @@ function MenuPage(props:any) {
         value={filterText}
         onChange={handleFilterChange}
       />
-        <ul className="card-list">
+        <ul className="list">
           {props.products && 
             props.products
             .filter((product: any) =>
@@ -108,7 +109,8 @@ function MenuPage(props:any) {
             )
             .map((product: any, index: number) => (
               <li key={index}>
-                <div className="card">
+                <div className="card" style={{display: 'flex', justifyContent:'normal', alignItems: 'center'}}>
+                  <div>
                   <h2>{product.name}</h2>
                   <p>Descrizione: {product.description}</p>
                   <p>Prezzo: {product.price} €</p>
@@ -128,6 +130,8 @@ function MenuPage(props:any) {
                     {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Rimuovi dai Preferiti' : 'Aggiungi ai Preferiti'}
                   </button>
                   }
+                  </div>
+                  <img src={food} style = {{height:"250px", width:"250px", marginLeft:'400px'}}/>
                 </div>
               </li>
             ))}

@@ -49,7 +49,7 @@ function AccountPage(props: any) {
     try {
       const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`, formData);
       if(response) props.setUser(response.data)
-      setMessage("Profile updated successfully!")
+      setMessage("Profilo Aggiornato Con Successo!")
     } catch (error:any) {
       setError(error)
       console.error("Error updating profile:", error);
@@ -59,7 +59,7 @@ function AccountPage(props: any) {
   const handleDeleteAccount = async () => {
     try {
       const response = await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`);
-      setMessage(response.data.username +" was successfully deleted!")
+      setMessage(response.data.username +" Eliminato Con Successo!")
       props.setUser(response.data)
       setTimeout(() => {
         window.location.href = "/"; 
