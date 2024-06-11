@@ -15,6 +15,7 @@ import AccountPage from './pages/AccountPage';
 import './styles/App.css'; // Import the CSS file for styling
 import PasswordResetPage from './pages/PasswordResetPage';
 import FavouritesPage from './pages/FavouritesPage';
+import glovo from './styles/glovo.png'
 
 function App() {
   
@@ -27,11 +28,12 @@ function App() {
   const [favouriteRestaurants, setFavouriteRestaurants] = useState<any>([])
   return (
     <Router>
-      <div className="container">
         <nav className="navbar">
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/">
+                <img src={glovo} alt="Home" style={{ width: '50px', height: '50px', borderRadius: '50%'}} />
+              </Link>
             </li>
             {user && user.ruolo === 'cliente' && 
               <>
@@ -55,7 +57,7 @@ function App() {
             }
             {user && <li><Link to="/balance"> Wallet</Link></li>}
             {user && user.ruolo === 'cliente' && <li><Link to="/cart"> Carrello</Link></li>}
-            {user && <li><Link to="/account">{/* `Logged in as ${user ? user.username : '' */ "Account"}</Link></li>} 
+            {user && <li><Link to="/account">Account</Link></li>} 
             {user ? <li onClick={() => setUser(null)}><Link to="/login">Logout</Link></li> : <li><Link to="/login">Login</Link></li>}    
           </ul>
         </nav>
@@ -72,8 +74,7 @@ function App() {
           <Route path="/account" element = {<AccountPage user={user} setUser={setUser}/>}/>
           <Route path="/resetpw" element = {<PasswordResetPage setUser={setUser}/>}/>
           <Route path="/favourites" element = {<FavouritesPage user={user} favouriteProducts={favouriteProducts} setFavouriteProducts={setFavouriteProducts}  favouriteRestaurants={favouriteRestaurants} setFavouriteRestaurants={setFavouriteRestaurants}/>}/>
-        </Routes>
-      </div>
+        </Routes> 
     </Router>
   );
 }

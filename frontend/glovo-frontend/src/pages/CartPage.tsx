@@ -71,7 +71,7 @@ function CartPage(props: any) {
       console.log("order data\n", orderData);
       const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData);
       if (response) {
-        setMessage('Order successfully placed!');
+        setMessage('Ordine Registrato Con Successso!');
         props.setCartItems([]);
       }
     } catch (error: any) {
@@ -92,11 +92,11 @@ function CartPage(props: any) {
   };
 
   return (
-    <>
+    <div className="card">
       {message && <h1>{message}</h1>}
       {error && <h1>Error: {error}</h1>}
       <h1>Il tuo Carrello:</h1>
-      <ul className="card-list">
+      <ul className="list">
         {props.cartItems && (
           <>
             {Object.keys(itemCount).map(pk => {
@@ -124,7 +124,7 @@ function CartPage(props: any) {
       <h2>Total: {getItemTotal()} €</h2>
       {Object.keys(itemCount).length !== 0 && <button className="button" onClick={handlePlaceOrder}>Pay</button>}
       <button className="button" onClick={() => props.setCartItems([])}>Annulla</button>
-    </>
+    </div>
   );
 }
 

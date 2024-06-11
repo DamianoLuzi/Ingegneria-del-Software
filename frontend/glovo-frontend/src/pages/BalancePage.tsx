@@ -41,7 +41,7 @@ function BalancePage(props: any) {
   }, [])
 
   return(
-    <div className="container">
+    <div className="card">
     <h1>Credito Disponibile: </h1>
     {balance && 
       <div>

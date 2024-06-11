@@ -42,52 +42,28 @@ function PasswordResetPage(props: any) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  
 
-  /* 
-  <div>
-        <button
-          className={formData.ruolo === "cliente" ? "active" : ""}
-          onClick={() => handleRoleSelection("cliente")}
-        >
-          Customer
-        </button>
-        <button
-          className={formData.ruolo === "ristorante" ? "active" : ""}
-          onClick={() => handleRoleSelection("ristorante")}
-        >
-          Restaurant
-        </button>
-        <button
-          className={formData.ruolo === "rider" ? "active" : ""}
-          onClick={() => handleRoleSelection("rider")}
-        >
-          Rider
-        </button>
-      </div>
-       */
   return (
     <div>
-      <h3>Reset your password!</h3>
       <div className="form-container">
       <div className="role-selection">
         <button
           className={formData.ruolo === "cliente" ? "active" : ""}
           onClick={() => handleRoleSelection("cliente")}
         >
-         Recover your Customer Password!
+         Recupera Password Utente
         </button>
         <button
           className={formData.ruolo === "ristorante" ? "active" : ""}
           onClick={() => handleRoleSelection("ristorante")}
         >
-          Recover Your Restaurant Password!
+          Recupera Password Ristorante
         </button>
         <button
           className={formData.ruolo === "rider" ? "active" : ""}
           onClick={() => handleRoleSelection("rider")}
         >
-          Recover Your Rider Password!
+          Recupera Password Rider
         </button>
       </div>
       <br />
@@ -121,7 +97,7 @@ function PasswordResetPage(props: any) {
           />
         </div>
         <p>
-          Don't have an account? Create one <a href="/signup">Here</a>!
+          Non sei registrato? Crea un account <a href="/signup">Qui!</a>
         </p>
         
         <button type="button" onClick={handleFormSubmit}>

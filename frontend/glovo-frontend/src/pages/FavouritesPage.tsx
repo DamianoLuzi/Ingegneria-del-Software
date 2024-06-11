@@ -28,8 +28,8 @@ function FavouritesPage(props: any) {
           props.setFavouriteProducts(props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk));
           props.user.favourite_items = props.favouriteProducts.filter((fav: any) => fav.pk !== item.pk);
         } else {
-          props.setFavouriteRestaurants(props.favouriteRestaurants.filter((fav: any) => fav.pk !== item.pk));
-          props.user.favourite_restaurants = props.favouriteRestaurants.filter((fav: any) => fav.pk !== item.pk);
+          props.setFavouriteRestaurants(props.favouriteRestaurants.filter((fav: any) => fav.username !== item.username));
+          props.user.favourite_restaurants = props.favouriteRestaurants.filter((fav: any) => fav.username !== item.username);
         }
       } else {
         await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/${isProduct ? 'favourite_products' : 'favourite_restaurants'}`, item);
@@ -75,7 +75,7 @@ function FavouritesPage(props: any) {
         />
         
         <h2>Prodotti Preferiti:</h2>
-        <ul className="card-list">
+        <ul className="list">
           {props.favouriteProducts
             .filter((product: any) =>
               product.name.toLowerCase().includes(filterText.toLowerCase())
@@ -96,7 +96,7 @@ function FavouritesPage(props: any) {
         </ul> 
 
         <h2>Ristoranti Preferiti:</h2>
-        <ul className="card-list">
+        <ul className="list">
           {props.favouriteRestaurants
             .filter((restaurant: any) =>
               restaurant.name.toLowerCase().includes(filterText.toLowerCase())

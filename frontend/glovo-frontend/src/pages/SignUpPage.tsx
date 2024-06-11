@@ -19,7 +19,6 @@ function SignUpForm(props: any) {
         "http://localhost:8000/signup",
         formData
       );
-      console.log("Response:", response.data);
       props.setUser(response.data);
     } catch (error:any) {
       console.error("Error:", error);
@@ -32,7 +31,6 @@ function SignUpForm(props: any) {
 
   const handleRoleSelection = (selectedRole: string) => {
     setFormData({ ...formData, ruolo: selectedRole });
-    console.log(formData)
   };
 
   const handleChange = (e: any) => {
