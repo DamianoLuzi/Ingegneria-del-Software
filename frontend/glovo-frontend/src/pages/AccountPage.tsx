@@ -85,6 +85,7 @@ function AccountPage(props: any) {
           <label htmlFor="username">Username:</label>
           {editMode.username ? (
             <input
+              className="form-input"
               type="text"
               id="username"
               name="username"
@@ -100,6 +101,7 @@ function AccountPage(props: any) {
           <label htmlFor="password">Password:</label>
           {editMode.password ? (
             <input
+              className="form-input"
               type="password"
               id="password"
               name="password"
@@ -117,6 +119,7 @@ function AccountPage(props: any) {
               <label htmlFor="orarioApertura">Orario di Apertura:</label>
               {editMode.orarioApertura ? (
                 <input
+                  className="form-input"
                   type="text"
                   id="orarioApertura"
                   name="orarioApertura"
@@ -132,6 +135,7 @@ function AccountPage(props: any) {
               <label htmlFor="orarioChiusura">Orario di Chiusura:</label>
               {editMode.orarioChiusura ? (
                 <input
+                  className="form-input"
                   type="text"
                   id="orarioChiusura"
                   name="orarioChiusura"
@@ -149,6 +153,7 @@ function AccountPage(props: any) {
           <label htmlFor="email">Email:</label>
           {editMode.email ? (
             <input
+              className="form-input"
               type="email"
               id="email"
               name="email"

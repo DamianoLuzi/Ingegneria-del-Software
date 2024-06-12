@@ -31,9 +31,9 @@ function App() {
         <nav className="navbar">
           <ul>
             <li>
-              <Link to="/">
-                <img src={glovo} alt="Home" style={{ width: '50px', height: '50px', borderRadius: '50%'}} />
-              </Link>
+            <Link to="/" style={{ display:"-ms-inline-flexbox" }}>
+                <img src={glovo} alt="Home" style={{ width: '80px', height: '80px', borderRadius: '50%'}} />
+            </Link>
             </li>
             {user && user.ruolo === 'cliente' && 
               <>
