@@ -50,6 +50,7 @@ function LoginForm(props: any) {
           )}
           <label htmlFor="username">Username:</label>
           <input
+            className="form-input"
             type="text"
             id="username"
             name="username"
@@ -60,6 +61,7 @@ function LoginForm(props: any) {
         <div>
           <label htmlFor="password">Password:</label>
           <input
+            className="form-input"
             type="password"
             id="password"
             name="password"

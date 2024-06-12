@@ -111,7 +111,7 @@ function EditMenuPage(props: any) {
       <h1>Modifica Menu</h1>
       {message && (<h1>{message}</h1>)}
       <input
-        className=""
+        className="form-input"
         type="text"
         placeholder="Filtra Prodotti"
         value={filterText}
@@ -119,11 +119,11 @@ function EditMenuPage(props: any) {
       />
       <button className="button" onClick={handleAddNewItem}>Aggiungi Nuovo Prodotto</button>
       {showAddForm && (
-        <form onSubmit={handleAddFormSubmit}>
-          <input type="text" name="name" placeholder="Item Name" value={formData.name} onChange={handleInputChange} />
-          <input type="text" name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />
-          <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInputChange} />
-          <button type="submit">Aggiungi</button>
+        <form className="form-container" onSubmit={handleAddFormSubmit}>
+          <input className="form-input" type="text" name="name" placeholder="Nome Prodotto" value={formData.name} onChange={handleInputChange} />
+          <input className="form-input" type="text" name="description" placeholder="Descrizione" value={formData.description} onChange={handleInputChange} />
+          <input className="form-input" type="number" name="price" placeholder="Prezzo" value={formData.price} onChange={handleInputChange} />
+          <button className="button" type="submit">Aggiungi</button>
         </form>
       )}
       {
@@ -136,7 +136,7 @@ function EditMenuPage(props: any) {
             </form>
         )
       }
-      <ul className="card-list">
+      <ul className="list">
         {menuItems
         .filter((item: any) =>
           item.name.toLowerCase().includes(filterText.toLowerCase())
@@ -147,8 +147,8 @@ function EditMenuPage(props: any) {
               <h2>{item.name}</h2>
               <p>Descrizione: {item.description}</p>
               <p>Prezzo: {item.price} €</p>
-              <button onClick={() => handleEditMenuItem(item)}>Modifica</button>
-              <button onClick={() => handleDeleteMenuItem(item)}>Elimina</button>
+              <button className="button" onClick={() => handleEditMenuItem(item)}>Modifica</button>
+              <button className="button" onClick={() => handleDeleteMenuItem(item)}>Elimina</button>
             </div>
           </li>
         ))}
