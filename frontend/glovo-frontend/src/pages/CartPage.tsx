@@ -92,7 +92,7 @@ function CartPage(props: any) {
   };
 
   return (
-    <div className="card">
+    <div>
       {message && <h1>{message}</h1>}
       {error && <h1>Error: {error}</h1>}
       <h1>Il tuo Carrello:</h1>
