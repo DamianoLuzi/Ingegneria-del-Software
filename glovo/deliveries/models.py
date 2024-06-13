@@ -51,23 +51,16 @@ class Order(models.Model):
           customer = BaseUser.get_user_by_role('cliente', customer_username)
           #no particular logic -> just fetching the first available rider
           rider = Rider.objects.filter(status='available').first()
-          #logic might eventually handle order creation without available riders -> delayed rider assignment
-          ##Rider.notify_rider(rider)
-          ##def notify_rider(rider)
-          ##text = f"Ciao {rider.username},\n Hai una nuova consegna da effettuare!"
-          ##send_mail(subject="Delivery", message=text, recipient_list=[rider.email], from_email='nerf.an120@gmail.com',  fail_silently=False)
           if rider is None:
-              return None, "No riders available at the moment"
-          #items_names = [item['name'] for item in items]
+              return None, "Nessun Rider Disponibile al momento"
           #storing a json array -> needs to be updated in class diagrams
           serialized_items = json.dumps(items)     
-
           # Fetching the customer's bank account
           customer_content_type = ContentType.objects.get_for_model(customer)
           customer_bank_account = BankAccount.objects.get(content_type=customer_content_type, object_id=customer.pk)
 
           if customer_bank_account.credit < order_price:
-              return None, "Insufficient Credit Balance! Top up your card first."
+              return None, "Credito Insufficiente! Ricarica il tuo Wallet"
           
           new_order = Order(
               restaurant_id=restaurant,
@@ -89,7 +82,7 @@ class Order(models.Model):
             new_order.save()
             return new_order, None
           else:
-            return None, "Insufficient Credit Balance! Top up your card first."
+            return None, "Credito Insufficiente! Ricarica il tuo Wallet"
       except Exception as e:
           return None, str(e)
       

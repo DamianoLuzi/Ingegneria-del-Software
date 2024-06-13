@@ -26,7 +26,8 @@ class BaseUser(models.Model):
       return Rider.objects.get(username = username)
 
   def update_balance(self, balance):
-    bank_account = BankAccount.objects.get(object_id = self.pk)
+    content_type = ContentType.objects.get_for_model(self)
+    bank_account = BankAccount.objects.get(object_id = self.pk, content_type = content_type)
     bank_account.credit = balance
     bank_account.save()
     #self.balance = balance
@@ -34,7 +35,8 @@ class BaseUser(models.Model):
 
   def get_balance(self):
     try:
-      return BankAccount.objects.get(object_id = self.pk).credit
+      content_type = ContentType.objects.get_for_model(self)
+      return BankAccount.objects.get(object_id = self.pk, content_type = content_type).credit
     except BankAccount.DoesNotExist:
       return float(0)
 
@@ -83,12 +85,22 @@ class BaseUser(models.Model):
           status='available' )
     user.save()
     #creating associated bank account
-    bank_account = BankAccount(
+    content_type = ContentType.objects.get_for_model(user)
+    if not BankAccount.objects.filter(content_type=content_type, object_id=user.pk).exists():
+        # Creating associated bank account
+        bank_account = BankAccount(
+            active=True,
+            credit=kwargs.get('balance', 0),
+            content_type=content_type,
+            object_id=user.pk)
+        bank_account.save()
+    """ bank_account = BankAccount(
         active=True,
         credit=kwargs.get('balance', 0),
         content_type=ContentType.objects.get_for_model(user),
-        object_id=user.pk)
-    bank_account.save()
+        object_id=user.pk) 
+        bank_account.save() """
+
     
     return user
   
@@ -140,7 +152,7 @@ class BankAccount(models.Model):
   object_id = models.PositiveIntegerField()
   content_object = GenericForeignKey('content_type', 'object_id')
   class Meta:
-        unique_together = ('content_type', 'object_id')
+    unique_together = ('content_type', 'object_id')
 
   def __str__(self):
     user = self.content_type

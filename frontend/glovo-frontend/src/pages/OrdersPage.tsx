@@ -64,15 +64,15 @@ function OrdersPage(props: any) {
             {orderDetails && orderDetails.pk == order.pk &&
               (<div>
                 <h2>Dettagli del tuo Ordine:</h2>
-                <p>Order ID: {orderDetails.pk}</p>
-                <p>Price: {orderDetails.price} €</p>
+                <p>ID Ordine: {orderDetails.pk}</p>
+                <p>Prezzo: {orderDetails.price} €</p>
                 <p>Status: {orderDetails.status}</p>
-                <p>Restaurant: {orderDetails.restaurant}</p>
-                <p>Customer: {orderDetails.customer}</p>
-                <p>Assigned Rider: {orderDetails.rider}</p>
-                <p>Placed at: {orderDetails.created_at}</p>
-                <p>Updated at: {orderDetails.updated_at}</p>
-                <p>Expected delivery time: {orderDetails.delivery_time} minutes</p>
+                <p>Ristorante: {orderDetails.restaurant}</p>
+                <p>Cliente: {orderDetails.customer}</p>
+                <p>Rider Assegnato: {orderDetails.rider}</p>
+                <p>Creato: {orderDetails.created_at}</p>
+                <p>Aggiornato: {orderDetails.updated_at}</p>
+                <p>Tempo Stimato di Consegna: {orderDetails.delivery_time} minuti</p>
                 {props.user.ruolo === 'ristorante' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Pronto alla Spedizione</button>}
                 {props.user.ruolo === 'rider' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Consegnato</button>}
                 {props.user.ruolo === 'cliente' && <button className="button" onClick={() => handleStatusChange(order)}>Ordine Ricevuto</button>}
