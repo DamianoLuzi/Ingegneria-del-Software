@@ -8,10 +8,10 @@ function FavouritesPage(props: any) {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(e.target.value); // Update filter text state when input changes
   };
-  
+
   const handleToggleFavourite = async (item: any) => {
     const isProduct = item.hasOwnProperty('price'); // Determine if the item is a product
-    const isFavourite = isProduct 
+    const isFavourite = isProduct
       ? props.favouriteProducts.some((fav: any) => fav.pk === item.pk)
       : props.favouriteRestaurants.some((fav: any) => fav.pk === item.pk);
 
@@ -61,7 +61,7 @@ function FavouritesPage(props: any) {
   }, [props.user.ruolo, props.user.username]);
 
 
-  
+
   return (
     <>
       <h1>I Tuoi Preferiti:</h1>
@@ -73,7 +73,7 @@ function FavouritesPage(props: any) {
           value={filterText}
           onChange={handleFilterChange}
         />
-        
+
         <h2>Prodotti Preferiti:</h2>
         <ul className="list">
           {props.favouriteProducts
@@ -88,12 +88,12 @@ function FavouritesPage(props: any) {
                 {
                   props.user && props.user.ruolo == "cliente" &&
                   <button className="button" onClick={() => handleToggleFavourite(product)}>
-                  {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Rimuovi' : 'Add to Favourites'}
+                    {props.favouriteProducts.some((fav: any) => fav.pk === product.pk) ? 'Rimuovi' : 'Add to Favourites'}
                   </button>
                 }
               </li>
-            )) }
-        </ul> 
+            ))}
+        </ul>
 
         <h2>Ristoranti Preferiti:</h2>
         <ul className="list">
@@ -109,9 +109,9 @@ function FavouritesPage(props: any) {
                 {
                   props.user && props.user.ruolo == "cliente" &&
                   <button className="button" onClick={() => handleToggleFavourite(restaurant)}>
-                  {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Rimuovi' : 'Add to Favourites'}
+                    {props.favouriteRestaurants.some((fav: any) => fav.username === restaurant.username) ? 'Rimuovi' : 'Add to Favourites'}
                   </button>
-                  }
+                }
               </li>
             ))}
         </ul>

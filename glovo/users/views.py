@@ -59,7 +59,6 @@ def balance(request, user_name, user_role):
 
 @api_view(['GET','PUT','DELETE','POST'])
 def account(request, user_name, user_role):
-  print("account view req.method\n", request.method)
   if request.method == 'PUT':
     updatedUser = BaseUser.update_user(user_role,user_name, request.data)
     if updatedUser is not None:
@@ -69,7 +68,6 @@ def account(request, user_name, user_role):
     if user is not None:
       return user.to_json()
   elif request.method == 'DELETE' or request.method == 'POST':
-    print("DELETE method recognized")
     user = BaseUser.delete_user(user_name, user_role)
     if user is not None:
       return JsonResponse(user.to_json(), status=201, safe=False)

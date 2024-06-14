@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "../styles/App.css"; 
+import "../styles/App.css";
 
 function SignUpForm(props: any) {
   const [errors, setErrors] = useState(null);
@@ -14,13 +14,12 @@ function SignUpForm(props: any) {
 
   const handleFormSubmit = async () => {
     try {
-      console.log("signup POST ", formData)
       const response = await axios.post(
         "http://localhost:8000/signup",
         formData
       );
       props.setUser(response.data);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error:", error);
       setErrors(error.response.data);
       setTimeout(() => {
@@ -47,19 +46,19 @@ function SignUpForm(props: any) {
           className={formData.ruolo === "cliente" ? "active" : ""}
           onClick={() => handleRoleSelection("cliente")}
         >
-          Join the Customers Community Now!
+          Unisciti ai Nostri Clienti Ora!
         </button>
         <button
           className={formData.ruolo === "ristorante" ? "active" : ""}
           onClick={() => handleRoleSelection("ristorante")}
         >
-          Join the Restaurants Community Now!
+          Diventa un Nostro Ristorante Partner!
         </button>
         <button
           className={formData.ruolo === "rider" ? "active" : ""}
           onClick={() => handleRoleSelection("rider")}
         >
-          Join the Riders Community Now!
+          Unisciti ai Nostri Rider!
         </button>
       </div>
       <br />
@@ -92,7 +91,7 @@ function SignUpForm(props: any) {
             onChange={handleChange}
           />
         </div>
-        {(/*formData.ruolo === "rider"||*/ formData.ruolo === "ristorante") && (
+        {(formData.ruolo === "ristorante") && (
           <div>
             <label htmlFor="posizione">Posizione:</label>
             <input
@@ -115,7 +114,7 @@ function SignUpForm(props: any) {
           />
         </div>
         <p>
-          Have an account? Log in <a href="/login">Here</a>!
+          Hai già un account? Effettua il Log In <a href="/login">Qui</a>!
         </p>
         <button type="button" onClick={handleFormSubmit}>
           Sign Up

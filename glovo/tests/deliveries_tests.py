@@ -84,7 +84,7 @@ class OrderTestCase(TestCase):
         new_order, error = Order.create_new_order(items, order_price, self.restaurant.username, self.customer.username)
         
         self.assertIsNone(new_order)
-        self.assertEqual(error, "Insufficient Credit Balance! Top up your card first.")
+        self.assertEqual(error, "Credito Insufficiente! Ricarica il tuo Wallet")
 
     def test_get_orders_by_user(self):
         items = [{"name": self.item.name, "price": self.item.price}]

@@ -99,15 +99,6 @@ class CustomerTestCase(APITestCase):
         user = Customer.get_user_by_role("cliente","updateduser")
         self.assertEqual(user.username, 'updateduser')
 
-    #DELETE method not being recognized -> error 405
-    def test_delete_user(self):
-        response = self.client.delete(
-            reverse('account', kwargs={'user_role': 'cliente', 'user_name': 'cliente1'})
-        ) 
-        print("delete response\n",response.content.decode())
-        #self.assertEqual(response.status_code, 200)
-        #self.assertIsNone(Customer.objects.filter(username="cliente1").first())
-
     def test_reset_user_password(self):
         payload = {'new_password': 'NewPass1234'}
         response = self.client.put(

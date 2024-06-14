@@ -29,7 +29,6 @@ class Item(models.Model):
       item.delete()
       return aux
     except Exception as e:
-      print("error fetching item to be deletd\n", str(e))
       return None
   @classmethod
   def get_restaurant_items(cls,restaurant_name):
@@ -45,7 +44,6 @@ class Item(models.Model):
   def add_new_product(cls,restaurant_name, data):
     try:
       res = Restaurant.objects.get(username = restaurant_name)
-      print("res adding product\n", res)
       newProduct = cls(
         restaurant_id = res.pk,
         name = data['name'],
