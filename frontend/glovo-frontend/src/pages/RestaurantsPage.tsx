@@ -55,7 +55,6 @@ function RestaurantsPage(props: any) {
         value={filterText}
         onChange={handleFilterChange}
       />
-      <br />
       <ul className="list">
         {props.restaurants &&
           props.restaurants

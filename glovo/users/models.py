@@ -30,7 +30,6 @@ class BaseUser(models.Model):
     bank_account = BankAccount.objects.get(object_id = self.pk, content_type = content_type)
     bank_account.credit = balance
     bank_account.save()
-    #self.balance = balance
     self.save()
 
   def get_balance(self):
@@ -84,7 +83,6 @@ class BaseUser(models.Model):
           password = kwargs['password'],
           status='available' )
     user.save()
-    #creating associated bank account
     content_type = ContentType.objects.get_for_model(user)
     if not BankAccount.objects.filter(content_type=content_type, object_id=user.pk).exists():
         # Creating associated bank account
@@ -93,15 +91,7 @@ class BaseUser(models.Model):
             credit=kwargs.get('balance', 0),
             content_type=content_type,
             object_id=user.pk)
-        bank_account.save()
-    """ bank_account = BankAccount(
-        active=True,
-        credit=kwargs.get('balance', 0),
-        content_type=ContentType.objects.get_for_model(user),
-        object_id=user.pk) 
-        bank_account.save() """
-
-    
+        bank_account.save()    
     return user
   
   @classmethod

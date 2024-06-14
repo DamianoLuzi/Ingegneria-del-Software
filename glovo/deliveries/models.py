@@ -49,11 +49,10 @@ class Order(models.Model):
       try:
           restaurant = BaseUser.get_user_by_role('ristorante', restaurant_username)
           customer = BaseUser.get_user_by_role('cliente', customer_username)
-          #no particular logic -> just fetching the first available rider
+          # fetching the first available rider
           rider = Rider.objects.filter(status='available').first()
           if rider is None:
               return None, "Nessun Rider Disponibile al momento"
-          #storing a json array -> needs to be updated in class diagrams
           serialized_items = json.dumps(items)     
           # Fetching the customer's bank account
           customer_content_type = ContentType.objects.get_for_model(customer)

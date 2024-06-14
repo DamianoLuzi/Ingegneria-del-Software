@@ -71,7 +71,6 @@ function PasswordResetPage(props: any) {
         <div>
           {errors && (
             <div>
-              <h3>Errors:</h3>
               <ul>
                 <li>{errors}</li>
               </ul>

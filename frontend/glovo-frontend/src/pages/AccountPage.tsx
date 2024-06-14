@@ -48,25 +48,25 @@ function AccountPage(props: any) {
     e.preventDefault();
     try {
       const response = await axios.put(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`, formData);
-      if(response) props.setUser(response.data)
+      if (response) props.setUser(response.data)
       setMessage("Profilo Aggiornato Con Successo!")
-    } catch (error:any) {
+    } catch (error: any) {
       setError(error)
       console.error("Error updating profile:", error);
     }
   };
-  
+
   const handleDeleteAccount = async () => {
     try {
       const response = await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/account`);
-      setMessage(response.data.username +" Eliminato Con Successo!")
+      setMessage(response.data.username + " Eliminato Con Successo!")
       props.setUser(response.data)
       setTimeout(() => {
-        window.location.href = "/"; 
+        window.location.href = "/";
         props.setUser(null);
       }, 5000);
-      
-    } catch (error:any) {
+
+    } catch (error: any) {
       setError(error.response.data.message || "An error occurred while deleting the account.");
     }
   };
@@ -91,7 +91,6 @@ function AccountPage(props: any) {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              //onBlur={() => handleFieldBlur("username")}
             />
           ) : (
             <p onClick={() => handleFieldClick("username")}>{formData.username}</p>

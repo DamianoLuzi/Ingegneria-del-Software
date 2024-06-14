@@ -19,14 +19,12 @@ def restaurants(request, **kwargs):
   if request.method == 'GET':
     restaurants = Restaurant.get_all_restaurants()
     restaurants_json = [restaurant.to_json() for restaurant in restaurants]
-    print("res JSON", restaurants_json)
     return JsonResponse(restaurants_json, status=200, safe=False)
   
 @api_view(['GET'])
 def users(request):
   try:
     users = Order.objects.all()
-    print("users")
     return HttpResponse(
       serialize('json',users), status= 200)
   except:
@@ -38,7 +36,6 @@ def items(request):
   try:
     items = Order.objects.all()
     data = serialize('json', items)
-    print("items", data)
     return HttpResponse(data, status= 200)
   except:
     return Response({"message":'unable to fetch'})
@@ -85,7 +82,6 @@ def menu_details(request, restaurant_name, id):
 @api_view(['GET','POST','DELETE'])
 def favourite_products(request, role, username):
     if request.method == "POST":
-      print("req\n", request.data)
       try:
           customer = Customer.objects.get(username=username)
           if request.data not in customer.prodotti_preferiti:
@@ -103,11 +99,9 @@ def favourite_products(request, role, username):
     if request.method == "DELETE":
       try:
         item = request.data
-        print("DEL\n",item)
         customer = Customer.objects.get(username=username)
         if item in customer.prodotti_preferiti:
           customer.prodotti_preferiti.remove(item)
-        #customer.prodotti_preferiti = [item for item in customer.prodotti_preferiti if item != data]
         customer.save()
         return JsonResponse(customer.prodotti_preferiti, status=200, safe=False)
       except Exception as e:
@@ -117,7 +111,6 @@ def favourite_products(request, role, username):
 @api_view(['GET','POST','DELETE'])
 def favourite_restaurants(request, role, username):
     if request.method == "POST":
-      print("req\n", request.data)
       try:
           customer = Customer.objects.get(username=username)
           if request.data not in customer.ristoranti_preferiti:
@@ -135,11 +128,9 @@ def favourite_restaurants(request, role, username):
     if request.method == "DELETE":
       try:
         item = request.data
-        print("DEL\n",item)
         customer = Customer.objects.get(username=username)
         if item in customer.ristoranti_preferiti:
           customer.ristoranti_preferiti.remove(item)
-        #customer.prodotti_preferiti = [item for item in customer.prodotti_preferiti if item != data]
         customer.save()
         return JsonResponse(customer.ristoranti_preferiti, status=200, safe=False)
       except Exception as e:

@@ -22,13 +22,7 @@ function LoginForm(props: any) {
       }, 5000);
     }
   };
-
-  const handleRoleSelection = (selectedRole: string) => {
-    const newRole =
-      formData.ruolo === selectedRole ? "" : selectedRole; 
-    setFormData({ ...formData, ruolo: newRole });
-  };
-
+  
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
