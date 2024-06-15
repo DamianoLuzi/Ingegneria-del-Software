@@ -19,7 +19,7 @@ def home(request):
 @api_view(['POST'])
 def login(request):
     try:
-      user = BaseUser.authenticate_user(request.data['username'])
+      user = BaseUser.authenticate_user(request.data['username'], request.data['password'])
       if user:
         return JsonResponse(user.to_json(), status = 200)
       else:
