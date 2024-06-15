@@ -40,7 +40,7 @@ class BaseUser(models.Model):
       return float(0)
 
   @classmethod
-  def authenticate_user(cls, username):
+  def authenticate_user(cls, username, password):
     #only checking whether user exists, might eventually add password check as well
     user = None
     try:
@@ -57,6 +57,7 @@ class BaseUser(models.Model):
             user = Rider.objects.get(username=username)
         except Rider.DoesNotExist:
             pass
+    if not password == user.password: return None
     return user
 
   @classmethod 
