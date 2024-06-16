@@ -14,7 +14,6 @@ function FavouritesPage(props: any) {
     const isFavourite = isProduct
       ? props.favouriteProducts.some((fav: any) => fav.pk === item.pk)
       : props.favouriteRestaurants.some((fav: any) => fav.pk === item.pk);
-
     try {
       if (isFavourite) {
         await axios.delete(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/${isProduct ? 'favourite_products' : 'favourite_restaurants'}`, {
@@ -51,7 +50,6 @@ function FavouritesPage(props: any) {
     const fetchFavourites = async () => {
       const productsResponse = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_products`);
       const restaurantsResponse = await axios.get(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/favourite_restaurants`);
-
       if (productsResponse) props.setFavouriteProducts(productsResponse.data);
       if (restaurantsResponse) props.setFavouriteRestaurants(restaurantsResponse.data);
     };
@@ -73,7 +71,6 @@ function FavouritesPage(props: any) {
           value={filterText}
           onChange={handleFilterChange}
         />
-
         <h2>Prodotti Preferiti:</h2>
         <ul className="list">
           {props.favouriteProducts

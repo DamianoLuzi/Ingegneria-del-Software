@@ -19,11 +19,11 @@ function PasswordResetPage(props: any) {
       setErrors("La tua password di recupero è "+ response.data.password+ "")
       } else {
         setTimeout(() => {
-          return setErrors('Passwords did not match');
+          return setErrors('Riprova, le password devono combaciare');
         }, 5000);
       }
     } catch (error:any) {
-      console.error("Error:", error);
+      console.error("Errore:", error);
       setErrors(error.message);
       setTimeout(() => {
         return setErrors('');

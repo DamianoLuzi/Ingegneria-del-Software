@@ -20,7 +20,7 @@ function MenuPage(props: any) {
         if (props.user.ruolo === 'ristorante') response = await axios.get(`http://localhost:8000/${props.selectedRestaurant.fields.name}/menu`);
         if (response) props.setProducts(response.data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Si è verificato un errore", error);
       }
     }
     getProducts()
@@ -62,7 +62,6 @@ function MenuPage(props: any) {
   };
 
   useEffect(() => {
-    console.log("user\n", props.user)
     props.setCartItems(selectedItems);
   }, [selectedItems]);
 

@@ -68,7 +68,6 @@ function CartPage(props: any) {
           return total + (item.price * itemCount[pk]);
         }, 0)
       }
-      console.log("order data\n", orderData);
       const response = await axios.post(`http://localhost:8000/${props.user.ruolo}/${props.user.username}/orders`, orderData);
       if (response) {
         setMessage('Ordine Registrato Con Successso!');
@@ -78,7 +77,7 @@ function CartPage(props: any) {
       if (error.response && (error.response.status === 500 || error.response.status === 400)) {
         setError(error.response.data);
       } else {
-        setError('An unexpected error occurred');
+        setError('Si è verificato un errore');
       }
     }
   };

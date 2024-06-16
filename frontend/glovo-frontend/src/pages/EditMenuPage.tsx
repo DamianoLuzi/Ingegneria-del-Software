@@ -91,7 +91,7 @@ function EditMenuPage(props: any) {
         setMessage('');
       }, 5000);
     } catch (error) {
-      console.error("Error updating menu item:", error);
+      console.error("Si è verificato un errore", error);
     }
   };
 
