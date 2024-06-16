@@ -52,7 +52,7 @@ function AccountPage(props: any) {
       setMessage("Profilo Aggiornato Con Successo!")
     } catch (error: any) {
       setError(error)
-      console.error("Error updating profile:", error);
+      console.error("Si è verificato un errore", error);
     }
   };
 
@@ -67,7 +67,7 @@ function AccountPage(props: any) {
       }, 5000);
 
     } catch (error: any) {
-      setError(error.response.data.message || "An error occurred while deleting the account.");
+      setError(error.response.data.message || "Si è verificato un errore");
     }
   };
 
