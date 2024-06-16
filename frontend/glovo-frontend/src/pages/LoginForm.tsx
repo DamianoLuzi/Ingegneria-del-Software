@@ -15,14 +15,14 @@ function LoginForm(props: any) {
       const response = await axios.post("http://localhost:8000/login",formData);
       props.setUser(response.data);
     } catch (error:any) {
-      console.error("Error:", error);
+      console.error("Errore:", error);
       setErrors(error.response.data);
       setTimeout(() => {
         setErrors(null);
       }, 5000);
     }
   };
-  
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

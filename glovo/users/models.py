@@ -57,7 +57,7 @@ class BaseUser(models.Model):
             user = Rider.objects.get(username=username)
         except Rider.DoesNotExist:
             pass
-    if not password == user.password: return None
+    if password != user.password: return None
     return user
 
   @classmethod 

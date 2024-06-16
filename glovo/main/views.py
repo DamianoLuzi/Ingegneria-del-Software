@@ -12,7 +12,7 @@ from datetime import datetime
 @api_view(['GET'])
 def home(request):
   if request.method == 'GET':
-    return Response({"message": 'Welcome back!'})
+    return Response({"message": 'Bentornato!'})
   
 @api_view(['GET'])
 def restaurants(request, **kwargs):

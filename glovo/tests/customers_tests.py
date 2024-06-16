@@ -100,13 +100,9 @@ class CustomerTestCase(APITestCase):
         self.assertEqual(user.username, 'updateduser')
 
     def test_reset_user_password(self):
-        payload = {'new_password': 'NewPass1234'}
-        response = self.client.put(
-            reverse('account', kwargs={'user_role': 'cliente', 'user_name': 'cliente1'}),
-            data=json.dumps(payload),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, 200)
-        user = Customer.authenticate_user("cliente1")
-        self.assertEqual(user.password, user.password) # recovery password is randomly generated 
-
+        payload = {
+            'password': 'NewPassword1234'
+        }
+        BaseUser.reset_user_password('cliente1','cliente',payload['password'])
+        user = Customer.authenticate_user("cliente1", payload['password'])
+        self.assertEqual(user.password, payload['password']) 
