@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer,BaseUser, Restaurant, Rider, BankAccount
+from .models import Customer, Restaurant, Rider, BankAccount
 
 # Register your models here.
 

@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser,User
-from datetime import datetime
-from users.models import BaseUser, Customer, Restaurant
+from users.models import  Restaurant
 # Create your models here.
 
 class Item(models.Model):

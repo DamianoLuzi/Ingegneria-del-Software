@@ -1,17 +1,8 @@
-from django.shortcuts import render
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from main.models import Item
-from users.models import Restaurant, Rider
-from users.models import Customer, BaseUser
 from deliveries.models import Order
-import json
-from django.core.serializers import serialize
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
 
-from datetime import datetime
 # Create your views here.
 @api_view(['GET','POST','PUT'])
 def orders(request,user_role, user_name):

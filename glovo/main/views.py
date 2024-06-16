@@ -1,14 +1,10 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from main.models import Item
-from users.models import Restaurant, Rider, Customer, BaseUser
+from users.models import Restaurant, Customer 
 from deliveries.models import Order
-import json
 from django.core.serializers import serialize
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime
 @api_view(['GET'])
 def home(request):
   if request.method == 'GET':

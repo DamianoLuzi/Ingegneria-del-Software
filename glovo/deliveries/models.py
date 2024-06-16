@@ -1,9 +1,7 @@
 from django.db import models
-from main.models import Item
 from users.models import Restaurant, Rider, BaseUser, BankAccount
 from users.models import Customer
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 import random
 import json
